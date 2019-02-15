@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PackageFactory\\AtomicFusion\\DataObjects": "Classes"
+            "PackageFactory\\AtomicFusion\\DataObjects\\": "Classes"
         }
     },
     "extra": {

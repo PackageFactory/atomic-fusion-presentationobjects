@@ -1,0 +1,26 @@
+{
+    "name": "packagefactory/atomicfusion-dataobjects",
+    "type": "neos-package",
+    "description": "Allows for usage of type-safe, testable data objects (e.g. value objects) in Atomic Fusion as a replacement for props and propsets.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bernhard Schmitt",
+            "email": "schmitt@sitegeist.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "neos/fusion": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "PackageFactory\\AtomicFusion\\DataObjects": "Classes"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "PackageFactory.AtomicFusion.DataObjects"
+        }
+    }
+}

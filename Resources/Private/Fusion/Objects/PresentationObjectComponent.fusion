@@ -1,0 +1,6 @@
+prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @class = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Fusion\\PresentationObjectComponentImplementation'
+
+    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Fusion\\ComponentPresentationObjectInterface'
+    presentationObject = null
+}

@@ -1,6 +1,0 @@
-prototype(PackageFactory.AtomicFusion.DataObjects:DataObjectComponent) {
-    @class = 'PackageFactory\\AtomicFusion\\DataObjects\\Fusion\\DataObjectComponentImplementation'
-
-    @dataObjectInterface = 'PackageFactory\\AtomicFusion\\DataObjects\\Fusion\\ComponentDataObjectInterface'
-    dataObject = null
-}

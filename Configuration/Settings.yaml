@@ -2,4 +2,4 @@ Neos:
   Neos:
     fusion:
       autoInclude:
-        PackageFactory.AtomicFusion.DataObjects: true
+        PackageFactory.AtomicFusion.PresentationObjects: true

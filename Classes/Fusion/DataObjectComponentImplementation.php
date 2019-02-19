@@ -36,7 +36,7 @@ class DataObjectComponentImplementation extends \Neos\Fusion\FusionObjects\Compo
         if (is_null($dataObjectInterface)) {
             throw new ComponentDataObjectInterfaceIsUndeclared('Component data object is undeclared, set it via @dataObjectInterface = \'...\'.');
         }
-        if (!interface_exists($dataObjectInterface)) {
+        if (!interface_exists($dataObjectInterface) && !class_exists($dataObjectInterface)) {
             throw new ComponentDataObjectInterfaceIsMissing('Declared data object interface "' . $dataObjectInterface . '" is missing, please add it to your codebase.');
         }
         if (!$dataObject instanceof $dataObjectInterface) {

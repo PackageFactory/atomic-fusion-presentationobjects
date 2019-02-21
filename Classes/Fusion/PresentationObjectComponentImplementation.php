@@ -19,7 +19,11 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
      */
     protected function prepare($context)
     {
-        $context['presentationObject'] = $this->getPresentationObject();
+        if ($this->fusionValue('isInPreviewMode')) {
+            $context['presentationObject'] = $this->getProps();
+        } else {
+            $context['presentationObject'] = $this->getPresentationObject();
+        }
 
         return parent::prepare($context);
     }

@@ -3,4 +3,5 @@ prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComp
 
     @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Fusion\\ComponentPresentationObjectInterface'
     presentationObject = null
+    isInPreviewMode = false
 }

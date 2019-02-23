@@ -11,6 +11,10 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  */
 class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjects\ComponentImplementation
 {
+    const PREVIEW_MODE = 'isInPreviewMode';
+
+    const OBJECT_NAME = 'presentationObject';
+
     /**
      * Prepare the context for the renderer
      *
@@ -19,14 +23,28 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
      */
     protected function prepare($context)
     {
-        $context['presentationObject'] = $this->getPresentationObject();
+        if ($this->isInPreviewMode()) {
+            $props = $this->getProps();
+            if (isset($props[self::OBJECT_NAME])) {
+                $props = array_merge($props, $props[self::OBJECT_NAME]);
+                unset($props[self::OBJECT_NAME]);
+            }
+            $context[self::OBJECT_NAME] = $props;
+        } else {
+            $context[self::OBJECT_NAME] = $this->getPresentationObject();
+        }
 
         return parent::prepare($context);
     }
 
+    protected function isInPreviewMode(): bool
+    {
+        return $this->fusionValue(self::PREVIEW_MODE);
+    }
+
     protected function getPresentationObject(): ComponentPresentationObjectInterface
     {
-        $presentationObject = $this->fusionValue('presentationObject');
+        $presentationObject = $this->fusionValue(self::OBJECT_NAME);
 
         if (is_null($presentationObject)) {
             throw new ComponentPresentationObjectIsMissing('Component presentation object is missing, set it via presentationObject = ... .');

@@ -15,6 +15,8 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
 
     const OBJECT_NAME = 'presentationObject';
 
+    const INTERFACE_DECLARATION_NAME = '__meta/presentationObjectInterface';
+
     /**
      * Prepare the context for the renderer
      *
@@ -50,7 +52,7 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
             throw new ComponentPresentationObjectIsMissing('Component presentation object is missing, set it via presentationObject = ... .');
         }
 
-        $presentationObjectInterface = $this->fusionValue('__meta/presentationObjectInterface');
+        $presentationObjectInterface = $this->fusionValue(self::INTERFACE_DECLARATION_NAME);
         if (is_null($presentationObjectInterface)) {
             throw new ComponentPresentationObjectInterfaceIsUndeclared('The component\'s presentation object interface is undeclared, set it via @presentationObjectInterface = \'...\'.');
         }

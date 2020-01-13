@@ -7,8 +7,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  */
 
 /**
- * The interface for component presentation objects
+ * The interface for component presentation object factories
  */
-interface ComponentPresentationObjectInterface
+interface ComponentPresentationObjectFactoryInterface
 {
 }

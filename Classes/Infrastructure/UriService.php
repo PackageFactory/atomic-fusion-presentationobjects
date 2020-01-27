@@ -88,7 +88,7 @@ final class UriService
         );
     }
 
-    protected function getControllerContext(): ControllerContext
+    public function getControllerContext(): ControllerContext
     {
         if (is_null($this->controllerContext)) {
             $requestHandler = $this->bootstrap->getActiveRequestHandler();

@@ -9,6 +9,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 use Neos\ContentRepository\Domain\NodeType\NodeTypeConstraintFactory;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
+use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\ContentElementEditableService;
@@ -17,7 +18,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\UriService;
 /**
  * The generic abstract component presentation object factory implementation
  */
-abstract class AbstractComponentPresentationObjectFactory implements ComponentPresentationObjectFactoryInterface
+abstract class AbstractComponentPresentationObjectFactory implements ComponentPresentationObjectFactoryInterface, ProtectedContextAwareInterface
 {
     /**
      * @Flow\Inject
@@ -55,5 +56,15 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
     final protected function findChildNodesByNodeTypeFilterString(TraversableNodeInterface $parentNode, string $nodeTypeFilterString): TraversableNodes
     {
         return $parentNode->findChildNodes($this->nodeTypeConstraintFactory->parseFilterString($nodeTypeFilterString));
+    }
+
+    /**
+     * All methods are considered safe
+     * @param string $methodName
+     * @return boolean
+     */
+    public function allowsCallOfMethod($methodName): bool
+    {
+        return true;
     }
 }

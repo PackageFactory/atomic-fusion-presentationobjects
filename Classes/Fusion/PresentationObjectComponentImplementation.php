@@ -39,6 +39,11 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
         return parent::prepare($context);
     }
 
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     protected function isInPreviewMode(): bool
     {
         return $this->fusionValue(self::PREVIEW_MODE);

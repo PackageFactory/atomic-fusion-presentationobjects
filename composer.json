@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "neos/fusion": "~4.2 || ~5.0 || dev-master"
+        "neos/fusion": "~5.0 || dev-master",
+        "neos/flow": "~6.0 || dev-master"
     },
     "autoload": {
         "psr-4": {

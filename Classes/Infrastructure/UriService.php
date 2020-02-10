@@ -5,6 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Infrastructure;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Annotations as Flow;
@@ -56,7 +57,9 @@ final class UriService
      * @param TraversableNodeInterface $documentNode
      * @param bool $absolute
      * @return string
+     * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException
+     * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      * @throws \Neos\Flow\Property\Exception
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception
@@ -94,17 +97,15 @@ final class UriService
             $requestHandler = $this->bootstrap->getActiveRequestHandler();
             if ($requestHandler instanceof Http\RequestHandler) {
                 $request = $requestHandler->getHttpRequest();
-                $response = $requestHandler->getHttpResponse();
             } else {
-                $request = Http\Request::createFromEnvironment();
-                $response = new Http\Response();
+                $request = ServerRequest::fromGlobals();
             }
-            $actionRequest = new Mvc\ActionRequest($request);
+            $actionRequest = Mvc\ActionRequest::fromHttpRequest($request);
             $uriBuilder = new Mvc\Routing\UriBuilder();
             $uriBuilder->setRequest($actionRequest);
             $this->controllerContext = new Mvc\Controller\ControllerContext(
                 $actionRequest,
-                $response,
+                new Mvc\ActionResponse(),
                 new Mvc\Controller\Arguments(),
                 $uriBuilder
             );
@@ -117,7 +118,9 @@ final class UriService
      * @param string $rawLinkUri
      * @param ContentContext $subgraph
      * @return string
-     * @throws \Neos\Flow\Mvc\Routing\Exception\MissingActionNameException
+     * @throws Http\Exception
+     * @throws Mvc\Routing\Exception\MissingActionNameException
+     * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      * @throws \Neos\Flow\Property\Exception
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception

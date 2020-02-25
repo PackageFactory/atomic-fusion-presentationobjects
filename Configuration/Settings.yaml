@@ -1,5 +1,5 @@
-Neos:
-  Neos:
-    fusion:
-      autoInclude:
-        PackageFactory.AtomicFusion.PresentationObjects: true
+PackageFactory:
+  AtomicFusion:
+    PresentationObjects:
+      componentGeneration:
+        defaultPackageKey: ''

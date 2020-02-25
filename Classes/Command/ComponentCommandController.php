@@ -28,13 +28,13 @@ class ComponentCommandController extends CommandController
      */
     protected $valueGenerator;
 
-    public function kickStartCommand(string $packageKey, string $componentName): void
+    public function kickStartCommand(string $componentName, string $packageKey = null): void
     {
-        $this->componentGenerator->generateComponent($packageKey, $componentName, $this->request->getExceedingArguments());
+        $this->componentGenerator->generateComponent($componentName, $this->request->getExceedingArguments(), $packageKey);
     }
 
-    public function kickStartValueCommand(string $packageKey, string $componentName, string $name, string $type, array $values = null, bool $createDataSource = false): void
+    public function kickStartValueCommand(string $componentName, string $name, string $type, array $values = null, bool $createDataSource = false, string $packageKey = null): void
     {
-        $this->valueGenerator->generateValue($packageKey, $componentName, $name, $type, $values, $createDataSource);
+        $this->valueGenerator->generateValue($componentName, $name, $type, $values, $createDataSource, $packageKey);
     }
 }

@@ -7,8 +7,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Value;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Package\PackageManager;
 use Neos\Utility\Files;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
 
 /**
  * The value generator domain service
@@ -19,15 +19,16 @@ final class ValueGenerator
 {
     /**
      * @Flow\Inject
-     * @var PackageManager
+     * @var PackageResolver
      */
-    protected $packageManager;
+    protected $packageResolver;
 
-    public function generateValue(string $packageKey, string $componentName, string $name, string $type, array $values, bool $generateDataSource): void
+    public function generateValue(string $componentName, string $name, string $type, array $values, bool $generateDataSource, ?string $packageKey = null): void
     {
-        $value = new Value($packageKey, $componentName, $name, $type, $values);
+        $package = $this->packageResolver->resolvePackage($packageKey);
 
-        $packagePath = $this->packageManager->getPackage($packageKey)->getPackagePath();
+        $value = new Value($package->getPackageKey(), $componentName, $name, $type, $values);
+        $packagePath = $package->getPackagePath();
         $classPath = $packagePath . 'Classes/Presentation/' . $componentName;
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);

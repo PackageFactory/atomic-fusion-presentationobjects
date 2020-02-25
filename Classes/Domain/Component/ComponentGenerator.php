@@ -7,8 +7,9 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Package\PackageManager;
+use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Utility\Files;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Dumper as YamlWriter;
 
@@ -27,15 +28,16 @@ final class ComponentGenerator
 
     /**
      * @Flow\Inject
-     * @var PackageManager
+     * @var PackageResolver
      */
-    protected $packageManager;
+    protected $packageResolver;
 
-    public function generateComponent(string $packageKey, string $componentName, array $serializedProps): void
+    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null): void
     {
-        $component = Component::fromInput($packageKey, $componentName, $serializedProps, $this->propTypeRepository);
+        $package = $this->packageResolver->resolvePackage($packageKey);
+        $component = Component::fromInput($package->getPackageKey(), $componentName, $serializedProps, $this->propTypeRepository);
 
-        $packagePath = $this->packageManager->getPackage($packageKey)->getPackagePath();
+        $packagePath = $package->getPackagePath();
         $classPath = $packagePath . 'Classes/Presentation/' . $componentName;
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
@@ -48,12 +50,12 @@ final class ComponentGenerator
         file_put_contents($component->getClassPath($packagePath), $component->getClassContent());
         file_put_contents($component->getFactoryPath($packagePath), $component->getFactoryContent());
         file_put_contents($component->getFusionPath($packagePath), $component->getFusionContent());
-        $this->registerFactory($component);
+        $this->registerFactory($package, $component);
     }
 
-    private function registerFactory(Component $component): void
+    private function registerFactory(FlowPackageInterface $package, Component $component): void
     {
-        $configurationPath = $this->packageManager->getPackage($component->getPackageKey())->getPackagePath() . 'Configuration/';
+        $configurationPath = $package->getPackagePath() . 'Configuration/';
         $configurationFilePath = $configurationPath . 'Settings.PresentationHelpers.yaml';
         if (!file_exists($configurationFilePath)) {
             Files::createDirectoryRecursively($configurationPath);

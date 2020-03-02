@@ -1,0 +1,20 @@
+<?php
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+
+
+/**
+ * The interface to be implemented by prop type repositories
+ */
+interface PropTypeRepositoryInterface
+{
+    public function findByType(?string $packageKey, ?string $componentName, string $type): ?PropType;
+
+    public function findPropTypeIdentifier(
+        string $packageKey,
+        string $componentName,
+        string $type
+    ): ?PropTypeIdentifier;
+
+    public function knowsByType(string $packageKey, string $componentName, string $type): bool;
+}

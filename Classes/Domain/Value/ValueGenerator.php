@@ -23,7 +23,7 @@ final class ValueGenerator
      */
     protected $packageResolver;
 
-    public function generateValue(string $componentName, string $name, string $type, array $values, bool $generateDataSource, ?string $packageKey = null): void
+    public function generateValue(string $componentName, string $name, string $type, array $values, ?string $packageKey = null): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
 
@@ -36,12 +36,10 @@ final class ValueGenerator
         file_put_contents($value->getClassPath($packagePath), $value->getClassContent());
         file_put_contents($value->getExceptionPath($packagePath), $value->getExceptionContent());
 
-        if ($generateDataSource) {
-            $dataSourcePath = $packagePath . 'Classes/Application/';
-            if (!is_dir($dataSourcePath)) {
-                Files::createDirectoryRecursively($dataSourcePath);
-            }
-            file_put_contents($value->getDataSourcePath($packagePath), $value->getDataSourceContent());
+        $dataSourcePath = $packagePath . 'Classes/Application/';
+        if (!is_dir($dataSourcePath)) {
+            Files::createDirectoryRecursively($dataSourcePath);
         }
+        file_put_contents($value->getProviderPath($packagePath), $value->getProviderContent());
     }
 }

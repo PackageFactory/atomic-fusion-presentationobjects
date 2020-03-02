@@ -13,7 +13,7 @@ use Neos\Flow\Annotations as Flow;
  */
 class PropTypeIsInvalid extends \InvalidArgumentException
 {
-    public static function becauseItIsNoKnownComponentOrPrimitive(string $attemptedType): self
+    public static function becauseItIsNoKnownComponentValueOrPrimitive(string $attemptedType): self
     {
         return new self('Given prop type "' . $attemptedType . '" is invalid. It must be either a primitive or a known sub component.', 1582385578);
     }

@@ -6,20 +6,38 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeIsInvalid;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeRepository;
+use Psr\Http\Message\UriInterface;
+use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 
 /**
  * @Flow\Proxy(false)
  */
 final class PropType
 {
-    const PRIMITIVES = [
-        'bool',
-        'float',
-        'integer',
-        'string'
+    /**
+     * @var array|string[]
+     */
+    public static $primitives = [
+        'string' => 'string',
+        'int' => 'int',
+        'float' => 'float',
+        'bool' => 'bool'
     ];
+
+    public static $globalValues = [
+        'ImageSource' => ImageSourceHelperInterface::class,
+        'Uri' => UriInterface::class
+    ];
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $simpleName;
 
     /**
      * @var string
@@ -31,21 +49,43 @@ final class PropType
      */
     private $nullable;
 
-    private function __construct(string $fullyQualifiedName, bool $nullable)
+    /**
+     * @var PropTypeClass
+     */
+    private $class;
+
+    private function __construct(string $name, string $simpleName, string $fullyQualifiedName, bool $nullable, PropTypeClass $class)
     {
+        $this->name = $name;
+        $this->simpleName = $simpleName;
         $this->fullyQualifiedName = $fullyQualifiedName;
         $this->nullable = $nullable;
+        $this->class = $class;
     }
 
-    public static function fromType(string $type, PropTypeRepository $propTypeRepository)
+    public static function create(string $packageKey, string $componentName, string $type, PropTypeRepositoryInterface $propTypeRepository): self
     {
-        if (!$propTypeRepository->knowsByType($type)) {
-            throw PropTypeIsInvalid::becauseItIsNoKnownComponentOrPrimitive($type);
+        if (!$identity = $propTypeRepository->findPropTypeIdentifier($packageKey, $componentName, $type)) {
+            throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($type);
         }
 
-        $values = $propTypeRepository->findValuesByType($type);
+        return new self(
+            $identity->getName(),
+            $identity->getSimpleName(),
+            $identity->getFullyQualifiedName(),
+            $identity->isNullable(),
+            $identity->getClass()
+        );
+    }
 
-        return new self($values['fullyQualifiedName'], $values['isNullable']);
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getSimpleName(): string
+    {
+        return $this->simpleName;
     }
 
     public function getFullyQualifiedName(): string
@@ -53,30 +93,28 @@ final class PropType
         return $this->fullyQualifiedName;
     }
 
-    public function getSimpleName(): string
-    {
-        $pivot = \mb_strrpos($this->fullyQualifiedName, '\\');
-
-        return \mb_substr($this->fullyQualifiedName, \mb_strrpos($this->fullyQualifiedName, $pivot ? $pivot + 1 : 0));
-    }
-
-    public function isPrimitive(): bool
-    {
-        return in_array($this->fullyQualifiedName, self::PRIMITIVES);
-    }
-
     public function isNullable(): bool
     {
         return $this->nullable;
     }
 
+    public function getClass(): PropTypeClass
+    {
+        return $this->class;
+    }
+
+    public function toUse(): string
+    {
+        return $this->fullyQualifiedName;
+    }
+
     public function toType(): string
     {
-        return ($this->isNullable() ? '?' : '') . $this->getSimpleName();
+        return ($this->isNullable() ? '?' : '') . $this->simpleName;
     }
 
     public function toVar(): string
     {
-        return $this->getSimpleName() . ($this->isNullable() ? '|null' : '');
+        return $this->simpleName . ($this->isNullable() ? '|null' : '');
     }
 }

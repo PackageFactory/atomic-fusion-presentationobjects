@@ -13,7 +13,6 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\PresentationObjectComponentImplementation;
-use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Prophet;
 
 /**
@@ -166,6 +165,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(null);
 
+        $this->expectException(ComponentPresentationObjectIsMissing::class);
+
         $subject->evaluate();
     }
 
@@ -196,6 +197,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(null);
+
+        $this->expectException(ComponentPresentationObjectInterfaceIsUndeclared::class);
 
         $subject->evaluate();
     }
@@ -228,6 +231,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn('\I\Do\Not\Exist');
 
+        $this->expectException(ComponentPresentationObjectInterfaceIsMissing::class);
+
         $subject->evaluate();
     }
 
@@ -259,6 +264,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(\DateTimeInterface::class);
 
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
+
         $subject->evaluate();
     }
 
@@ -289,6 +296,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(\DateTimeInterface::class);
+
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
 
         $subject->evaluate();
     }

@@ -141,7 +141,7 @@ final class MyComponentTypeIsInvalid extends \DomainException
         );
     }
 
-    public function testGetDataSourceContent(): void
+    public function testGetProviderContent(): void
     {
         Assert::assertSame('<?php
 namespace Acme\Site\Application;
@@ -154,9 +154,10 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
+use Neos\Eel\ProtectedContextAwareInterface;
 use Acme\Site\Presentation\MyComponent\MyComponentType;
 
-class MyComponentTypeDataSource extends AbstractDataSource
+class MyComponentTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface
 {
     /**
      * @Flow\Inject
@@ -178,8 +179,21 @@ class MyComponentTypeDataSource extends AbstractDataSource
 
         return $myComponentTypes;
     }
+
+    /**
+     * @return array|string[]
+     */
+    public function getValues(): array
+    {
+        return MyComponentType::getValues();
+    }
+
+    public function allowsCallOfMethod($methodName): bool
+    {
+        return true;
+    }
 }
 ',
-            $this->subject->getDataSourceContent());
+            $this->subject->getProviderContent());
     }
 }

@@ -69,6 +69,6 @@ final class ComponentGenerator
         }
 
         $writer = new YamlWriter();
-        file_put_contents($configurationFilePath, $writer->dump($configuration, 100));
+        file_put_contents($configurationFilePath, $writer->dump($configuration, 100, 2));
     }
 }

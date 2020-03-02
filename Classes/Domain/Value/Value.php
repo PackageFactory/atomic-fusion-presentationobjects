@@ -173,12 +173,12 @@ final class ' . $this->getName() . 'IsInvalid extends \DomainException
 ';
     }
 
-    public function getDataSourcePath(string $packagePath): string
+    public function getProviderPath(string $packagePath): string
     {
-        return $packagePath . 'Classes/Application/' . $this->name . 'DataSource.php';
+        return $packagePath . 'Classes/Application/' . $this->name . 'Provider.php';
     }
 
-    public function getDataSourceContent(): string
+    public function getProviderContent(): string
     {
         $arrayName = lcfirst($this->getPluralName());
         return '<?php
@@ -192,9 +192,10 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
+use Neos\Eel\ProtectedContextAwareInterface;
 use ' . $this->getNamespace() . '\\' . $this->name . ';
 
-class ' . $this->name . 'DataSource extends AbstractDataSource
+class ' . $this->name . 'Provider extends AbstractDataSource implements ProtectedContextAwareInterface
 {
     /**
      * @Flow\Inject
@@ -215,6 +216,19 @@ class ' . $this->name . 'DataSource extends AbstractDataSource
         }
 
         return $' . $arrayName . ';
+    }
+
+    /**
+     * @return array|' . $this->type . '[]
+     */
+    public function getValues(): array
+    {
+        return ' . $this->name . '::getValues();
+    }
+
+    public function allowsCallOfMethod($methodName): bool
+    {
+        return true;
     }
 }
 ';

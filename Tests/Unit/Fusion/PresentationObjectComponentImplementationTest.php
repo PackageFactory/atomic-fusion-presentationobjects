@@ -3,7 +3,11 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
 
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Fusion\Core\Runtime;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsMissing;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\PresentationObjectComponentImplementation;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -100,7 +104,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutGivenPresentationObject()
     {
@@ -126,12 +129,13 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
         $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
 
+        $this->expectException(ComponentPresentationObjectIsMissing::class);
+
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutDeclaredPresentationObjectInterface()
     {
@@ -161,12 +165,13 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
         $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
 
+        $this->expectException(ComponentPresentationObjectInterfaceIsUndeclared::class);
+
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsMissing
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutExistingPresentationObjectInterface()
     {
@@ -196,12 +201,13 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
         $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
 
+        $this->expectException(ComponentPresentationObjectInterfaceIsMissing::class);
+
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheDeclaredInterface()
     {
@@ -231,12 +237,13 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
         $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
 
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
+
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheBaseInterface()
     {
@@ -265,6 +272,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             }));
 
         $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
 
         $subject->evaluate();
     }

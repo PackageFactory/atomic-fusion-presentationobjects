@@ -6,9 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeIsInvalid;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeRepository;
+use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 
 /**
  * @Flow\Proxy(false)
@@ -30,11 +28,11 @@ final class Component
      */
     private $props;
 
-    public function __construct(string $packageKey, string $name, array $props, ?PropTypeRepository $propTypeRepository = null)
+    public function __construct(string $packageKey, string $name, array $props, ?PropTypeRepositoryInterface $propTypeRepository = null)
     {
         foreach ($props as &$propType) {
             if (is_string($propType)) {
-                $propType = $propTypeRepository->findByType($propType);
+                $propType = $propTypeRepository->findByType($packageKey, $name, $propType);
             }
         }
         $this->packageKey = $packageKey;
@@ -42,14 +40,14 @@ final class Component
         $this->props = $props;
     }
 
-    public static function fromInput(string $packageKey, string $name, array $serializedProps, PropTypeRepository $propTypeRepository): self
+    public static function fromInput(string $packageKey, string $name, array $serializedProps, PropTypeRepositoryInterface $propTypeRepository): self
     {
         $props = [];
         foreach ($serializedProps as $serializedProp) {
             list($propName, $serializedPropType) = explode(':', $serializedProp);
-            $propType = $propTypeRepository->findByType($serializedPropType);
+            $propType = $propTypeRepository->findByType($packageKey, $name, $serializedPropType);
             if (is_null($propType)) {
-                throw PropTypeIsInvalid::becauseItIsNoKnownComponentOrPrimitive($serializedPropType);
+                throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($serializedPropType);
             }
             $props[$propName] = $propType;
         }
@@ -82,7 +80,7 @@ final class Component
     public function isLeaf(): bool
     {
         foreach ($this->props as $propType) {
-            if (!$propType->isPrimitive()) {
+            if ($propType->getClass()->isComponent()) {
                 return false;
             }
         }
@@ -129,6 +127,7 @@ namespace ' . $this->getNamespace() . ';
  * This file is part of the ' . $this->getPackageKey() . ' package.
  */
 
+' . $this->renderUseStatements() . '
 interface ' . $this->getName() . 'Interface
 {
     ' . trim (implode("\n\n    ", $this->getAccessors(true))) .  '
@@ -147,7 +146,7 @@ namespace ' . $this->getNamespace() . ';
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-
+' . $this->renderUseStatements() . '
 /**
  * @Flow\Proxy(false)
  */
@@ -183,8 +182,15 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
     {
         $terms = [];
         foreach ($this->props as $propName => $propType) {
+            if ($propType->getFullyQualifiedName() === ImageSourceHelperInterface::class) {
+                $definitionData = '<Sitegeist.Lazybones:Image imageSource={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
+            } elseif ($propType->getClass()->isComponent()) {
+                $definitionData = '<' . $this->packageKey . ':Component.' . $propType->getName() . ' presentationObject={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
+            } else {
+                $definitionData = '{presentationObject.' . $propName . '}';
+            }
             $terms[] = '        <dt>' . $propName . ':</dt>
-        <dd>{presentationObject.' . $propName . '}</dd>';
+        <dd>' . $definitionData . '</dd>';
         }
 
         return 'prototype(' . $this->packageKey . ':Component.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
@@ -213,6 +219,22 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
         }
 
         return $properties;
+    }
+
+    private function renderUseStatements(): string
+    {
+        $statements = '';
+
+        $statedTypes = [];
+        foreach ($this->props as $propType) {
+            if (!$propType->getClass()->isPrimitive() && \mb_strpos($propType->getFullyQualifiedName(), $this->getNamespace()) !== 0 && !isset($statedTypes[$propType->getSimpleName()])) {
+                $statedTypes[$propType->getSimpleName()] = true;
+                $statements .= 'use ' . $propType->getFullyQualifiedName() . ';
+';
+            }
+        }
+
+        return $statements;
     }
 
     private function renderConstructor(): string

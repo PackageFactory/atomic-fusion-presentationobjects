@@ -13,6 +13,7 @@ use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\ContentElementEditableService;
+use Neos\Neos\Service\ContentElementWrappingService;
 use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\UriService;
 
 /**
@@ -40,9 +41,24 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
 
     /**
      * @Flow\Inject
+     * @var ContentElementWrappingService
+     */
+    protected $contentElementWrappingService;
+
+    /**
+     * @Flow\Inject
      * @var NodeTypeConstraintFactory
      */
     protected $nodeTypeConstraintFactory;
+
+    final protected function createWrapper(TraversableNodeInterface $node, PresentationObjectComponentImplementation $fusionObject): callable
+    {
+        $wrappingService = $this->contentElementWrappingService;
+
+        return function(string $content) use($node, $fusionObject, $wrappingService) {
+            return $wrappingService->wrapContentObject($node, $content, $fusionObject->getPath());
+        };
+    }
 
     final protected function getEditableProperty(TraversableNodeInterface $node, string $propertyName): string
     {
@@ -60,6 +76,7 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
 
     /**
      * All methods are considered safe
+     *
      * @param string $methodName
      * @return boolean
      */

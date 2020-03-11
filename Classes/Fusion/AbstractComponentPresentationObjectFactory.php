@@ -69,15 +69,18 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
     /**
      * @param TraversableNodeInterface $node
      * @param string $propertyName
+     * @param boolean $block
      * @return string
      */
-    final protected function getEditableProperty(TraversableNodeInterface $node, string $propertyName): string
+    final protected function getEditableProperty(TraversableNodeInterface $node, string $propertyName, bool $block = false): string
     {
         /** @var NodeInterface $node */
         return $this->contentElementEditableService->wrapContentProperty(
             $node,
             $propertyName,
-            $node->getProperty($propertyName) ?: ''
+            ($block ? '<div>' : '')
+                . ($node->getProperty($propertyName) ?: '')
+                . ($block ? '</div>' : '')
         );
     }
 

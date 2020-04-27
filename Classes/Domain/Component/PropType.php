@@ -117,4 +117,44 @@ final class PropType
     {
         return $this->simpleName . ($this->isNullable() ? '|null' : '');
     }
+
+    public function toStyleGuidePropValue(): string
+    {
+        $styleGuideValue = '';
+        if ($this->class->isPrimitive()) {
+            switch ($this->name) {
+                case 'string':
+                    $styleGuideValue = '\'Text\'';
+                    break;
+                case 'int':
+                    $styleGuideValue = '4711';
+                    break;
+                case 'float':
+                    $styleGuideValue = '47.11';
+                    break;
+                case 'bool':
+                     $styleGuideValue = 'true';
+                    break;
+            }
+        } elseif ($this->class->isGlobalValue()) {
+            switch ($this->name) {
+                case 'ImageSourceHelperInterface':
+                    $styleGuideValue = 'Sitegeist.Kaleidoscope:DummyImageSource {
+                height = 1920
+                width = 1080
+            }';
+                    break;
+                case 'UriInterface':
+                    $styleGuideValue = '\'https://neos.io\'';
+                    break;
+            }
+        } elseif ($this->class->isValue()) {
+            $styleGuideValue = '';
+        } elseif ($this->class->isComponent()) {
+            $styleGuideValue = '{
+            }';
+        }
+
+        return $styleGuideValue;
+    }
 }

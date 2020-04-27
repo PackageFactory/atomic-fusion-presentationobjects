@@ -181,6 +181,7 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
     public function getFusionContent(): string
     {
         $terms = [];
+        $styleGuideProps = [];
         foreach ($this->props as $propName => $propType) {
             if ($propType->getFullyQualifiedName() === ImageSourceHelperInterface::class) {
                 $definitionData = '<Sitegeist.Lazybones:Image imageSource={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
@@ -189,12 +190,21 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
             } else {
                 $definitionData = '{presentationObject.' . $propName . '}';
             }
-            $terms[] = '        <dt>' . $propName . ':</dt>
+            $styleGuideProps[] = $propName . ' = ' . $propType->toStyleGuidePropValue();
+                $terms[] = '        <dt>' . $propName . ':</dt>
         <dd>' . $definitionData . '</dd>';
         }
 
         return 'prototype(' . $this->packageKey . ':Component.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'' . $this->getNamespace() .  '\\' . $this->name . 'Interface\'
+
+    @styleguide {
+        title = \'' . $this->name . '\'
+
+        props {
+            ' . implode("\n            ", $styleGuideProps) .'
+        }
+    }
 
     renderer = afx`<dl>
         ' . trim(implode("\n", $terms)) . '

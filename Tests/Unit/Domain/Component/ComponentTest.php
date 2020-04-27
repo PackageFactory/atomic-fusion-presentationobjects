@@ -320,6 +320,35 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
         Assert::assertSame('prototype(Acme.Site:Component.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'Acme\\Site\\Presentation\\MyComponent\\MyComponentInterface\'
 
+    @styleguide {
+        title = \'MyComponent\'
+
+        props {
+            bool = true
+            nullableBool = true
+            float = 47.11
+            nullableFloat = 47.11
+            int = 4711
+            nullableInt = 4711
+            string = \'Text\'
+            nullableString = \'Text\'
+            uri = \'https://neos.io\'
+            nullableUri = \'https://neos.io\'
+            image = Sitegeist.Kaleidoscope:DummyImageSource {
+                height = 1920
+                width = 1080
+            }
+            nullableImage = Sitegeist.Kaleidoscope:DummyImageSource {
+                height = 1920
+                width = 1080
+            }
+            subComponent = {
+            }
+            nullableSubComponent = {
+            }
+        }
+    }
+
     renderer = afx`<dl>
         <dt>bool:</dt>
         <dd>{presentationObject.bool}</dd>

@@ -96,7 +96,7 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
 
     private function knowsComponent(string $packageKey, string $type): bool
     {
-        return class_exists($this->getComponentInterfaceName($packageKey, $type));
+        return interface_exists($this->getComponentInterfaceName($packageKey, $type));
     }
 
     private function getComponentInterfaceName(string $packageKey, string $type): string

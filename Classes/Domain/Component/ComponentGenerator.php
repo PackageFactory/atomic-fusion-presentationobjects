@@ -68,7 +68,7 @@ final class ComponentGenerator
             $configuration['Neos']['Fusion']['defaultContext'][$component->getHelperName()] = $component->getFactoryName();
         }
 
-        $writer = new YamlWriter();
-        file_put_contents($configurationFilePath, $writer->dump($configuration, 100, 2));
+        $writer = new YamlWriter(2);
+        file_put_contents($configurationFilePath, $writer->dump($configuration, 100));
     }
 }

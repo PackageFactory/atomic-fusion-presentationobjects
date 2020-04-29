@@ -124,32 +124,32 @@ final class PropType
         if ($this->class->isPrimitive()) {
             switch ($this->name) {
                 case 'string':
-                    $styleGuideValue = '\'Text\'';
+                    $styleGuideValue = '= \'Text\'';
                     break;
                 case 'int':
-                    $styleGuideValue = '4711';
+                    $styleGuideValue = '= 4711';
                     break;
                 case 'float':
-                    $styleGuideValue = '47.11';
+                    $styleGuideValue = '= 47.11';
                     break;
                 case 'bool':
-                     $styleGuideValue = 'true';
+                     $styleGuideValue = '= true';
                     break;
             }
         } elseif ($this->class->isGlobalValue()) {
             switch ($this->name) {
                 case 'ImageSourceHelperInterface':
-                    $styleGuideValue = 'Sitegeist.Kaleidoscope:DummyImageSource {
+                    $styleGuideValue = '= Sitegeist.Kaleidoscope:DummyImageSource {
                 height = 1920
                 width = 1080
             }';
                     break;
                 case 'UriInterface':
-                    $styleGuideValue = '\'https://neos.io\'';
+                    $styleGuideValue = '= \'https://neos.io\'';
                     break;
             }
         } elseif ($this->class->isValue()) {
-            $styleGuideValue = '';
+            $styleGuideValue = '= \'\'';
         } elseif ($this->class->isComponent()) {
             $styleGuideValue = '{
             }';

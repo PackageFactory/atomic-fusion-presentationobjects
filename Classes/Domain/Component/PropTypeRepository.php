@@ -15,6 +15,12 @@ use Neos\Flow\Annotations as Flow;
  */
 final class PropTypeRepository implements PropTypeRepositoryInterface
 {
+    /**
+     * @Flow\Inject
+     * @var ComponentRepository
+     */
+    protected $componentRepository;
+
     public function findByType(?string $packageKey, ?string $componentName, string $type): ?PropType
     {
         if (!$this->knowsByType($packageKey, $componentName, $type)) {
@@ -52,7 +58,14 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
 
         if ($this->knowsComponent($packageKey, $type)) {
             $interfaceName = $this->getComponentInterfaceName($packageKey, $type);
-            return new PropTypeIdentifier($type, $this->getSimpleClassName($interfaceName), $interfaceName, $nullable, PropTypeClass::component());
+            $componentType = $this->componentRepository->getComponentType($interfaceName);
+            return new PropTypeIdentifier(
+                $type,
+                $this->getSimpleClassName($interfaceName),
+                $interfaceName,
+                $nullable,
+                $componentType->isLeaf() ? PropTypeClass::leaf() : PropTypeClass::composite()
+            );
         }
 
         return null;

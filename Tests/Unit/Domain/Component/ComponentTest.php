@@ -24,8 +24,8 @@ class ComponentTest extends UnitTestCase
 
         $propTypeRepository = new DummyPropTypeRepository();
         $propTypeRepository->propTypeIdentifiers['Acme.Site']['MySubComponent'] = [
-            'MySubComponent' => new PropTypeIdentifier('MySubComponent', 'MySubComponentInterface', 'Acme\Site\Presentation\MySubComponent\MySubComponentInterface', false, PropTypeClass::component()),
-            '?MySubComponent' => new PropTypeIdentifier('MySubComponent', 'MySubComponentInterface', 'Acme\Site\Presentation\MySubComponent\MySubComponentInterface', true, PropTypeClass::component())
+            'MySubComponent' => new PropTypeIdentifier('MySubComponent', 'MySubComponentInterface', 'Acme\Site\Presentation\MySubComponent\MySubComponentInterface', false, PropTypeClass::leaf()),
+            '?MySubComponent' => new PropTypeIdentifier('MySubComponent', 'MySubComponentInterface', 'Acme\Site\Presentation\MySubComponent\MySubComponentInterface', true, PropTypeClass::leaf())
         ];
 
         $this->subject = Component::fromInput(
@@ -60,11 +60,12 @@ namespace Acme\Site\Presentation\MyComponent;
  * This file is part of the Acme.Site package.
  */
 
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 use Acme\Site\Presentation\MySubComponent\MySubComponentInterface;
 
-interface MyComponentInterface
+interface MyComponentInterface extends ComponentPresentationObjectInterface
 {
     public function getBool(): bool;
 
@@ -317,7 +318,7 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
 
     public function testGetFusionContent(): void
     {
-        Assert::assertSame('prototype(Acme.Site:Component.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+        Assert::assertSame('prototype(Acme.Site:Composite.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'Acme\\Site\\Presentation\\MyComponent\\MyComponentInterface\'
 
     @styleguide {
@@ -342,9 +343,9 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
                 height = 1920
                 width = 1080
             }
-            subComponent = {
+            subComponent {
             }
-            nullableSubComponent = {
+            nullableSubComponent {
             }
         }
     }
@@ -375,9 +376,9 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
         <dt>nullableImage:</dt>
         <dd><Sitegeist.Lazybones:Image imageSource={presentationObject.nullableImage} @if.isToBeRendered={presentationObject.nullableImage} /></dd>
         <dt>subComponent:</dt>
-        <dd><Acme.Site:Component.MySubComponent presentationObject={presentationObject.subComponent} /></dd>
+        <dd><Acme.Site:Leaf.MySubComponent presentationObject={presentationObject.subComponent} /></dd>
         <dt>nullableSubComponent:</dt>
-        <dd><Acme.Site:Component.MySubComponent presentationObject={presentationObject.nullableSubComponent} @if.isToBeRendered={presentationObject.nullableSubComponent} /></dd>
+        <dd><Acme.Site:Leaf.MySubComponent presentationObject={presentationObject.nullableSubComponent} @if.isToBeRendered={presentationObject.nullableSubComponent} /></dd>
     </dl>`
 }
 ',

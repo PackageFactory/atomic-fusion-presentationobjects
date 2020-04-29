@@ -15,7 +15,8 @@ final class PropTypeClass
     const CLASS_PRIMITIVE = 'primitive';
     const CLASS_GLOBAL_VALUE = 'globalValue';
     const CLASS_VALUE = 'value';
-    const CLASS_COMPONENT = 'component';
+    const CLASS_COMPOSITE = 'composite';
+    const CLASS_LEAF = 'leaf';
 
     /**
      * @var string
@@ -42,9 +43,14 @@ final class PropTypeClass
         return new self(self::CLASS_VALUE);
     }
 
-    public static function component(): self
+    public static function leaf(): self
     {
-        return new self(self::CLASS_COMPONENT);
+        return new self(self::CLASS_LEAF);
+    }
+
+    public static function composite(): self
+    {
+        return new self(self::CLASS_COMPOSITE);
     }
 
     public function isPrimitive(): bool
@@ -64,10 +70,26 @@ final class PropTypeClass
 
     public function isComponent(): bool
     {
-        return $this->value === self::CLASS_COMPONENT;
+        return $this->value === self::CLASS_COMPOSITE
+            || $this->value === self::CLASS_LEAF;
+    }
+
+    public function isComposite(): bool
+    {
+        return $this->value === self::CLASS_COMPOSITE;
+    }
+
+    public function isLeaf(): bool
+    {
+        return $this->value === self::CLASS_LEAF;
     }
 
     public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function __toString(): string
     {
         return $this->value;
     }

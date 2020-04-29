@@ -88,6 +88,17 @@ final class Component
         return true;
     }
 
+    public function getType(): ComponentType
+    {
+        foreach ($this->props as $propType) {
+            if ($propType->getClass()->isComponent()) {
+                return ComponentType::composite();
+            }
+        }
+
+        return ComponentType::leaf();
+    }
+
     public function getFactoryName(): string
     {
         return $this->getNamespace() . '\\' . $this->name . 'Factory';
@@ -115,7 +126,7 @@ final class Component
 
     public function getFusionPath(string $packagePath): string
     {
-        return $packagePath . 'Resources/Private/Fusion/Presentation/' . ($this->isLeaf() ? 'Leaf' : 'Composite') . '/' . $this->name . '/' . $this->name . '.fusion';
+        return $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst($this->getType()) . '/' . $this->name . '/' . $this->name . '.fusion';
     }
 
     public function getInterfaceContent(): string
@@ -127,8 +138,9 @@ namespace ' . $this->getNamespace() . ';
  * This file is part of the ' . $this->getPackageKey() . ' package.
  */
 
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
 ' . $this->renderUseStatements() . '
-interface ' . $this->getName() . 'Interface
+interface ' . $this->getName() . 'Interface extends ComponentPresentationObjectInterface
 {
     ' . trim (implode("\n\n    ", $this->getAccessors(true))) .  '
 }
@@ -186,16 +198,16 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
             if ($propType->getFullyQualifiedName() === ImageSourceHelperInterface::class) {
                 $definitionData = '<Sitegeist.Lazybones:Image imageSource={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
             } elseif ($propType->getClass()->isComponent()) {
-                $definitionData = '<' . $this->packageKey . ':Component.' . $propType->getName() . ' presentationObject={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
+                $definitionData = '<' . $this->packageKey . ':' . ucfirst($propType->getClass()) . '.' . $propType->getName() . ' presentationObject={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
             } else {
                 $definitionData = '{presentationObject.' . $propName . '}';
             }
-            $styleGuideProps[] = $propName . ' = ' . $propType->toStyleGuidePropValue();
+            $styleGuideProps[] = $propName . ' ' . $propType->toStyleGuidePropValue();
                 $terms[] = '        <dt>' . $propName . ':</dt>
         <dd>' . $definitionData . '</dd>';
         }
 
-        return 'prototype(' . $this->packageKey . ':Component.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+        return 'prototype(' . $this->packageKey . ':' . ucfirst($this->getType()) . '.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'' . $this->getNamespace() .  '\\' . $this->name . 'Interface\'
 
     @styleguide {

@@ -208,7 +208,7 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
         }
 
         return 'prototype(' . $this->packageKey . ':' . ucfirst($this->getType()) . '.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = \'' . $this->getNamespace() .  '\\' . $this->name . 'Interface\'
+    @presentationObjectInterface = \'' . str_replace('\\', '\\\\', ucfirst($this->getNamespace())) .  '\\\\' . $this->name . 'Interface\'
 
     @styleguide {
         title = \'' . $this->name . '\'

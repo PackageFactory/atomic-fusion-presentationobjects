@@ -319,7 +319,7 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
     public function testGetFusionContent(): void
     {
         Assert::assertSame('prototype(Acme.Site:Composite.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = \'Acme\\Site\\Presentation\\MyComponent\\MyComponentInterface\'
+    @presentationObjectInterface = \'Acme\\\\Site\\\\Presentation\\\\MyComponent\\\\MyComponentInterface\'
 
     @styleguide {
         title = \'MyComponent\'

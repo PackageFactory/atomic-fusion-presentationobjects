@@ -13,6 +13,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
 /**
  * The value generator domain service
  *
+ * @deprecated 2.0
  * @Flow\Scope("singleton")
  */
 final class ValueGenerator

@@ -8,6 +8,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Value;
 use Neos\Flow\Annotations as Flow;
 
 /**
+ * @deprecated 2.0
  * @Flow\Proxy(false)
  */
 final class Value

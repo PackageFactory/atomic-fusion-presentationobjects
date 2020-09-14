@@ -23,6 +23,7 @@ class ComponentCommandController extends CommandController
     protected $componentGenerator;
 
     /**
+     * @deprecated 2.0
      * @Flow\Inject
      * @var ValueGenerator
      */
@@ -33,6 +34,15 @@ class ComponentCommandController extends CommandController
         $this->componentGenerator->generateComponent($name, $this->request->getExceedingArguments(), $packageKey);
     }
 
+    /**
+     * @deprecated 2.0
+     * @param string $componentName
+     * @param string $name
+     * @param string $type
+     * @param array $values
+     * @param string $packageKey
+     * @return void
+     */
     public function kickStartValueCommand(string $componentName, string $name, string $type, array $values = null, string $packageKey = null): void
     {
         $this->valueGenerator->generateValue($componentName, $name, $type, $values, $packageKey);

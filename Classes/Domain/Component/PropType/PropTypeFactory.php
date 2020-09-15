@@ -8,6 +8,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
 use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\Psr7\Uri;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 
@@ -39,6 +40,8 @@ final class PropTypeFactory
                 return new UriPropType($nullable);
             case 'ImageSource':
                 return new ImageSourcePropType($nullable);
+            case 'slot':
+                return new SlotPropType($nullable);
             default:
                 if ($isComponentArray = IsComponentArray::isSatisfiedByInputString($input)) {
                     $input = \mb_substr($input, 6, \mb_strlen($input) - 7);
@@ -80,6 +83,8 @@ final class PropTypeFactory
                     return new UriPropType($nullable);
                 case ImageSourceHelperInterface::class:
                     return new ImageSourcePropType($nullable);
+                case SlotInterface::class:
+                    return new SlotPropType($nullable);
                 default:
                     if (IsEnum::isSatisfiedByClassName($type)) {
                         /** @phpstan-var class-string<mixed> $type */

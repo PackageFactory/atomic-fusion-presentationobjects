@@ -1,0 +1,10 @@
+prototype(PackageFactory.AtomicFusion.PresentationObjects:Collection) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\SlotInterface'
+
+    renderer = Neos.Fusion:Loop {
+        items = ${presentationObject.items}
+        itemRenderer = PackageFactory.AtomicFusion.PresentationObjects:Slot {
+            presentationObject = ${item}
+        }
+    }
+}

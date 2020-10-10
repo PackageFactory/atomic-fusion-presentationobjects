@@ -55,7 +55,7 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
     {
         $wrappingService = $this->contentElementWrappingService;
 
-        return function(string $content) use($node, $fusionObject, $wrappingService) {
+        return function (string $content) use ($node, $fusionObject, $wrappingService) {
             return $wrappingService->wrapContentObject($node, $content, $fusionObject->getPath());
         };
     }

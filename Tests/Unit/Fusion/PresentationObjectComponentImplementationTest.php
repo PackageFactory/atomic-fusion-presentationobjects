@@ -65,7 +65,7 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
                 $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME),
                 $this->equalTo('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME)
             ))
-            ->will($this->returnCallback(function ($path) use($mockPresentationObject) {
+            ->will($this->returnCallback(function ($path) use ($mockPresentationObject) {
                 if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
                     return false;
                 }

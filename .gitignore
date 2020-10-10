@@ -1,0 +1,6 @@
+bin/
+Build/
+Packages/
+vendor/
+composer.lock
+.phpunit.result.cache

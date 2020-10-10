@@ -76,11 +76,15 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
 
     /**
      * Returns the Fusion path to the to-be-wrapped Content Element, if applicable
+     * (Borrowed from \Neos\Neos\Fusion\ContentElementWrappingImplementation)
+     *
+     * @TODO: We need to have a look at this one, it doesn't seem to be used anywhere (@WBE)
      *
      * @return string
      */
     public function getContentElementFusionPath(): string
     {
+        // @codeCoverageIgnoreStart
         $fusionPathSegments = explode('/', $this->path);
         $numberOfFusionPathSegments = count($fusionPathSegments);
         if (isset($fusionPathSegments[$numberOfFusionPathSegments - 3])
@@ -99,5 +103,6 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
             return implode('/', array_slice($fusionPathSegments, 0, -4));
         }
         return $this->path;
+        // @codeCoverageIgnoreEnd
     }
 }

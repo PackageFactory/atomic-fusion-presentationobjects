@@ -1,17 +1,49 @@
 <?php
 namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
 
+/*
+ * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
+ */
+
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Fusion\Core\Runtime;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsMissing;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\PresentationObjectComponentImplementation;
 use PHPUnit\Framework\MockObject\MockObject;
+use Prophecy\Prophet;
 
 /**
  * Test cases for the PresentationObjectComponentImplementation
  */
 class PresentationObjectComponentImplementationTest extends UnitTestCase
 {
+    /**
+     * @var Prophet
+     */
+    private $prophet;
+
+    /**
+     * @before
+     * @return void
+     */
+    public function setUpPresentationObjectComponentImplementation(): void
+    {
+        $this->prophet = new Prophet();
+    }
+
+    /**
+     * @after
+     * @return void
+     */
+    public function tearDownPresentationObjectComponentImplementation(): void
+    {
+        $this->prophet->checkPredictions();
+    }
+
     /**
      * @test
      * @throws \ReflectionException
@@ -100,10 +132,26 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing
+     * @return void
+     */
+    public function publishesItsOwnPath(): void
+    {
+        $subject = new PresentationObjectComponentImplementation(
+            $this->prophet->prophesize(Runtime::class)->reveal(),
+            'path/to/button/integration',
+            'Vendor.Site:Component.Button'
+        );
+
+        $this->assertEquals('path/to/button/integration', $subject->getPath());
+    }
+
+    /**
+     * @test
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutGivenPresentationObject()
     {
+        $this->expectException(ComponentPresentationObjectIsMissing::class);
+
         $mockRuntime = $this->createMock(Runtime::class);
 
         /** @var Runtime|MockObject $mockRuntime */
@@ -131,10 +179,11 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutDeclaredPresentationObjectInterface()
     {
+        $this->expectException(ComponentPresentationObjectInterfaceIsUndeclared::class);
+
         $mockRuntime = $this->createMock(Runtime::class);
 
         /** @var Runtime|MockObject $mockRuntime */
@@ -166,10 +215,11 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsMissing
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutExistingPresentationObjectInterface()
     {
+        $this->expectException(ComponentPresentationObjectInterfaceIsMissing::class);
+
         $mockRuntime = $this->createMock(Runtime::class);
 
         /** @var Runtime|MockObject $mockRuntime */
@@ -201,10 +251,11 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheDeclaredInterface()
     {
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
+
         $mockRuntime = $this->createMock(Runtime::class);
 
         /** @var Runtime|MockObject $mockRuntime */
@@ -236,10 +287,11 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface
      */
     public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheBaseInterface()
     {
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
+
         $mockRuntime = $this->createMock(Runtime::class);
 
         /** @var Runtime|MockObject $mockRuntime */

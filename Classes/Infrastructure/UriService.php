@@ -11,17 +11,17 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Flow\Http;
-use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\AssetInterface;
 use Neos\Media\Domain\Repository\AssetRepository;
 use Neos\Neos\Service\LinkingService;
 use Neos\Flow\Mvc;
 use Neos\Flow\Core\Bootstrap;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\UriServiceInterface;
 
 /**
  * The URI service
  */
-final class UriService
+final class UriService implements UriServiceInterface
 {
     /**
      * @Flow\Inject
@@ -66,16 +66,28 @@ final class UriService
         return $this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, null, $absolute);
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $resourcePath
+     * @return string
+     */
     public function getResourceUri(string $packageKey, string $resourcePath): string
     {
         return $this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath);
     }
 
+    /**
+     * @param AssetInterface $asset
+     * @return string
+     */
     public function getAssetUri(AssetInterface $asset): string
     {
         return $this->resourceManager->getPublicPersistentResourceUri($asset->getResource());
     }
 
+    /**
+     * @return string
+     */
     public function getDummyImageBaseUri(): string
     {
         $uriBuilder = $this->getControllerContext()->getUriBuilder();
@@ -88,6 +100,9 @@ final class UriService
         );
     }
 
+    /**
+     * @return ControllerContext
+     */
     public function getControllerContext(): ControllerContext
     {
         if (is_null($this->controllerContext)) {
@@ -126,13 +141,14 @@ final class UriService
     {
         if (\mb_substr($rawLinkUri, 0, 7) === 'node://') {
             $nodeIdentifier = \mb_substr($rawLinkUri, 7);
+            /** @var TraversableNodeInterface $node */
             $node = $subgraph->getNodeByIdentifier($nodeIdentifier);
             $linkUri = $node ? $this->getNodeUri($node) : '#';
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'asset://') {
             $assetIdentifier = \mb_substr($rawLinkUri, 8);
-            /** @var Asset $asset */
+            /** @var AssetInterface $asset */
             $asset = $this->assetRepository->findByIdentifier($assetIdentifier);
-            $linkUri = $this->getAssetUri($asset);
+            $linkUri = $asset ? $this->getAssetUri($asset) : '#';
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'https://' || \mb_substr($rawLinkUri, 0, 7) === 'http://') {
             $linkUri = $rawLinkUri;
         } else {

@@ -6,6 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\NodeType\NodeTypeConstraintFactory;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
@@ -14,7 +15,6 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\ContentElementEditableService;
 use Neos\Neos\Service\ContentElementWrappingService;
-use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\UriService;
 
 /**
  * The generic abstract component presentation object factory implementation
@@ -23,7 +23,19 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
 {
     /**
      * @Flow\Inject
-     * @var UriService
+     * @var ContentElementWrappingService
+     */
+    protected $contentElementWrappingService;
+
+    /**
+     * @Flow\Inject
+     * @var ContentElementEditableService
+     */
+    protected $contentElementEditableService;
+
+    /**
+     * @Flow\Inject
+     * @var UriServiceInterface
      */
     protected $uriService;
 
@@ -35,33 +47,33 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
 
     /**
      * @Flow\Inject
-     * @var ContentElementEditableService
-     */
-    protected $contentElementEditableService;
-
-    /**
-     * @Flow\Inject
-     * @var ContentElementWrappingService
-     */
-    protected $contentElementWrappingService;
-
-    /**
-     * @Flow\Inject
      * @var NodeTypeConstraintFactory
      */
     protected $nodeTypeConstraintFactory;
 
+    /**
+     * @param TraversableNodeInterface $node
+     * @param PresentationObjectComponentImplementation $fusionObject
+     * @return callable
+     */
     final protected function createWrapper(TraversableNodeInterface $node, PresentationObjectComponentImplementation $fusionObject): callable
     {
         $wrappingService = $this->contentElementWrappingService;
 
         return function (string $content) use ($node, $fusionObject, $wrappingService) {
+            /** @var NodeInterface $node */
             return $wrappingService->wrapContentObject($node, $content, $fusionObject->getPath());
         };
     }
 
+    /**
+     * @param TraversableNodeInterface $node
+     * @param string $propertyName
+     * @return string
+     */
     final protected function getEditableProperty(TraversableNodeInterface $node, string $propertyName): string
     {
+        /** @var NodeInterface $node */
         return $this->contentElementEditableService->wrapContentProperty(
             $node,
             $propertyName,
@@ -69,6 +81,11 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
         );
     }
 
+    /**
+     * @param TraversableNodeInterface $parentNode
+     * @param string $nodeTypeFilterString
+     * @return TraversableNodes
+     */
     final protected function findChildNodesByNodeTypeFilterString(TraversableNodeInterface $parentNode, string $nodeTypeFilterString): TraversableNodes
     {
         return $parentNode->findChildNodes($this->nodeTypeConstraintFactory->parseFilterString($nodeTypeFilterString));

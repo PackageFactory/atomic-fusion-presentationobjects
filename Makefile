@@ -52,3 +52,6 @@ test-isolated::
 		--enforce-time-limit \
 		--group isolated \
 		Tests
+
+github-action::
+	@act -P ubuntu-20.04=shivammathur/node:focal

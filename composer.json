@@ -19,7 +19,8 @@
         "phpstan/phpstan": "^0.12.48",
         "neos/buildessentials": "^6.3",
         "mikey179/vfsstream": "^1.6",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "jangregor/phpstan-prophecy": "^0.8.0"
     },
     "config": {
         "vendor-dir": "Packages/Libraries",

@@ -84,6 +84,7 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
     /**
      * @param TraversableNodeInterface $parentNode
      * @param string $nodeTypeFilterString
+     * @phpstan-return TraversableNodes<TraversableNodeInterface>
      * @return TraversableNodes
      */
     final protected function findChildNodesByNodeTypeFilterString(TraversableNodeInterface $parentNode, string $nodeTypeFilterString): TraversableNodes

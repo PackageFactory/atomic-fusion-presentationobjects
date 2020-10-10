@@ -10,6 +10,7 @@ use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\NodeType\NodeTypeConstraintFactory;
 use Neos\ContentRepository\Domain\NodeType\NodeTypeConstraints;
+use Neos\ContentRepository\Domain\NodeType\NodeTypeName;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
 use Neos\Neos\Service\ContentElementEditableService;
 use Neos\Neos\Service\ContentElementWrappingService;
@@ -30,17 +31,17 @@ final class AbstractComponentPresentationObjectFactoryTest extends UnitTestCase
     private $prophet;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<ContentElementWrappingService>
      */
     private $contentElementWrappingService;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<ContentElementEditableService>
      */
     private $contentElementEditableService;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<NodeTypeConstraintFactory>
      */
     private $nodeTypeConstraintFactory;
 
@@ -113,7 +114,7 @@ final class AbstractComponentPresentationObjectFactoryTest extends UnitTestCase
             /**
              * @param TraversableNodeInterface $parentNode
              * @param string $nodeTypeFilterString
-             * @return TraversableNodes
+             * @return TraversableNodes<TraversableNodeInterface>
              */
             public function findChildNodesByNodeTypeFilterStringForTest(TraversableNodeInterface $parentNode, string $nodeTypeFilterString): TraversableNodes
             {
@@ -193,7 +194,11 @@ final class AbstractComponentPresentationObjectFactoryTest extends UnitTestCase
     public function findsChildNodesByNodeTypeFilterString(): void
     {
         $nodeTypeFilterString = 'Neos.Neos:Document,!Neos.Neos:Shortcut';
-        $constraints = new NodeTypeConstraints(false, ['Neos.Neos:Document'], ['!Neos.Neos:Shortcut']);
+        $constraints = new NodeTypeConstraints(
+            false,
+            [NodeTypeName::fromString('Neos.Neos:Document')],
+            [NodeTypeName::fromString('Neos.Neos:Shortcut')]
+        );
 
         $homePageNode = $this->prophet
             ->prophesize(TraversableNodeInterface::class)

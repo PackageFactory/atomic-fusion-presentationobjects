@@ -20,7 +20,9 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
     /**
      * Prepare the context for the renderer
      *
+     * @phpstan-param array<string,mixed> $context
      * @param array $context
+     * @phpstan-return array<string,mixed>
      * @return array
      */
     protected function prepare($context)
@@ -39,16 +41,25 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
         return parent::prepare($context);
     }
 
+    /**
+     * @return string
+     */
     public function getPath(): string
     {
         return $this->path;
     }
 
+    /**
+     * @return boolean
+     */
     protected function isInPreviewMode(): bool
     {
         return $this->fusionValue(self::PREVIEW_MODE);
     }
 
+    /**
+     * @return ComponentPresentationObjectInterface
+     */
     protected function getPresentationObject(): ComponentPresentationObjectInterface
     {
         $presentationObject = $this->fusionValue(self::OBJECT_NAME);

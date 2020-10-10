@@ -25,6 +25,7 @@ final class AbstractComponentPresentationObjectTest extends UnitTestCase
         $presentationObject = new class extends AbstractComponentPresentationObject {
         };
 
+        // @phpstan-ignore-next-line
         $presentationObject->getFoo();
     }
 }

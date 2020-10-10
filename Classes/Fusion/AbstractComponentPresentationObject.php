@@ -15,7 +15,9 @@ abstract class AbstractComponentPresentationObject implements ComponentPresentat
      * Catches all internal EEL magic calls
      *
      * @param string $name
+     * @phpstan-param array<mixed> $arguments
      * @param array $arguments
+     * @return void
      */
     final public function __call($name, $arguments)
     {

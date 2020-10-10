@@ -13,37 +13,32 @@ use Neos\Media\Domain\Model\AssetInterface;
 interface UriServiceInterface
 {
     /**
-     * @param string $rawLinkUri
-     * @param ContentContext $subgraph
+     * @param TraversableNodeInterface $documentNode
+     * @param boolean $absolute
      * @return string
      */
     public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false): string;
 
     /**
-     * @param string $rawLinkUri
-     * @param ContentContext $subgraph
+     * @param string $packageKey
+     * @param string $resourcePath
      * @return string
      */
     public function getResourceUri(string $packageKey, string $resourcePath): string;
 
     /**
-     * @param string $rawLinkUri
-     * @param ContentContext $subgraph
+     * @param AssetInterface $asset
      * @return string
      */
     public function getAssetUri(AssetInterface $asset): string;
 
     /**
-     * @param string $rawLinkUri
-     * @param ContentContext $subgraph
      * @return string
      */
     public function getDummyImageBaseUri(): string;
 
     /**
-     * @param string $rawLinkUri
-     * @param ContentContext $subgraph
-     * @return string
+     * @return ControllerContext
      */
     public function getControllerContext(): ControllerContext;
 

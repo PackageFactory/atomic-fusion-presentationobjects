@@ -18,6 +18,7 @@ install::
 	@composer install
 
 cleanup::
+	@rm -f composer.lock
 	@rm -rf Packages
 	@rm -rf Build
 	@rm -rf bin

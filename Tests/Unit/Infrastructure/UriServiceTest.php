@@ -33,27 +33,27 @@ final class UriServiceTest extends UnitTestCase
     private $prophet;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<ResourceManager>
      */
     private $resourceManager;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<LinkingService>
      */
     private $linkingService;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<AssetRepository>
      */
     private $assetRepository;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<Bootstrap>
      */
     private $bootstrap;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy<UriBuilder>
      */
     private $uriBuilder;
 

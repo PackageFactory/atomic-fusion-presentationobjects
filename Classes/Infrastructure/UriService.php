@@ -48,7 +48,7 @@ final class UriService implements UriServiceInterface
     protected $bootstrap;
 
     /**
-     * @var ControllerContext
+     * @var null|ControllerContext
      */
     protected $controllerContext;
 
@@ -82,7 +82,8 @@ final class UriService implements UriServiceInterface
      */
     public function getAssetUri(AssetInterface $asset): string
     {
-        return $this->resourceManager->getPublicPersistentResourceUri($asset->getResource());
+        $uri = $this->resourceManager->getPublicPersistentResourceUri($asset->getResource());
+        return is_string($uri) ? $uri : '#';
     }
 
     /**
@@ -141,12 +142,12 @@ final class UriService implements UriServiceInterface
     {
         if (\mb_substr($rawLinkUri, 0, 7) === 'node://') {
             $nodeIdentifier = \mb_substr($rawLinkUri, 7);
-            /** @var TraversableNodeInterface $node */
+            /** @var null|TraversableNodeInterface $node */
             $node = $subgraph->getNodeByIdentifier($nodeIdentifier);
             $linkUri = $node ? $this->getNodeUri($node) : '#';
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'asset://') {
             $assetIdentifier = \mb_substr($rawLinkUri, 8);
-            /** @var AssetInterface $asset */
+            /** @var null|AssetInterface $asset */
             $asset = $this->assetRepository->findByIdentifier($assetIdentifier);
             $linkUri = $asset ? $this->getAssetUri($asset) : '#';
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'https://' || \mb_substr($rawLinkUri, 0, 7) === 'http://') {

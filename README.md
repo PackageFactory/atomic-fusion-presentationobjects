@@ -10,243 +10,106 @@
 composer require packagefactory/atomicfusion-presentationobjects
 ```
 
+## Documentation
+
+1. [PresentationObjects and Components](./Documentation/01_PresentationObjectsAndComponents.md)
+2. [Content integration with PresentationObject Factories](./Documentation/02_PresentationObjectFactories.md)
+3. [Integration Recipes](./Documentation/03_IntegrationRecipes.md)
+4. [Scaffolding with the Component Kickstarter](./Documentation/04_Kickstarter.md)
+5. [Preview Mode](./Documentation/05_PreviewMode.md)
+
 ## Why
 
-PackageFactory.AtomicFusion has been the first step in the direction of Component architecture in Neos CMS. It provided a `Component` fusion prototype that allowed for writing frontend components with a clear interface for the backend.
+`PackageFactory.AtomicFusion` has been the first step in the direction of Component architecture in Neos CMS. It provides a `Component` fusion prototype that allows for writing frontend components with a clear interface for the backend.
 
-However, that interface hasn't been strict. Developers were able to express requirements for their components, but those requirements weren't enforced on any level.
+However, that interface isn't strict. Developers are able to express requirements for their components, but those requirements aren't enforced on any level. Because of that, [PackageFactory.AtomicFusion.PropTypes](https://github.com/PackageFactory/atomic-fusion-proptypes) was created to bring the concept of [React.js PropTypes](https://reactjs.org/docs/typechecking-with-proptypes.html) to AtomicFusion.
 
-Because of that, the concept of PropTypes were adopted from React.js in the form of PackageFactory.AtomicFusion.PropTypes. PropTypes check incoming data against a defined schema whenever a component is invoked at runtime, thus ensuring that a component can never be rendered with invalid data.
+PropTypes check incoming data against a defined schema whenever a component is invoked, thus ensuring that a component can never be rendered with invalid data. The weakness of this pattern is that any guarantee over the integrity of the component interface can only ever be made at runtime. This way integration remains error-prone.
 
-With the advent of Typescript PropTypes have become sort-of obsolete in the React world, since static typings do not have an impact on bundle size and catch type-related bugs before runtime.
+With the advent of [Typescript](https://www.typescriptlang.org/), PropTypes have become almost obsolete in the React world, since static typings don't have an impact on bundle size and catch type-related bugs before runtime. Typescript is a superset of ECMAScript and extends the language with type-annotations for static analysis. As of right now, a similar concept for Fusion does not exist.
 
-TODO: DDD tactical pattern ValueObject
+This is where PresentationObjects come into play.
 
-### Benefits
+The idea of PresentationObjects is to leverage PHPs typesystem to enforce the component interface by replacing dynamic `array`-driven props for `Neos.Fusion:Component` with actual PHP interfaces. Unlike Typescript, PresentationObjects are not a langauge extension, but just plain PHP value objects. Therefore, they allow for static analysis and also enforce the interface at runtime.
 
-TODO
+## How does it work?
 
-### Drawbacks
+This package provides a special component prototype for Fusion that allows to associate a component with a PHP interface via the `@presentationObjectInterface` annotation. `PackageFactory.AtomicFusion.PresentationObjects` then makes sure that any object that is passed to that component implements the declared interface.
 
-TODO
+PresentationObjects are Value Objects (see: https://martinfowler.com/bliki/ValueObject.html). They are immutable and are only allowed to consist of scalar properties, other value objects or arrays of the former two. They act as predictable data containers.
 
-## Usage
+PresentationObjects are created by factories (see: https://en.wikipedia.org/wiki/Factory_(object-oriented_programming)). These classes have the responsibility to encapsulate specific use cases of a component, retrieve all the data needed for producing it and do the required data mapping. In order to access them in Fusion, PresentationObject factories are registered as Eel Helpers.
 
-### Writing a PresentationObject
+## Benefits
 
-PresentationObject are ValueObjects. In that they are immutable and can only consist of scalar properties or other value objects.
+### Type-safety & Static Analysis
 
-<small>*`EXAMPLE: PresentationObject`*<small>
+The most important function of PresentationObjects is to enforce the interface between domain and presentation layer using PHPs type system. Without further measures however, PHPs type system is only relevant at runtime.
 
-```php
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\MyPresentationObject;
+Luckily, there's tools like [phpstan](https://phpstan.org/) or [psalm](https://psalm.dev/), which allow static analysis of your PHP code base.
 
-/**
- * It's highly recommended to declare PresentationObjects as final to them
- * canonical.
- */
-final class MyPresentationObject implements MyPresentationObjectInterface
-{
-    /**
-     * @var string
-     */
-    private $firstProperty;
+Typesafety and static analysis comes with a lot of benefits:
 
-    /**
-     * @var integer
-     */
-    private $secondProperty;
+1. **Catch type-related bugs before runtime.** Consequent use of [Typehints](https://docs.phpdoc.org/latest/guides/types.html) ensures the correctness of your code during static analysis. Using [phpDoc types](https://docs.phpdoc.org/latest/guides/types.html) allows you to even go beyond the capabilities of PHP and use patterns like Generics or Union types without them being actually supported by PHPs type system.
+2. **Self-documenting interfaces.** Typehints and type annotations amend parameters and properties with the important information of what kind of data they require without the need to look it up in a separate documentation.
+3. **IDE support.** Modern PHP IDEs understand Typehints and phpDoc types and can use them to provide code completion, intelligent parameter suggestions and advanced refactoring capabilities.
 
-    /**
-     * @param string $firstProperty
-     * @param integer $secondProperty
-     */
-    public function __construct(
-        string $firstProperty,
-        int $secondProperty
-    ) {
-        $this->firstProperty = $firstProperty;
-        $this->secondProperty = $secondProperty;
-    }
+### Testing & QA Tooling
 
-    /**
-     * @return string
-     */
-    public function getFirstProperty(): string
-    {
-        return $this->firstProperty;
-    }
+Since they're just PHP code, it is quite easy to write functional and unit tests for PresentationObjects and PresentationObject factories with tools like phpunit (https://phpunit.de/).
 
-    /**
-     * PresentationObjects are immutable. In order to perform change actions
-     * you need to implement a copy-on-write mechanism like this one.
-     *
-     * Such with*-methods are optional however.
-     *
-     * @param string $firstProperty
-     * @return self
-     */
-    public function withFirstProperty(string $firstProperty): self
-    {
-        return new self($firstProperty, $this->secondProperty);
-    }
+For the same reason, PresentationObjects integrate well with any QA tooling for PHP, like:
 
-    /**
-     * @return integer
-     */
-    public function getSecondProperty(): int
-    {
-        return $this->secondProperty;
-    }
-}
-```
+* PHP_CodeSniffer: https://github.com/squizlabs/PHP_CodeSniffer
+* PHP Coding Standards Fixer: https://cs.symfony.com/
+* PHPCPD: https://github.com/sebastianbergmann/phpcpd
 
-### Binding a PresentationObject to a PresentationObjectComponent
+### Separation of Concerns
 
-<small>*`EXAMPLE: PresentationObject Interface`*<small>
+The extensibility of Fusion is generally a great feature, but it also leads to ambiguity when it comes to complex data processing tasks.
 
-```php
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\MyPresentationObject;
+You are left with several options to encapsulate effectful tasks (e.g. custom Eel-Helpers, custom FusionObjects, custom FlowQueryOperations, `Neos.Neos:Plugin`, etc.) with no real guidance as to which mechanism fits which use-case.
 
-interface MyPresentationObjectInterface
-{
-    /**
-     * @return string
-     */
-    public function getFirstProperty(): string;
+When using `PackageFactory.AtomicFusion.PresentationObjects` data and content integration are unambiguously handled by PresentationObject factories. Since these are PHP-Classes capable of any data operation within a Neos instance, your choice of mechanism boils down to one option.
 
-    /**
-     * @return integer
-     */
-    public function getSecondProperty(): int
-}
-```
+### Debugging
 
-<small>*`EXAMPLE: PresentationObject Component`*<small>
+Fusion is sometimes hard to debug, especially if it is unclear, where exactly a malfunction occurs. `Neos.Fusion:Debug` cannot be arbitrarily positioned in your Fusion code and needs to be rendered just like everything else. it therefore also requires the rendering process to succeed at all.
 
-```fusion
-prototype(Vendor.Site:MyPresentationObject) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\MyPresentationObject\\MyPresentationObjectInterface'
+Presentation object factories allow use of the good ol' `\Neos\Flow\var_dump(); die;`-Pattern for simple debugging.
 
-    renderer = afx`
-        <dl>
-            <dt>First property:</dt>
-            <dd>{presentationObject.firstProperty}</dd>
-            <dt>Second property:</dt>
-            <dd>{presentationObject.secondProperty}</dd>
-        </dl>
-    `
-}
-```
+For more advanced needs the PHP-native character of PresentationObjects comes with a natural compatibility with Xdebug step debugging (https://xdebug.org/docs/remote) and profiling (https://xdebug.org/docs/profiler).
 
-TODO
+## Drawbacks
 
-### Writing and registering a PresentationObject Factory
+### A step away from [Neos.Fusion](https://docs.neos.io/cms/manual/rendering/fusion)
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+Fusion is a domain specific language that specializes on declarative rendering instructions. As a DSL, Fusion is able to enforce a certain mindset linguistically.
 
-```php
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\MyPresentationObject;
+PresentationObjects move the concern of content integration largely over to PHP. And while PHP is a multi-paradigm language that *can* be used similarly to Fusion, it doesn't enforce that use at all.
 
-use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+So when using `PackageFactory.AtomicFusion.PresentationObjects`, you need to pay attention on your language use and avoid common anti-patterns. It is strongly recommended that you adhere closely to the value object pattern when writing PresentationObjects. For factories, familiarity with general PHP best practices is helpful (see for instance: https://phptherightway.com/).
 
-/**
- * @Flow\Scope("singleton")
- */
-final class MyPresentationObjectFactory extends AbstractComponentPresentationObjectFactory
-{
-}
-```
+> **Hint:** PHP 8 will be released soon and comes with a lot of great language features that are going to allow to write most of the patterns presented here in a much more concise fashion. Especially noteworthy are [Constructor property promotion](https://wiki.php.net/rfc/constructor_promotion) and [Named arguments](https://wiki.php.net/rfc/named_params). For more on that, have a look at this article: https://stitcher.io/blog/new-in-php-8
 
-<small>*`EXAMPLE: Settings.PresentationHelpers.yaml`*<small>
+### Verbosity
 
-```yaml
-Neos:
-  Fusion:
-    defaultContext:
-      Vendor.Site.MyPresentationObject: Vendor\Site\Presentation\MyPresentationObject\MyPresentationObjectFactory
-```
+PresentationObjects require you to write more code than plain AtomicFusion. To remedy that, this package comes with a [scaffolding tool](./Documentation/Kickstarter.md) to ease the creation of initial code structures.
 
-TODO
+Currently, there's also a lot of concepts involved that spread information over the Codebase (`Classes/Presentation/`, `Resources/Private/Fusion/`, `Configuration/`), thus breaking the principle of co-location.
 
-### Neos CMS content integration with PresentationObject Factories
+In theory, co-location could be achieved by leveraging the `autoload.psr-4` configuration in the composer manifest (see: https://getcomposer.org/doc/04-schema.md#psr-4). However, the viability of this idea has not been proven yet.
 
-TODO
+### Fusion Interoperation
 
-<small>*`EXAMPLE: MyContentElement.fusion`*<small>
+As of right now, Fusion is still the entry point for content integration. It's important to be aware of that, especially when changing factory method signatures, because this is a giant surface on which type-safety is lost.
 
-```fusion
-prototype(Vendor.Site:MyContentElement) < prototype(Neos.Neos:ContentComponent) {
-    renderer = Vendor.Site:MyPresentationObject {
-        presentationObject = ${Vendor.Site.MyPresentationObject.forNode(node)}
-    }
-}
-```
+Fusion is required to handle two major concerns:
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+1. **The internal content mapping and augmentation logic of Neos CMS.** Neos uses Fusion to map content repository nodes to their respective rendering instructions. It also uses Fusion to augment rendered content elements with information required by the Neos UI for inline editing.
+2. **Content cache and partial page rendering.** Fusion provides the `@cache` annotation to enable individual caching instructions for different rendering paths. Its `ContentCache` service is able to resolve nested cached and uncached page fragments, thus allowing for maximum flexibility.
 
-```php
-/* ... */
-final class MyPresentationObjectFactory extends AbstractComponentPresentationObjectFactory
-{
-    /**
-     * @param TraversableNodeInterface $node
-     * @return MyPresentationObjectInterface
-     */
-    public function forNode(TraversableNodeInterface $node): MyPresentationObjectInterface
-    {
-        return new MyPresentationObject(
-            $node->getProperty('firstProperty'),
-            $node->getProperty('secondProperty')
-        );
-    }
-}
-```
-
-TODO: see Docs/Integration.md
-
-### Using the code generator
-
-TODO
-
-```sh
-./flow component:kickstartvalue --package-key=Vendor.Site \
-    Headline \
-    HeadlineLook string \
-        --values=REGULAR,HERO
-```
-
-```sh
-./flow component:kickstart --package-key=Vendor.Site
-    Headline \
-        content:string \
-        look:HeadlineLook
-```
-
-### Preview Mode
-
-The `PresentationObjectComponent` has a special flag to change its behavior when used with tools like Sitegeist.Monocle.
-
-Sitegeist.Monocle uses dummy data that is read directly from an annotation within the component code. That data ends up being a plain PHP array, that does not implement the desired interface. The PresentationObject enforcement would thus break Sitegeist.Monocle's component preview.
-
-When the flag `isInPreviewMode` ist set to `true`, the default `props` context
-is folded into the `presentationObject` context and the PresentationObject enforcement is deactivated.
-
-This allows seamless use with tools like Sitegeist.Monocle.
-
-<small>*`EXAMPLE: Root.fusion`*<small>
-
-```fusion
-prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    isInPreviewMode = ${request.controllerPackageKey == 'Sitegeist.Monocle'}
-}
-```
-
-> The above example shows how `isInPreviewMode` can be set to true for all PresentationObjectComponents that are rendered in Sitegeist.Monocle.
+Future developments of this package are going to focus on solutions for those two problems.
 
 ## License
 

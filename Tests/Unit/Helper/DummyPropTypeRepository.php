@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Helper;
 
+/*
+ * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
+ */
+
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeIdentifier;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeRepository;

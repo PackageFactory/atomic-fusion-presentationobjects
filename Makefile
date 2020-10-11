@@ -33,7 +33,6 @@ lint::
 		--exclude=Generic.Files.LineLength \
 		Classes/ Tests/
 
-
 analyse::
 	@bin/phpstan analyse \
 		--autoload-file Build/BuildEssentials/PhpUnit/UnitTestBootstrap.php \

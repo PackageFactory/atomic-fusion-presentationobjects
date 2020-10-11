@@ -32,6 +32,13 @@ final class ComponentGenerator
      */
     protected $packageResolver;
 
+    /**
+     * @param string $componentName
+     * @phpstan-param array<mixed> $serializedProps
+     * @param array $serializedProps
+     * @param string|null $packageKey
+     * @return void
+     */
     public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
@@ -53,6 +60,11 @@ final class ComponentGenerator
         $this->registerFactory($package, $component);
     }
 
+    /**
+     * @param FlowPackageInterface $package
+     * @param Component $component
+     * @return void
+     */
     private function registerFactory(FlowPackageInterface $package, Component $component): void
     {
         $configurationPath = $package->getPackagePath() . 'Configuration/';

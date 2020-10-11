@@ -8,7 +8,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Package\FlowPackageInterface;
-use Neos\Flow\Package\PackageInterface;
 use Neos\Flow\Package\PackageManager;
 
 /**
@@ -33,19 +32,32 @@ final class PackageResolver
     public function resolvePackage(?string $packageKey = null): FlowPackageInterface
     {
         if ($packageKey) {
-            return $this->packageManager->getPackage($packageKey);
+            $package = $this->packageManager->getPackage($packageKey);
+            if ($package instanceof FlowPackageInterface) {
+                return $package;
+            } else {
+                throw NoPackageCouldBeResolved::
+                    becauseGivenPackageKeyDoesNotReferToAFlowPackage($packageKey);
+            }
         }
         if ($this->defaultPackageKey) {
-            return $this->packageManager->getPackage($this->defaultPackageKey);
+            $package = $this->packageManager->getPackage($this->defaultPackageKey);
+            if ($package instanceof FlowPackageInterface) {
+                return $package;
+            } else {
+                throw NoPackageCouldBeResolved::
+                    becauseDefaultPackageKeyDoesNotReferToAFlowPackage($this->defaultPackageKey);
+            }
         }
 
         foreach ($this->packageManager->getAvailablePackages() as $availablePackage) {
-            /** @var PackageInterface $availablePackage */
+            /** @var FlowPackageInterface $availablePackage */
             if ($availablePackage->getComposerManifest('type') === 'neos-site') {
                 return $availablePackage;
             }
         }
 
-        throw NoPackageCouldBeResolved::becauseNoneIsConfiguredAndNoSitePackageIsAvailable();
+        throw NoPackageCouldBeResolved::
+            becauseNoneIsConfiguredAndNoSitePackageIsAvailable();
     }
 }

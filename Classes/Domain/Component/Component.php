@@ -28,18 +28,25 @@ final class Component
      */
     private $props;
 
-    public function __construct(string $packageKey, string $name, array $props, ?PropTypeRepositoryInterface $propTypeRepository = null)
+    /**
+     * @param string $packageKey
+     * @param string $name
+     * @param array|PropType[] $props
+     */
+    public function __construct(string $packageKey, string $name, array $props)
     {
-        foreach ($props as &$propType) {
-            if (is_string($propType)) {
-                $propType = $propTypeRepository->findByType($packageKey, $name, $propType);
-            }
-        }
         $this->packageKey = $packageKey;
         $this->name = $name;
         $this->props = $props;
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $name
+     * @param array|string[] $serializedProps
+     * @param PropTypeRepositoryInterface $propTypeRepository
+     * @return self
+     */
     public static function fromInput(string $packageKey, string $name, array $serializedProps, PropTypeRepositoryInterface $propTypeRepository): self
     {
         $props = [];
@@ -59,11 +66,17 @@ final class Component
         );
     }
 
+    /**
+     * @return string
+     */
     public function getPackageKey(): string
     {
         return $this->packageKey;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
@@ -72,11 +85,14 @@ final class Component
     /**
      * @return array|PropType[]
      */
-    public function getProps()
+    public function getProps(): array
     {
         return $this->props;
     }
 
+    /**
+     * @return boolean
+     */
     public function isLeaf(): bool
     {
         foreach ($this->props as $propType) {
@@ -88,6 +104,9 @@ final class Component
         return true;
     }
 
+    /**
+     * @return ComponentType
+     */
     public function getType(): ComponentType
     {
         foreach ($this->props as $propType) {
@@ -99,36 +118,61 @@ final class Component
         return ComponentType::leaf();
     }
 
+    /**
+     * @return string
+     */
     public function getFactoryName(): string
     {
         return $this->getNamespace() . '\\' . $this->name . 'Factory';
     }
 
+    /**
+     * @return string
+     */
     public function getHelperName(): string
     {
         return \mb_substr($this->getPackageKey(), \mb_strrpos($this->getPackageKey(), '.') + 1) . '.' . $this->getName();
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getInterfacePath(string $packagePath): string
     {
         return $packagePath . 'Classes/Presentation/' . $this->name . '/' . $this->name . 'Interface.php';
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getClassPath(string $packagePath): string
     {
         return $packagePath . 'Classes/Presentation/' . $this->name . '/' . $this->name . '.php';
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getFactoryPath(string $packagePath): string
     {
         return $packagePath . 'Classes/Presentation/' . $this->name . '/' . $this->name . 'Factory.php';
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getFusionPath(string $packagePath): string
     {
         return $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst($this->getType()) . '/' . $this->name . '/' . $this->name . '.fusion';
     }
 
+    /**
+     * @return string
+     */
     public function getInterfaceContent(): string
     {
         return '<?php
@@ -147,6 +191,9 @@ interface ' . $this->getName() . 'Interface extends ComponentPresentationObjectI
 ';
     }
 
+    /**
+     * @return string
+     */
     public function getClassContent(): string
     {
         return '<?php
@@ -173,6 +220,9 @@ final class ' . $this->getName() . ' extends AbstractComponentPresentationObject
 ';
     }
 
+    /**
+     * @return string
+     */
     public function getFactoryContent(): string
     {
         return '<?php
@@ -190,6 +240,9 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
 ';
     }
 
+    /**
+     * @return string
+     */
     public function getFusionContent(): string
     {
         $terms = [];
@@ -225,11 +278,17 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
 ';
     }
 
+    /**
+     * @return string
+     */
     private function getNamespace(): string
     {
         return \str_replace('.', '\\', $this->packageKey) . '\Presentation\\' . $this->name;
     }
 
+    /**
+     * @return array|string[]
+     */
     private function getProperties(): array
     {
         $properties = [];
@@ -243,6 +302,9 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
         return $properties;
     }
 
+    /**
+     * @return string
+     */
     private function renderUseStatements(): string
     {
         $statements = '';
@@ -259,6 +321,9 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
         return $statements;
     }
 
+    /**
+     * @return string
+     */
     private function renderConstructor(): string
     {
         $arguments = [];
@@ -274,6 +339,10 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
     }';
     }
 
+    /**
+     * @param boolean $abstract
+     * @return array|string[]
+     */
     private function getAccessors(bool $abstract = false): array
     {
         $accessors = [];

@@ -23,6 +23,14 @@ final class ValueGenerator
      */
     protected $packageResolver;
 
+    /**
+     * @param string $componentName
+     * @param string $name
+     * @param string $type
+     * @param array|string[] $values
+     * @param null|string $packageKey
+     * @return void
+     */
     public function generateValue(string $componentName, string $name, string $type, array $values, ?string $packageKey = null): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);

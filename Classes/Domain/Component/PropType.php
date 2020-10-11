@@ -15,6 +15,7 @@ use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 final class PropType
 {
     /**
+     * @phpstan-var array<string,string>
      * @var array|string[]
      */
     public static $primitives = [
@@ -24,6 +25,10 @@ final class PropType
         'bool' => 'bool'
     ];
 
+    /**
+     * @phpstan-var array<string,class-string>
+     * @var array|string[]
+     */
     public static $globalValues = [
         'ImageSource' => ImageSourceHelperInterface::class,
         'Uri' => UriInterface::class
@@ -54,6 +59,13 @@ final class PropType
      */
     private $class;
 
+    /**
+     * @param string $name
+     * @param string $simpleName
+     * @param string $fullyQualifiedName
+     * @param boolean $nullable
+     * @param PropTypeClass $class
+     */
     private function __construct(string $name, string $simpleName, string $fullyQualifiedName, bool $nullable, PropTypeClass $class)
     {
         $this->name = $name;
@@ -63,6 +75,13 @@ final class PropType
         $this->class = $class;
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string $type
+     * @param PropTypeRepositoryInterface $propTypeRepository
+     * @return self
+     */
     public static function create(string $packageKey, string $componentName, string $type, PropTypeRepositoryInterface $propTypeRepository): self
     {
         if (!$identity = $propTypeRepository->findPropTypeIdentifier($packageKey, $componentName, $type)) {
@@ -78,46 +97,73 @@ final class PropType
         );
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getSimpleName(): string
     {
         return $this->simpleName;
     }
 
+    /**
+     * @return string
+     */
     public function getFullyQualifiedName(): string
     {
         return $this->fullyQualifiedName;
     }
 
+    /**
+     * @return boolean
+     */
     public function isNullable(): bool
     {
         return $this->nullable;
     }
 
+    /**
+     * @return PropTypeClass
+     */
     public function getClass(): PropTypeClass
     {
         return $this->class;
     }
 
+    /**
+     * @return string
+     */
     public function toUse(): string
     {
         return $this->fullyQualifiedName;
     }
 
+    /**
+     * @return string
+     */
     public function toType(): string
     {
         return ($this->isNullable() ? '?' : '') . $this->simpleName;
     }
 
+    /**
+     * @return string
+     */
     public function toVar(): string
     {
         return $this->simpleName . ($this->isNullable() ? '|null' : '');
     }
 
+    /**
+     * @return string
+     */
     public function toStyleGuidePropValue(): string
     {
         $styleGuideValue = '';

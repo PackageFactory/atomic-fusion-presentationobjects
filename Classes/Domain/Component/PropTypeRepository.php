@@ -21,8 +21,18 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
      */
     protected $componentRepository;
 
+    /**
+     * @param null|string $packageKey
+     * @param null|string $componentName
+     * @param string $type
+     * @return null|PropType
+     */
     public function findByType(?string $packageKey, ?string $componentName, string $type): ?PropType
     {
+        if ($packageKey === null || $componentName === null) {
+            return null;
+        }
+
         if (!$this->knowsByType($packageKey, $componentName, $type)) {
             return null;
         }
@@ -30,6 +40,12 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
         return PropType::create($packageKey, $componentName, $type, $this);
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string $type
+     * @return null|PropTypeIdentifier
+     */
     public function findPropTypeIdentifier(string $packageKey, string $componentName, string $type): ?PropTypeIdentifier
     {
         if (!$this->knowsByType($packageKey, $componentName, $type)) {
@@ -71,11 +87,21 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
         return null;
     }
 
+    /**
+     * @param string $className
+     * @return string
+     */
     private function getSimpleClassName(string $className): string
     {
         return \mb_substr($className, \mb_strrpos($className, '\\') + 1);
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string $type
+     * @return boolean
+     */
     public function knowsByType(string $packageKey, string $componentName, string $type): bool
     {
         $type = trim($type, '?');
@@ -86,35 +112,69 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
             || $this->knowsComponent($packageKey, $type);
     }
 
+    /**
+     * @param string $type
+     * @return boolean
+     */
     private function knowsPrimitive(string $type): bool
     {
         return isset(PropType::$primitives[$type]);
     }
 
+    /**
+     * @param string $type
+     * @return boolean
+     */
     private function knowsGlobalValue(string $type): bool
     {
         return isset(PropType::$globalValues[$type]);
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string $type
+     * @return boolean
+     */
     private function knowsValue(string $packageKey, string $componentName, string $type): bool
     {
         return class_exists($this->getValueClassName($packageKey, $componentName, $type));
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string $type
+     * @return string
+     */
     private function getValueClassName(string $packageKey, string $componentName, string $type): string
     {
         return \str_replace('.', '\\', $packageKey)
         . '\Presentation\\' . $componentName . '\\' . $type;
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $type
+     * @return boolean
+     */
     private function knowsComponent(string $packageKey, string $type): bool
     {
         return interface_exists($this->getComponentInterfaceName($packageKey, $type));
     }
 
+    /**
+     * @param string $packageKey
+     * @param string $type
+     * @phpstan-return class-string
+     * @return string
+     */
     private function getComponentInterfaceName(string $packageKey, string $type): string
     {
-        return  \str_replace('.', '\\', $packageKey)
+        /** @phpstan-var class-string $interfaceName */
+        $interfaceName =  \str_replace('.', '\\', $packageKey)
             . '\Presentation\\' . $type . '\\' . $type . 'Interface';
+
+        return $interfaceName;
     }
 }

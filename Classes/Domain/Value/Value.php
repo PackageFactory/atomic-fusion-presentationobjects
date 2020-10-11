@@ -33,10 +33,17 @@ final class Value
     private $type;
 
     /**
-     * @var array|null
+     * @var null|string[]
      */
     private $values;
 
+    /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string $name
+     * @param string $type
+     * @param null|string[] $values
+     */
     public function __construct(string $packageKey, string $componentName, string $name, string $type, ?array $values)
     {
         $this->packageKey = $packageKey;
@@ -49,36 +56,58 @@ final class Value
         $this->values = $values;
     }
 
+    /**
+     * @return string
+     */
     public function getPackageKey(): string
     {
         return $this->packageKey;
     }
 
+    /**
+     * @return string
+     */
     public function getComponentName(): string
     {
         return $this->componentName;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
+    /**
+     * @return null|string[]
+     */
     public function getValues(): ?array
     {
         return $this->values;
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getClassPath(string $packagePath): string
     {
         return $packagePath . 'Classes/Presentation/' . $this->componentName . '/' . $this->name . '.php';
     }
 
+    /**
+     * @return string
+     */
     public function getClassContent(): string
     {
         $variable = '$' . $this->type;
@@ -144,11 +173,18 @@ final class ' . $this->getName() . '
 ';
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getExceptionPath(string $packagePath): string
     {
         return $packagePath . 'Classes/Presentation/' . $this->componentName . '/' . $this->name . 'IsInvalid.php';
     }
 
+    /**
+     * @return string
+     */
     public function getExceptionContent(): string
     {
         return '<?php
@@ -173,11 +209,18 @@ final class ' . $this->getName() . 'IsInvalid extends \DomainException
 ';
     }
 
+    /**
+     * @param string $packagePath
+     * @return string
+     */
     public function getProviderPath(string $packagePath): string
     {
         return $packagePath . 'Classes/Application/' . $this->name . 'Provider.php';
     }
 
+    /**
+     * @return string
+     */
     public function getProviderContent(): string
     {
         $arrayName = lcfirst($this->getPluralName());
@@ -234,6 +277,9 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
 ';
     }
 
+    /**
+     * @return string
+     */
     private function getPluralName(): string
     {
         return \mb_substr($this->name, -1) === 'y'
@@ -241,69 +287,101 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
             : $this->name . 's';
     }
 
+    /**
+     * @return string
+     */
     private function getDataSourceIdentifier(): string
     {
         return strtolower(str_replace('.', '-', $this->packageKey) . '-' .  implode('-', $this->splitName(true)));
     }
 
+    /**
+     * @return string
+     */
     private function getDataSourceNamespace(): string
     {
         return \str_replace('.', '\\', $this->packageKey) . '\Application';
     }
 
+    /**
+     * @return string
+     */
     private function getNamespace(): string
     {
         return \str_replace('.', '\\', $this->packageKey) . '\Presentation\\' . $this->componentName;
     }
 
+    /**
+     * @return string
+     */
     private function renderConstants(): string
     {
         $constants = [];
-        foreach ($this->values as $value) {
-            $constants[] = 'const ' . $this->getConstantName($value) . ' = \'' . $value . '\';';
+        if (is_array($this->values)) {
+            foreach ($this->values as $value) {
+                $constants[] = 'const ' . $this->getConstantName($value) . ' = \'' . $value . '\';';
+            }
         }
 
         return trim(implode("\n    ", $constants));
     }
 
+    /**
+     * @return string
+     */
     private function renderNamedConstructors(): string
     {
         $constructors = [];
-        foreach ($this->values as $value) {
-
-            $constructors[]  = 'public static function ' . $value . '(): self
+        if (is_array($this->values)) {
+            foreach ($this->values as $value) {
+                $constructors[]  = 'public static function ' . $value . '(): self
     {
         return new self(self::' . $this->getConstantName($value) . ');
     }';
+            }
         }
 
         return trim(implode("\n\n    ", $constructors));
     }
 
+    /**
+     * @return string
+     */
     private function renderComparators(): string
     {
         $comparators = [];
-        foreach ($this->values as $value) {
-
-            $comparators[]  = 'public function getIs' . ucfirst($value) . '(): bool
+        if (is_array($this->values)) {
+            foreach ($this->values as $value) {
+                $comparators[]  = 'public function getIs' . ucfirst($value) . '(): bool
     {
         return $this->value === self::' . $this->getConstantName($value) . ';
     }';
+            }
         }
 
         return trim(implode("\n\n    ", $comparators));
     }
 
+    /**
+     * @return string
+     */
     public function renderValues(): string
     {
         $values = [];
-        foreach ($this->values as $value) {
-            $values[] = 'self::' . $this->getConstantName($value) . ',';
+
+        if (is_array($this->values)) {
+            foreach ($this->values as $value) {
+                $values[] = 'self::' . $this->getConstantName($value) . ',';
+            }
         }
 
         return trim(trim(implode("\n            ", $values)), ',');
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
     private function getConstantName(string $value): string
     {
         $parts = $this->splitName();
@@ -314,16 +392,23 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
         return 'VALUE_' . strtoupper($value);
     }
 
+    /**
+     * @param boolean $plural
+     * @return string[]
+     */
     private function splitName(bool $plural = false): array
     {
         $name = $plural ? $this->getPluralName() : $this->name;
         $nameParts = [];
         $parts = preg_split("/([A-Z])/", $name, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        foreach ($parts as $i => $part) {
-            if ($i % 2 === 0) {
-                $nameParts[$i / 2] = $part;
-            } else {
-                $nameParts[($i - 1) / 2] .= $part;
+
+        if (is_array($parts)) {
+            foreach ($parts as $i => $part) {
+                if ($i % 2 === 0) {
+                    $nameParts[$i / 2] = $part;
+                } else {
+                    $nameParts[($i - 1) / 2] .= $part;
+                }
             }
         }
 

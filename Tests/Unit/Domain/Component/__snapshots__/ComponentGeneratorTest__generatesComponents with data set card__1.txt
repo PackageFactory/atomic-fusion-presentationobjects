@@ -1,0 +1,58 @@
+<?php
+namespace Vendor\Site\Presentation\Card;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use Image;
+use Text;
+use Link;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Card extends AbstractComponentPresentationObject implements CardInterface
+{
+    /**
+     * @var Image|null
+     */
+    private $image;
+
+    /**
+     * @var Text|null
+     */
+    private $text;
+
+    /**
+     * @var Link|null
+     */
+    private $link;
+
+    public function __construct(
+        ?Image $image,
+        ?Text $text,
+        ?Link $link
+    ) {
+        $this->image = $image;
+        $this->text = $text;
+        $this->link = $link;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function getText(): ?Text
+    {
+        return $this->text;
+    }
+
+    public function getLink(): ?Link
+    {
+        return $this->link;
+    }
+}

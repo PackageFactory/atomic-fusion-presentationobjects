@@ -1,0 +1,4 @@
+Neos:
+  Fusion:
+    defaultContext:
+      Site.Card: Vendor\Site\Presentation\Card\CardFactory

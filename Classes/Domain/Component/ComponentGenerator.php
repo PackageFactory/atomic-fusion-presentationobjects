@@ -9,7 +9,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Utility\Files;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Dumper as YamlWriter;
 
@@ -28,7 +28,7 @@ final class ComponentGenerator
 
     /**
      * @Flow\Inject
-     * @var PackageResolver
+     * @var PackageResolverInterface
      */
     protected $packageResolver;
 

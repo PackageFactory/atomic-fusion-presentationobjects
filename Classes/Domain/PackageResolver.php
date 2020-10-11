@@ -15,7 +15,7 @@ use Neos\Flow\Package\PackageManager;
  *
  * @Flow\Scope("singleton")
  */
-final class PackageResolver
+final class PackageResolver implements PackageResolverInterface
 {
     /**
      * @Flow\Inject

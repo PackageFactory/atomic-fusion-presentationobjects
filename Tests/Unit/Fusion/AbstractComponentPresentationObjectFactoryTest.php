@@ -104,11 +104,12 @@ final class AbstractComponentPresentationObjectFactoryTest extends UnitTestCase
             /**
              * @param TraversableNodeInterface $node
              * @param string $propertyName
+             * @param boolean $block
              * @return string
              */
-            public function getEditablePropertyForTest(TraversableNodeInterface $node, string $propertyName): string
+            public function getEditablePropertyForTest(TraversableNodeInterface $node, string $propertyName, bool $block): string
             {
-                return $this->getEditableProperty($node, $propertyName);
+                return $this->getEditableProperty($node, $propertyName, $block);
             }
 
             /**
@@ -170,7 +171,7 @@ final class AbstractComponentPresentationObjectFactoryTest extends UnitTestCase
      * @test
      * @return void
      */
-    public function providesEditableNodeProperties(): void
+    public function providesInlineEditableNodeProperties(): void
     {
         $textNode = $this->prophet
             ->prophesize(TraversableNodeInterface::class)
@@ -183,7 +184,28 @@ final class AbstractComponentPresentationObjectFactoryTest extends UnitTestCase
 
         $this->assertEquals(
             '<div class="editable" data-node="text-node" data-property="content"><p><strong>Lorem</strong> ipsum...</p></div>',
-            $factory->getEditablePropertyForTest($textNode->reveal(), 'content')
+            $factory->getEditablePropertyForTest($textNode->reveal(), 'content', false)
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function providesBlockEditableNodeProperties(): void
+    {
+        $textNode = $this->prophet
+            ->prophesize(TraversableNodeInterface::class)
+            ->willImplement(NodeInterface::class);
+        $textNode->getIdentifier()->willReturn('text-node');
+        $textNode->getProperty('content')->willReturn('<p><strong>Lorem</strong> ipsum...</p>');
+
+        /** @var mixed $factory */
+        $factory = $this->factory;
+
+        $this->assertEquals(
+            '<div class="editable" data-node="text-node" data-property="content"><div><p><strong>Lorem</strong> ipsum...</p></div></div>',
+            $factory->getEditablePropertyForTest($textNode->reveal(), 'content', true)
         );
     }
 

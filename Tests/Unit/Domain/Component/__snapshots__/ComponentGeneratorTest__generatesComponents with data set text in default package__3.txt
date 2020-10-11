@@ -1,0 +1,12 @@
+<?php
+namespace Vendor\Default\Presentation\Text;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class TextFactory extends AbstractComponentPresentationObjectFactory
+{
+}

@@ -1,0 +1,5 @@
+Neos:
+  Fusion:
+    defaultContext:
+      Existing.Helper: Some\OtherPackage\Existing\HelperFactory
+      Default.Text: Vendor\Default\Presentation\Text\TextFactory

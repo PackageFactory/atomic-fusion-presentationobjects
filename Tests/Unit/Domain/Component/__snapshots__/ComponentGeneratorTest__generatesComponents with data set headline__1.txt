@@ -1,0 +1,57 @@
+<?php
+namespace Vendor\Site\Presentation\Headline;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use HeadlineType;
+use HeadlineLook;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Headline extends AbstractComponentPresentationObject implements HeadlineInterface
+{
+    /**
+     * @var HeadlineType
+     */
+    private $type;
+
+    /**
+     * @var HeadlineLook
+     */
+    private $look;
+
+    /**
+     * @var string
+     */
+    private $content;
+
+    public function __construct(
+        HeadlineType $type,
+        HeadlineLook $look,
+        string $content
+    ) {
+        $this->type = $type;
+        $this->look = $look;
+        $this->content = $content;
+    }
+
+    public function getType(): HeadlineType
+    {
+        return $this->type;
+    }
+
+    public function getLook(): HeadlineLook
+    {
+        return $this->look;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+}

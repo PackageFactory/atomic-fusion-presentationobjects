@@ -66,7 +66,7 @@ final class PropType
      * @param boolean $nullable
      * @param PropTypeClass $class
      */
-    private function __construct(string $name, string $simpleName, string $fullyQualifiedName, bool $nullable, PropTypeClass $class)
+    public function __construct(string $name, string $simpleName, string $fullyQualifiedName, bool $nullable, PropTypeClass $class)
     {
         $this->name = $name;
         $this->simpleName = $simpleName;

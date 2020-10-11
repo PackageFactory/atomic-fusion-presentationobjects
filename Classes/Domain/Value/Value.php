@@ -183,9 +183,10 @@ final class ' . $this->getName() . '
     }
 
     /**
+     * @param \DateTimeImmutable $now
      * @return string
      */
-    public function getExceptionContent(): string
+    public function getExceptionContent(\DateTimeImmutable $now): string
     {
         return '<?php
 namespace ' . $this->getNamespace() . ';
@@ -203,7 +204,7 @@ final class ' . $this->getName() . 'IsInvalid extends \DomainException
 {
     public static function becauseItMustBeOneOfTheDefinedConstants(' . $this->type . ' $attemptedValue): self
     {
-        return new self(\'The given value "\' . $attemptedValue . \'" is no valid ' . $this->name . ', must be one of the defined constants. \', ' . time() . ');
+        return new self(\'The given value "\' . $attemptedValue . \'" is no valid ' . $this->name . ', must be one of the defined constants. \', ' . $now->getTimestamp() . ');
     }
 }
 ';

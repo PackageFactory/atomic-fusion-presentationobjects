@@ -8,7 +8,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Value;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\Files;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
 
 /**
  * The value generator domain service
@@ -19,9 +19,22 @@ final class ValueGenerator
 {
     /**
      * @Flow\Inject
-     * @var PackageResolver
+     * @var PackageResolverInterface
      */
     protected $packageResolver;
+
+    /**
+     * @var \DateTimeImmutable
+     */
+    protected $now;
+
+    /**
+     * @param null|\DateTimeImmutable $now
+     */
+    public function __construct(?\DateTimeImmutable $now = null)
+    {
+        $this->now = $now ?? new \DateTimeImmutable();
+    }
 
     /**
      * @param string $componentName
@@ -42,7 +55,7 @@ final class ValueGenerator
             Files::createDirectoryRecursively($classPath);
         }
         file_put_contents($value->getClassPath($packagePath), $value->getClassContent());
-        file_put_contents($value->getExceptionPath($packagePath), $value->getExceptionContent());
+        file_put_contents($value->getExceptionPath($packagePath), $value->getExceptionContent($this->now));
 
         $dataSourcePath = $packagePath . 'Classes/Application/';
         if (!is_dir($dataSourcePath)) {

@@ -17,7 +17,7 @@
           processUncoveredFiles="true"
           pathCoverage="true"
           ignoreDeprecatedCodeUnits="true"
-          disableCodeCoverageIgnore="true">
+          disableCodeCoverageIgnore="false">
         <include>
             <directory suffix=".php">Classes</directory>
         </include>

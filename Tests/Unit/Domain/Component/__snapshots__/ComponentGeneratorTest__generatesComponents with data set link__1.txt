@@ -1,0 +1,44 @@
+<?php
+namespace Vendor\Site\Presentation\Link;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use UriInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Link extends AbstractComponentPresentationObject implements LinkInterface
+{
+    /**
+     * @var UriInterface
+     */
+    private $href;
+
+    /**
+     * @var string|null
+     */
+    private $title;
+
+    public function __construct(
+        UriInterface $href,
+        ?string $title
+    ) {
+        $this->href = $href;
+        $this->title = $title;
+    }
+
+    public function getHref(): UriInterface
+    {
+        return $this->href;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+}

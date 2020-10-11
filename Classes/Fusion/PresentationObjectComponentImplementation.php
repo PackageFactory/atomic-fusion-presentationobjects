@@ -5,16 +5,39 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use Neos\Fusion\FusionObjects\DataStructureImplementation;
+
 /**
  * A custom component implementation allowing the usage of presentation objects in the fusion runtime
  */
-class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjects\ComponentImplementation
+class PresentationObjectComponentImplementation extends DataStructureImplementation
 {
     const PREVIEW_MODE = 'isInPreviewMode';
 
     const OBJECT_NAME = 'presentationObject';
 
     const INTERFACE_DECLARATION_NAME = '__meta/presentationObjectInterface';
+
+    /**
+     * Properties that are ignored and not included into the ``props`` context
+     *
+     * @var array|string[]
+     */
+    protected $ignoreProperties = ['__meta', 'renderer'];
+
+    /**
+     * Evaluate the fusion-keys and transfer the result into the context as ``props``
+     * afterwards evaluate the ``renderer`` with this context
+     *
+     * @return mixed
+     */
+    public function evaluate()
+    {
+        $context = $this->runtime->getCurrentContext();
+        $renderContext = $this->prepare($context);
+        $result = $this->render($renderContext);
+        return $result;
+    }
 
     /**
      * Prepare the context for the renderer
@@ -24,7 +47,7 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
      * @phpstan-return array<string,mixed>
      * @return array
      */
-    protected function prepare($context)
+    protected function prepare(array $context): array
     {
         if ($this->isInPreviewMode()) {
             $props = $this->getProps();
@@ -37,7 +60,45 @@ class PresentationObjectComponentImplementation extends \Neos\Fusion\FusionObjec
             $context[self::OBJECT_NAME] = $this->getPresentationObject();
         }
 
-        return parent::prepare($context);
+        $context['props'] = $this->getProps();
+        return $context;
+    }
+
+    /**
+     * Calculate the component props
+     *
+     * @phpstan-return array<string,mixed>
+     * @return array
+     */
+    protected function getProps()
+    {
+        /** @phpstan-var string[] $sortedChildFusionKeys */
+        $sortedChildFusionKeys = $this->sortNestedFusionKeys();
+        $props = [];
+        foreach ($sortedChildFusionKeys as $key) {
+            try {
+                $props[$key] = $this->fusionValue($key);
+            } catch (\Exception $e) {
+                $props[$key] = $this->runtime->handleRenderingException($this->path . '/' . $key, $e);
+            }
+        }
+
+        return $props;
+    }
+
+    /**
+     * Evaluate the renderer with the give context and return
+     *
+     * @phpstan-param array<string,mixed> $context
+     * @param array $context
+     * @return mixed
+     */
+    protected function render(array $context)
+    {
+        $this->runtime->pushContextArray($context);
+        $result = $this->runtime->render($this->path . '/renderer');
+        $this->runtime->popContext();
+        return $result;
     }
 
     /**

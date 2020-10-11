@@ -33,7 +33,8 @@ class ValueTest extends UnitTestCase
 
     public function testGetClassContent(): void
     {
-        Assert::assertSame('<?php
+        Assert::assertSame(
+            '<?php
 namespace Acme\Site\Presentation\MyComponent;
 
 /*
@@ -117,7 +118,8 @@ final class MyComponentType
 
     public function testGetExceptionContent(): void
     {
-        Assert::assertSame('<?php
+        Assert::assertSame(
+            '<?php
 namespace Acme\Site\Presentation\MyComponent;
 
 /*
@@ -143,7 +145,8 @@ final class MyComponentTypeIsInvalid extends \DomainException
 
     public function testGetProviderContent(): void
     {
-        Assert::assertSame('<?php
+        Assert::assertSame(
+            '<?php
 namespace Acme\Site\Application;
 
 /*
@@ -194,6 +197,7 @@ class MyComponentTypeProvider extends AbstractDataSource implements ProtectedCon
     }
 }
 ',
-            $this->subject->getProviderContent());
+            $this->subject->getProviderContent()
+        );
     }
 }

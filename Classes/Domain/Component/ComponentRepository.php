@@ -24,7 +24,7 @@ final class ComponentRepository
     public function getComponentType(string $interfaceName): ComponentType
     {
         $reflection = new \ReflectionClass($interfaceName);
-        foreach($reflection->getMethods() as $method) {
+        foreach ($reflection->getMethods() as $method) {
             if (\mb_strpos($method->getName(), 'get') === 0 && interface_exists((string) $method->getReturnType())) {
                 /** @phpstan-var class-string $getterReturnTypeName */
                 $getterReturnTypeName = (string) $method->getReturnType();

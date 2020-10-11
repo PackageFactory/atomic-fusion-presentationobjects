@@ -53,7 +53,8 @@ class ComponentTest extends UnitTestCase
 
     public function testGetInterfaceContent(): void
     {
-        Assert::assertSame('<?php
+        Assert::assertSame(
+            '<?php
 namespace Acme\Site\Presentation\MyComponent;
 
 /*
@@ -102,7 +103,8 @@ interface MyComponentInterface extends ComponentPresentationObjectInterface
 
     public function testGetClassContent(): void
     {
-        Assert::assertSame('<?php
+        Assert::assertSame(
+            '<?php
 namespace Acme\Site\Presentation\MyComponent;
 
 /*
@@ -299,7 +301,8 @@ final class MyComponent extends AbstractComponentPresentationObject implements M
 
     public function testGetFactoryContent(): void
     {
-        Assert::assertSame('<?php
+        Assert::assertSame(
+            '<?php
 namespace Acme\Site\Presentation\MyComponent;
 
 /*
@@ -318,7 +321,8 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
 
     public function testGetFusionContent(): void
     {
-        Assert::assertSame('prototype(Acme.Site:Composite.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+        Assert::assertSame(
+            'prototype(Acme.Site:Composite.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'Acme\\\\Site\\\\Presentation\\\\MyComponent\\\\MyComponentInterface\'
 
     @styleguide {

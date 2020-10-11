@@ -2,7 +2,6 @@
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
-
 /**
  * The interface to be implemented by prop type repositories
  */

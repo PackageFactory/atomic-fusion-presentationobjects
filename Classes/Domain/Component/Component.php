@@ -186,7 +186,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
 ' . $this->renderUseStatements() . '
 interface ' . $this->getName() . 'Interface extends ComponentPresentationObjectInterface
 {
-    ' . trim (implode("\n\n    ", $this->getAccessors(true))) .  '
+    ' . trim(implode("\n\n    ", $this->getAccessors(true))) .  '
 }
 ';
     }
@@ -211,11 +211,11 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
  */
 final class ' . $this->getName() . ' extends AbstractComponentPresentationObject implements ' . $this->getName() . 'Interface
 {
-    ' . trim (implode("\n\n    ", $this->getProperties())) .  '
+    ' . trim(implode("\n\n    ", $this->getProperties())) .  '
 
     ' . $this->renderConstructor() .  '
 
-    ' . trim (implode("\n\n    ", $this->getAccessors(false))) .  '
+    ' . trim(implode("\n\n    ", $this->getAccessors(false))) .  '
 }
 ';
     }

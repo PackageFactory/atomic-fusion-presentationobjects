@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 /*
@@ -167,7 +167,7 @@ final class Component
      */
     public function getFusionPath(string $packagePath): string
     {
-        return $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst($this->getType()) . '/' . $this->name . '/' . $this->name . '.fusion';
+        return $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst((string) $this->getType()) . '/' . $this->name . '/' . $this->name . '.fusion';
     }
 
     /**
@@ -251,7 +251,7 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
             if ($propType->getFullyQualifiedName() === ImageSourceHelperInterface::class) {
                 $definitionData = '<Sitegeist.Lazybones:Image imageSource={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
             } elseif ($propType->getClass()->isComponent()) {
-                $definitionData = '<' . $this->packageKey . ':' . ucfirst($propType->getClass()) . '.' . $propType->getName() . ' presentationObject={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
+                $definitionData = '<' . $this->packageKey . ':' . ucfirst((string) $propType->getClass()) . '.' . $propType->getName() . ' presentationObject={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
             } else {
                 $definitionData = '{presentationObject.' . $propName . '}';
             }
@@ -260,7 +260,7 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
         <dd>' . $definitionData . '</dd>';
         }
 
-        return 'prototype(' . $this->packageKey . ':' . ucfirst($this->getType()) . '.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+        return 'prototype(' . $this->packageKey . ':' . ucfirst((string) $this->getType()) . '.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'' . str_replace('\\', '\\\\', ucfirst($this->getNamespace())) .  '\\\\' . $this->name . 'Interface\'
 
     @styleguide {

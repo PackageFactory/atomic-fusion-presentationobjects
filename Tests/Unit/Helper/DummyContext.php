@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Helper;
 
 use Neos\Neos\Domain\Service\ContentContext;

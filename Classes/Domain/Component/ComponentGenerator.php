@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 /*
@@ -49,7 +48,7 @@ final class ComponentGenerator
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
         }
-        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst($component->getType()) . '/' . $componentName;
+        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst((string) $component->getType()) . '/' . $componentName;
         if (!file_exists($fusionPath)) {
             Files::createDirectoryRecursively($fusionPath);
         }

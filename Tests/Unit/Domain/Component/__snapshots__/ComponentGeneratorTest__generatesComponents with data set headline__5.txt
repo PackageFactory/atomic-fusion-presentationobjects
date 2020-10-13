@@ -1,0 +1,22 @@
+prototype(Vendor.Site:Leaf.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Headline\\HeadlineInterface'
+
+    @styleguide {
+        title = 'Headline'
+
+        props {
+            type = ''
+            look = ''
+            content = 'Text'
+        }
+    }
+
+    renderer = afx`<dl>
+        <dt>type:</dt>
+        <dd>{presentationObject.type}</dd>
+        <dt>look:</dt>
+        <dd>{presentationObject.look}</dd>
+        <dt>content:</dt>
+        <dd>{presentationObject.content}</dd>
+    </dl>`
+}

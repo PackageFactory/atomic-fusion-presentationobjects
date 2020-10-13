@@ -1,0 +1,25 @@
+prototype(Vendor.Site:Leaf.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Image\\ImageInterface'
+
+    @styleguide {
+        title = 'Image'
+
+        props {
+            src = Sitegeist.Kaleidoscope:DummyImageSource {
+                height = 1920
+                width = 1080
+            }
+            alt = 'Text'
+            title = 'Text'
+        }
+    }
+
+    renderer = afx`<dl>
+        <dt>src:</dt>
+        <dd>{presentationObject.src}</dd>
+        <dt>alt:</dt>
+        <dd>{presentationObject.alt}</dd>
+        <dt>title:</dt>
+        <dd>{presentationObject.title}</dd>
+    </dl>`
+}

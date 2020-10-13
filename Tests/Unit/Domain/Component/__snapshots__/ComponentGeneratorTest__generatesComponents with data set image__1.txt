@@ -1,0 +1,56 @@
+<?php
+namespace Vendor\Site\Presentation\Image;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use ImageSourceHelperInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Image extends AbstractComponentPresentationObject implements ImageInterface
+{
+    /**
+     * @var ImageSourceHelperInterface
+     */
+    private $src;
+
+    /**
+     * @var string
+     */
+    private $alt;
+
+    /**
+     * @var string|null
+     */
+    private $title;
+
+    public function __construct(
+        ImageSourceHelperInterface $src,
+        string $alt,
+        ?string $title
+    ) {
+        $this->src = $src;
+        $this->alt = $alt;
+        $this->title = $title;
+    }
+
+    public function getSrc(): ImageSourceHelperInterface
+    {
+        return $this->src;
+    }
+
+    public function getAlt(): string
+    {
+        return $this->alt;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+}

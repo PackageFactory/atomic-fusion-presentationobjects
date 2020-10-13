@@ -1,0 +1,12 @@
+<?php
+namespace Vendor\Site\Presentation\Headline;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class HeadlineFactory extends AbstractComponentPresentationObjectFactory
+{
+}

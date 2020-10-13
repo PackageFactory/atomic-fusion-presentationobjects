@@ -1,0 +1,12 @@
+<?php
+namespace Vendor\Site\Presentation\Link;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class LinkFactory extends AbstractComponentPresentationObjectFactory
+{
+}

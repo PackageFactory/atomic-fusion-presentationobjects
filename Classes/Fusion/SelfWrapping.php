@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
 /*
@@ -14,10 +13,14 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 trait SelfWrapping
 {
     /**
-     * @var callable|null
+     * @var null|callable
      */
     private $wrapper;
 
+    /**
+     * @param string $value
+     * @return string
+     */
     final public function wrap(string $value): string
     {
         $wrapper = $this->wrapper;

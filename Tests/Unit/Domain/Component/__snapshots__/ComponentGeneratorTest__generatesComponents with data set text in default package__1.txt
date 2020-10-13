@@ -1,0 +1,31 @@
+<?php
+namespace Vendor\Default\Presentation\Text;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Text extends AbstractComponentPresentationObject implements TextInterface
+{
+    /**
+     * @var string
+     */
+    private $content;
+
+    public function __construct(
+        string $content
+    ) {
+        $this->content = $content;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+}

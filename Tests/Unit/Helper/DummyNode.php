@@ -1,5 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Helper;
+
+/*
+ * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
+ */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeTemplate;

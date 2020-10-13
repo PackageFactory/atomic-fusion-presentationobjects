@@ -1,11 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
+
+/*
+ * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
+ */
 
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Fusion\Core\Runtime;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsMissing;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\PresentationObjectComponentImplementation;
-use PHPUnit\Framework\MockObject\MockObject;
+use Prophecy\Prophet;
 
 /**
  * Test cases for the PresentationObjectComponentImplementation
@@ -13,33 +21,53 @@ use PHPUnit\Framework\MockObject\MockObject;
 class PresentationObjectComponentImplementationTest extends UnitTestCase
 {
     /**
+     * @var Prophet
+     */
+    private $prophet;
+
+    /**
+     * @before
+     * @return void
+     */
+    public function setUpPresentationObjectComponentImplementation(): void
+    {
+        $this->prophet = new Prophet();
+    }
+
+    /**
+     * @after
+     * @return void
+     */
+    public function tearDownPresentationObjectComponentImplementation(): void
+    {
+        $this->prophet->checkPredictions();
+    }
+
+    /**
      * @test
      * @throws \ReflectionException
+     * @return void
      */
-    public function prepareProperlyMergesPropsToStubbedPresentationObjectInPreviewMode()
+    public function prepareProperlyMergesPropsToStubbedPresentationObjectInPreviewMode(): void
     {
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime = $this->createMock(Runtime::class);
+        $runtime = $this->prophet->prophesize(Runtime::class);
 
-        $mockRuntime
-            ->expects($this->any())
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/foo')
-            ))
-            ->will($this->returnCallback(function ($path) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return true;
-                }
-                if ($path === 'test/foo') {
-                    return 'bar';
-                }
-                return null;
-            }));
-
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
         $subject['foo'] = 'bar';
+
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(true);
+        $runtime
+            ->evaluate('test/foo', $subject)
+            ->willReturn('bar');
 
         $context = $this->getPrepare()->invokeArgs($subject, [[]]);
 
@@ -50,39 +78,38 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
     /**
      * @test
      * @throws \ReflectionException
+     * @return void
      */
-    public function prepareWritesPresentationObjectToContextWhenNotInPreviewMode()
+    public function prepareWritesPresentationObjectToContextWhenNotInPreviewMode(): void
     {
-        $mockRuntime = $this->createMock(Runtime::class);
+        $runtime = $this->prophet->prophesize(Runtime::class);
+        $presentationObject = $this->prophet->prophesize(ComponentPresentationObjectInterface::class);
 
-        $mockPresentationObject = $this->createMock(ComponentPresentationObjectInterface::class);
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime
-            ->expects($this->exactly(3))
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME)
-            ))
-            ->will($this->returnCallback(function ($path) use($mockPresentationObject) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return false;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::OBJECT_NAME) {
-                    return $mockPresentationObject;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME) {
-                    return ComponentPresentationObjectInterface::class;
-                }
-                return null;
-            }));
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
 
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(false);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
+            ->willReturn($presentationObject);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
+            ->willReturn(ComponentPresentationObjectInterface::class);
 
         $context = $this->getPrepare()->invokeArgs($subject, [[]]);
 
-        $this->assertSame($mockPresentationObject, $context[PresentationObjectComponentImplementation::OBJECT_NAME]);
+        $this->assertSame(
+            $presentationObject->reveal(),
+            $context[PresentationObjectComponentImplementation::OBJECT_NAME]
+        );
     }
 
     /**
@@ -100,171 +127,177 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectIsMissing
+     * @return void
      */
-    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutGivenPresentationObject()
+    public function publishesItsOwnPath(): void
     {
-        $mockRuntime = $this->createMock(Runtime::class);
+        $subject = new PresentationObjectComponentImplementation(
+            $this->prophet->prophesize(Runtime::class)->reveal(),
+            'path/to/button/integration',
+            'Vendor.Site:Component.Button'
+        );
 
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime
-            ->expects($this->exactly(2))
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME)
-            ))
-            ->will($this->returnCallback(function ($path) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return false;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::OBJECT_NAME) {
-                    return null;
-                }
-                return null;
-            }));
+        $this->assertEquals('path/to/button/integration', $subject->getPath());
+    }
 
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+    /**
+     * @test
+     * @return void
+     */
+    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutGivenPresentationObject(): void
+    {
+        $this->expectException(ComponentPresentationObjectIsMissing::class);
+
+        $runtime = $this->prophet->prophesize(Runtime::class);
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
+
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(false);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
+            ->willReturn(null);
+
+        $this->expectException(ComponentPresentationObjectIsMissing::class);
 
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsUndeclared
+     * @return void
      */
-    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutDeclaredPresentationObjectInterface()
+    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutDeclaredPresentationObjectInterface(): void
     {
-        $mockRuntime = $this->createMock(Runtime::class);
+        $this->expectException(ComponentPresentationObjectInterfaceIsUndeclared::class);
 
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime
-            ->expects($this->exactly(3))
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME)
-            ))
-            ->will($this->returnCallback(function ($path) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return false;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::OBJECT_NAME) {
-                    return new \DateTimeImmutable();
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME) {
-                    return null;
-                }
-                return null;
-            }));
+        $runtime = $this->prophet->prophesize(Runtime::class);
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
 
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(false);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
+            ->willReturn(new \DateTimeImmutable);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
+            ->willReturn(null);
+
+        $this->expectException(ComponentPresentationObjectInterfaceIsUndeclared::class);
 
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterfaceIsMissing
+     * @return void
      */
-    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutExistingPresentationObjectInterface()
+    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithoutExistingPresentationObjectInterface(): void
     {
-        $mockRuntime = $this->createMock(Runtime::class);
+        $this->expectException(ComponentPresentationObjectInterfaceIsMissing::class);
 
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime
-            ->expects($this->exactly(3))
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME)
-            ))
-            ->will($this->returnCallback(function ($path) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return false;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::OBJECT_NAME) {
-                    return new \DateTimeImmutable();
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME) {
-                    return '\I\Do\Not\Exist';
-                }
-                return null;
-            }));
+        $runtime = $this->prophet->prophesize(Runtime::class);
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
 
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(false);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
+            ->willReturn(new \DateTimeImmutable);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
+            ->willReturn('\I\Do\Not\Exist');
+
+        $this->expectException(ComponentPresentationObjectInterfaceIsMissing::class);
 
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface
+     * @return void
      */
-    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheDeclaredInterface()
+    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheDeclaredInterface(): void
     {
-        $mockRuntime = $this->createMock(Runtime::class);
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
 
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime
-            ->expects($this->exactly(3))
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME)
-            ))
-            ->will($this->returnCallback(function ($path) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return false;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::OBJECT_NAME) {
-                    return new \stdClass();
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME) {
-                    return \DateTimeInterface::class;
-                }
-                return null;
-            }));
+        $runtime = $this->prophet->prophesize(Runtime::class);
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
 
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(false);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
+            ->willReturn(new \stdClass);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
+            ->willReturn(\DateTimeInterface::class);
+
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
 
         $subject->evaluate();
     }
 
     /**
      * @test
-     * @expectedException \PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectDoesNotImplementRequiredInterface
+     * @return void
      */
-    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheBaseInterface()
+    public function evaluateThrowsExceptionWhenNotInPreviewModeAndWithPresentationObjectNotImplementingTheBaseInterface(): void
     {
-        $mockRuntime = $this->createMock(Runtime::class);
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
 
-        /** @var Runtime|MockObject $mockRuntime */
-        $mockRuntime
-            ->expects($this->exactly(3))
-            ->method('evaluate')
-            ->with($this->logicalOr(
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::OBJECT_NAME),
-                $this->equalTo('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME)
-            ))
-            ->will($this->returnCallback(function ($path) {
-                if ($path === 'test/' . PresentationObjectComponentImplementation::PREVIEW_MODE) {
-                    return false;
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::OBJECT_NAME) {
-                    return new \DateTimeImmutable();
-                }
-                if ($path === 'test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME) {
-                    return \DateTimeInterface::class;
-                }
-                return null;
-            }));
+        $runtime = $this->prophet->prophesize(Runtime::class);
+        $subject = new PresentationObjectComponentImplementation(
+            $runtime->reveal(),
+            'test',
+            'My.Package:Component'
+        );
 
-        $subject = new PresentationObjectComponentImplementation($mockRuntime, 'test', 'My.Package:Component');
+        $runtime
+            ->getCurrentContext()
+            ->willReturn([]);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
+            ->willReturn(false);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
+            ->willReturn(new \DateTimeImmutable);
+        $runtime
+            ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
+            ->willReturn(\DateTimeInterface::class);
+
+        $this->expectException(ComponentPresentationObjectDoesNotImplementRequiredInterface::class);
 
         $subject->evaluate();
     }

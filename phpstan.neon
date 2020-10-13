@@ -1,0 +1,5 @@
+includes:
+    - Packages/Libraries/jangregor/phpstan-prophecy/extension.neon
+parameters:
+	excludes_analyse:
+		- Tests/Unit/Helper/*

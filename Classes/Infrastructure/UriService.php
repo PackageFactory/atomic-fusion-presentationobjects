@@ -5,6 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Infrastructure;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Annotations as Flow;
@@ -112,17 +113,15 @@ final class UriService implements UriServiceInterface
             $requestHandler = $this->bootstrap->getActiveRequestHandler();
             if ($requestHandler instanceof Http\RequestHandler) {
                 $request = $requestHandler->getHttpRequest();
-                $response = $requestHandler->getHttpResponse();
             } else {
-                $request = Http\Request::createFromEnvironment();
-                $response = new Http\Response();
+                $request = ServerRequest::fromGlobals();
             }
-            $actionRequest = new Mvc\ActionRequest($request);
+            $actionRequest = Mvc\ActionRequest::fromHttpRequest($request);
             $uriBuilder = new Mvc\Routing\UriBuilder();
             $uriBuilder->setRequest($actionRequest);
             $this->controllerContext = new Mvc\Controller\ControllerContext(
                 $actionRequest,
-                $response,
+                new Mvc\ActionResponse(),
                 new Mvc\Controller\Arguments(),
                 $uriBuilder
             );

@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "neos/neos": "~4.3",
-        "sitegeist/kaleidoscope": "^5.0"
+        "neos/neos": "^4.3 || dev-master",
+        "sitegeist/kaleidoscope": "^5.0 || dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.4",

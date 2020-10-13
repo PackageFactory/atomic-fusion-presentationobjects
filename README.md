@@ -111,6 +111,10 @@ Fusion is required to handle two major concerns:
 
 Future developments of this package are going to focus on solutions for those two problems.
 
+## Contribution
+
+We will gladly accept contributions. Please send us pull requests.
+
 ## License
 
 see [LICENSE](./LICENSE)

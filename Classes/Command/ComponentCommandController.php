@@ -9,7 +9,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\FusionNamespace;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\ValueGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 
 /**
  * The command controller for kick-starting PresentationObject components
@@ -24,7 +24,7 @@ class ComponentCommandController extends CommandController
 
     /**
      * @Flow\Inject
-     * @var ValueGenerator
+     * @var EnumGenerator
      */
     protected $valueGenerator;
 
@@ -82,8 +82,8 @@ class ComponentCommandController extends CommandController
      * @param null|string $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
      * @return void
      */
-    public function kickStartValueCommand(string $componentName, string $name, string $type, array $values = [], ?string $packageKey = null): void
+    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], ?string $packageKey = null): void
     {
-        $this->valueGenerator->generateValue($componentName, $name, $type, $values, $packageKey);
+        $this->valueGenerator->generateEnum($componentName, $name, $type, $values, $packageKey);
     }
 }

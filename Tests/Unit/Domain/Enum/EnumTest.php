@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Value;
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
 use Neos\Flow\Tests\UnitTestCase;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\Value;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\Enum;
 use PHPUnit\Framework\Assert;
 
 /**
- * Test cases for Component
+ * Test cases for Enum
  */
-class ValueTest extends UnitTestCase
+class EnumTest extends UnitTestCase
 {
     /**
-     * @var Value
+     * @var Enum
      */
     private $subject;
 
@@ -23,7 +23,7 @@ class ValueTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->subject = new Value(
+        $this->subject = new Enum(
             'Acme.Site',
             'MyComponent',
             'MyComponentType',

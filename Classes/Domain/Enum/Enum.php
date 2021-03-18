@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Value;
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
@@ -10,7 +10,7 @@ use Neos\Flow\Annotations as Flow;
 /**
  * @Flow\Proxy(false)
  */
-final class Value
+final class Enum
 {
     /**
      * @var string

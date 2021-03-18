@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Value;
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
@@ -9,15 +9,15 @@ use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\ValueGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
- * Test cases for ValueGenerator
+ * Test cases for EnumGenerator
  */
-final class ValueGeneratorTest extends UnitTestCase
+final class EnumGeneratorTest extends UnitTestCase
 {
     use MatchesSnapshots;
 
@@ -42,9 +42,9 @@ final class ValueGeneratorTest extends UnitTestCase
     protected $packageResolver;
 
     /**
-     * @var ValueGenerator
+     * @var EnumGenerator
      */
-    protected $valueGenerator;
+    protected $enumGenerator;
 
     /**
      * @before
@@ -83,9 +83,9 @@ final class ValueGeneratorTest extends UnitTestCase
             ->resolvePackage(null)
             ->willReturn($this->defaultPackage);
 
-        $this->valueGenerator = new ValueGenerator(new \DateTimeImmutable('@1602423895'));
+        $this->enumGenerator = new EnumGenerator(new \DateTimeImmutable('@1602423895'));
 
-        $this->inject($this->valueGenerator, 'packageResolver', $this->packageResolver->reveal());
+        $this->inject($this->enumGenerator, 'packageResolver', $this->packageResolver->reveal());
     }
 
     /**
@@ -130,9 +130,9 @@ final class ValueGeneratorTest extends UnitTestCase
      * @param string[] $expectedFileNames
      * @return void
      */
-    public function generatesValues(string $componentName, string $name, string $type, array $values, ?string $packageKey, array $expectedFileNames): void
+    public function generatesEnums(string $componentName, string $name, string $type, array $values, ?string $packageKey, array $expectedFileNames): void
     {
-        $this->valueGenerator->generateValue($componentName, $name, $type, $values, $packageKey);
+        $this->enumGenerator->generateEnum($componentName, $name, $type, $values, $packageKey);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

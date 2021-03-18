@@ -316,7 +316,7 @@ final class ' . PluralName::forName($this->getName()) . ' extends \ArrayObject
             } elseif ($propType->getClass()->isGeneric()) {
                 $definitionData = '
             <Neos.Fusion:Loop items={presentationObject.' . $propName. '}>
-                <' . $this->packageKey . ':Component.' . PluralName::toName($propType->getName()) . ' presentationObject={item} />
+                <' . $this->packageKey . ':Component.' . $propType->getName() . ' presentationObject={item} />
             </Neos.Fusion:Loop>
         ';
             } else {

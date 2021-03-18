@@ -18,11 +18,4 @@ final class PluralName
             ? \mb_substr($name, 0, \mb_strlen($name) - 1) . 'ies'
             : $name . 's';
     }
-
-    public static function toName(string $pluralName): string
-    {
-        return \mb_substr($pluralName, -3) === 'ies'
-            ? \mb_substr($pluralName, 0, \mb_strlen($pluralName) - 3) . 'y'
-            : \mb_substr($pluralName, 0, \mb_strlen($pluralName) - 1);
-    }
 }

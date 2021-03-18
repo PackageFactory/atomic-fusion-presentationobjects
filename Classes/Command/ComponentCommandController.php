@@ -20,13 +20,13 @@ class ComponentCommandController extends CommandController
      * @Flow\Inject
      * @var ComponentGenerator
      */
-    protected ComponentGenerator $componentGenerator;
+    protected $componentGenerator;
 
     /**
      * @Flow\Inject
      * @var ValueGenerator
      */
-    protected ValueGenerator $valueGenerator;
+    protected $valueGenerator;
 
     /**
      * Create a new PresentationObject component and factory

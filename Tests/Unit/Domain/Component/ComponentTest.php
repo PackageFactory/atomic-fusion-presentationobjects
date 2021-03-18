@@ -53,7 +53,8 @@ class ComponentTest extends UnitTestCase
                 'nullableSubComponent:?MySubComponent'
             ],
             $propTypeRepository,
-            FusionNamespace::default()
+            FusionNamespace::default(),
+            true
         );
     }
 
@@ -351,6 +352,46 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
 }
 ',
             $this->subject->getFusionContent()
+        );
+    }
+
+    public function testGetGenericContent(): void
+    {
+        Assert::assertSame(
+            '<?php
+namespace Acme\Site\Presentation\MyComponent;
+
+/*
+ * This file is part of the Acme.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class MyComponents extends \ArrayObject
+{
+    public function __construct($array = array(), $flags = 0, $iteratorClass = "ArrayIterator")
+    {
+        foreach ($array as $element) {
+            if (!$element instanceof MyComponent) {
+                throw new \InvalidArgumentException(self::class . \' can only consist of \' . MyComponent::class);
+            }
+        }
+        parent::__construct($array, $flags, $iteratorClass);
+    }
+
+    /**
+     * @return \ArrayIterator|MyComponent[]
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return parent::getIterator();
+    }
+}
+',
+            $this->subject->getGenericContent()
         );
     }
 }

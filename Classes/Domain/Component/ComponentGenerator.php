@@ -36,10 +36,11 @@ final class ComponentGenerator
      * @param array $serializedProps
      * @param string|null $packageKey
      * @param FusionNamespace|null $namespace
+     * @param bool $generic
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null): void
+    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null, bool $generic = false): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
         $component = Component::fromInput(
@@ -47,7 +48,8 @@ final class ComponentGenerator
             $componentName,
             $serializedProps,
             $this->propTypeRepository,
-            $namespace ?: FusionNamespace::default()
+            $namespace ?: FusionNamespace::default(),
+            $generic
         );
 
         $packagePath = $package->getPackagePath();
@@ -63,6 +65,9 @@ final class ComponentGenerator
         file_put_contents($component->getClassPath($packagePath), $component->getClassContent());
         file_put_contents($component->getFactoryPath($packagePath), $component->getFactoryContent());
         file_put_contents($component->getFusionPath($packagePath), $component->getFusionContent());
+        if ($generic) {
+            file_put_contents($component->getGenericPath($packagePath), $component->getGenericContent());
+        }
         $this->registerFactory($package, $component);
     }
 

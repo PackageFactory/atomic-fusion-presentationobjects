@@ -16,6 +16,7 @@ final class PropTypeClass
     const CLASS_GLOBAL_VALUE = 'globalValue';
     const CLASS_VALUE = 'value';
     const CLASS_COMPONENT = 'component';
+    const CLASS_GENERIC = 'generic';
 
     /**
      * @var string
@@ -47,6 +48,11 @@ final class PropTypeClass
         return new self(self::CLASS_COMPONENT);
     }
 
+    public static function generic(): self
+    {
+        return new self(self::CLASS_GENERIC);
+    }
+
     public function isPrimitive(): bool
     {
         return $this->value === self::CLASS_PRIMITIVE;
@@ -65,6 +71,11 @@ final class PropTypeClass
     public function isComponent(): bool
     {
         return $this->value === self::CLASS_COMPONENT;
+    }
+
+    public function isGeneric(): bool
+    {
+        return $this->value === self::CLASS_GENERIC;
     }
 
     public function getValue(): string

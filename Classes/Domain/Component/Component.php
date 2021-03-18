@@ -34,17 +34,24 @@ final class Component
     private FusionNamespace $fusionNamespace;
 
     /**
+     * @var bool
+     */
+    private bool $generic;
+
+    /**
      * @param string $packageKey
      * @param string $name
      * @param array|PropType[] $props
      * @param FusionNamespace $fusionNamespace
+     * @param bool $generic
      */
-    public function __construct(string $packageKey, string $name, array $props, FusionNamespace $fusionNamespace)
+    public function __construct(string $packageKey, string $name, array $props, FusionNamespace $fusionNamespace, bool $generic)
     {
         $this->packageKey = $packageKey;
         $this->name = $name;
         $this->props = $props;
         $this->fusionNamespace = $fusionNamespace;
+        $this->generic = $generic;
     }
 
     /**
@@ -53,6 +60,7 @@ final class Component
      * @param array|string[] $serializedProps
      * @param PropTypeRepositoryInterface $propTypeRepository
      * @param FusionNamespace $fusionNamespace
+     * @param bool $generic
      * @return self
      */
     public static function fromInput(
@@ -60,7 +68,8 @@ final class Component
         string $name,
         array $serializedProps,
         PropTypeRepositoryInterface $propTypeRepository,
-        FusionNamespace $fusionNamespace
+        FusionNamespace $fusionNamespace,
+        bool $generic
     ): self {
         $props = [];
         foreach ($serializedProps as $serializedProp) {
@@ -76,7 +85,8 @@ final class Component
             $packageKey,
             $name,
             $props,
-            $fusionNamespace
+            $fusionNamespace,
+            $generic
         );
     }
 
@@ -110,6 +120,14 @@ final class Component
     public function getFusionNamespace(): FusionNamespace
     {
         return $this->fusionNamespace;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGeneric(): bool
+    {
+        return $this->generic;
     }
 
     /**
@@ -162,6 +180,15 @@ final class Component
     public function getFusionPath(string $packagePath): string
     {
         return $packagePath . 'Resources/Private/Fusion/Presentation/' . $this->getFusionNamespace()->toFilePath() . '/' . $this->name . '/' . $this->name . '.fusion';
+    }
+
+    /**
+     * @param string $packagePath
+     * @return string
+     */
+    public function getGenericPath(string $packagePath): string
+    {
+        return $packagePath . 'Classes/Presentation/' . $this->name . '/' . PluralName::forName($this->name) . '.php';
     }
 
     /**
@@ -237,6 +264,46 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
     /**
      * @return string
      */
+    public function getGenericContent(): string
+    {
+        return '<?php
+namespace ' . $this->getNamespace() . ';
+
+/*
+ * This file is part of the ' . $this->getPackageKey() . ' package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class ' . PluralName::forName($this->getName()) . ' extends \ArrayObject
+{
+    public function __construct($array = array(), $flags = 0, $iteratorClass = "ArrayIterator")
+    {
+        foreach ($array as $element) {
+            if (!$element instanceof ' . $this->getName() . ') {
+                throw new \InvalidArgumentException(self::class . \' can only consist of \' . ' . $this->getName() . '::class);
+            }
+        }
+        parent::__construct($array, $flags, $iteratorClass);
+    }
+
+    /**
+     * @return \ArrayIterator|' . $this->getName() . '[]
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return parent::getIterator();
+    }
+}
+';
+    }
+
+    /**
+     * @return string
+     */
     public function getFusionContent(): string
     {
         $terms = [];
@@ -246,11 +313,17 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
                 $definitionData = '<Sitegeist.Lazybones:Image imageSource={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
             } elseif ($propType->getClass()->isComponent()) {
                 $definitionData = '<' . $this->packageKey . ':' . ucfirst((string) $propType->getClass()) . '.' . $propType->getName() . ' presentationObject={presentationObject.' . $propName . '}' . ($propType->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />';
+            } elseif ($propType->getClass()->isGeneric()) {
+                $definitionData = '
+            <Neos.Fusion:Loop items={presentationObject.' . $propName. '}>
+                <' . $this->packageKey . ':Component.' . PluralName::toName($propType->getName()) . ' presentationObject={item} />
+            </Neos.Fusion:Loop>
+        ';
             } else {
                 $definitionData = '{presentationObject.' . $propName . '}';
             }
             $styleGuideProps[] = $propName . ' ' . $propType->toStyleGuidePropValue();
-                $terms[] = '        <dt>' . $propName . ':</dt>
+            $terms[] = '        <dt>' . $propName . ':</dt>
         <dd>' . $definitionData . '</dd>';
         }
 

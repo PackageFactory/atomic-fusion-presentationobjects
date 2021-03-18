@@ -1,0 +1,12 @@
+<?php
+namespace Vendor\Site\Presentation\WithGenericText;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class WithGenericTextFactory extends AbstractComponentPresentationObjectFactory
+{
+}

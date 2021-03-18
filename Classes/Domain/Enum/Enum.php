@@ -6,6 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PluralName;
 
 /**
  * @Flow\Proxy(false)
@@ -221,7 +222,7 @@ final class ' . $this->getName() . 'IsInvalid extends \DomainException
      */
     public function getProviderContent(): string
     {
-        $arrayName = lcfirst($this->getPluralName());
+        $arrayName = lcfirst(PluralName::forName($this->name));
         return '<?php
 namespace ' . $this->getDataSourceNamespace() . ';
 
@@ -273,16 +274,6 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
     }
 }
 ';
-    }
-
-    /**
-     * @return string
-     */
-    private function getPluralName(): string
-    {
-        return \mb_substr($this->name, -1) === 'y'
-            ? \mb_substr($this->name, 0, \mb_strlen($this->name) - 1) . 'ies'
-            : $this->name . 's';
     }
 
     /**
@@ -396,7 +387,7 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
      */
     private function splitName(bool $plural = false): array
     {
-        $name = $plural ? $this->getPluralName() : $this->name;
+        $name = $plural ? PluralName::forName($this->name) : $this->name;
         $nameParts = [];
         $parts = preg_split("/([A-Z])/", $name, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 

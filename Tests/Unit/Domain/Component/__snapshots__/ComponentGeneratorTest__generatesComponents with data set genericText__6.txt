@@ -1,0 +1,16 @@
+prototype(Vendor.Site:Component.Text) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Text\\TextInterface'
+
+    @styleguide {
+        title = 'Text'
+
+        props {
+            content = 'Text'
+        }
+    }
+
+    renderer = afx`<dl>
+        <dt>content:</dt>
+        <dd>{presentationObject.content}</dd>
+    </dl>`
+}

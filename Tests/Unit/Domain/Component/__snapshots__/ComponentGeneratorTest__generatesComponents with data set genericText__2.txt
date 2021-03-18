@@ -1,0 +1,32 @@
+<?php
+namespace Vendor\Site\Presentation\Text;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Texts extends \ArrayObject
+{
+    public function __construct($array = array(), $flags = 0, $iteratorClass = "ArrayIterator")
+    {
+        foreach ($array as $element) {
+            if (!$element instanceof Text) {
+                throw new \InvalidArgumentException(self::class . ' can only consist of ' . Text::class);
+            }
+        }
+        parent::__construct($array, $flags, $iteratorClass);
+    }
+
+    /**
+     * @return \ArrayIterator|Text[]
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return parent::getIterator();
+    }
+}

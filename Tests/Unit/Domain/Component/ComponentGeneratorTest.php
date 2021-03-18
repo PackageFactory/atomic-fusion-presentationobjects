@@ -106,6 +106,9 @@ final class ComponentGeneratorTest extends UnitTestCase
         $this->propTypeRepository
             ->findByType(Argument::any(), Argument::any(), '?Link')
             ->willReturn(new PropType('Link', 'Link', 'Link', true, PropTypeClass::Component()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), 'array<Text>')
+            ->willReturn(new PropType('Texts', 'Texts', 'Texts', false, PropTypeClass::Generic()));
 
         $this->sitePackage = $this->prophet->prophesize(FlowPackageInterface::class);
         $this->sitePackage
@@ -216,6 +219,23 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Even/FancierComponent/Text/Text.fusion'
                 ], 'Even.FancierComponent'],
+            'genericText' =>
+                ['Text', ['content:string'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/Text.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/Texts.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Text/Text.fusion'
+                ], 'Component', true],
+            'withGenericText' =>
+                ['WithGenericText', ['texts:array<Text>'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/WithGenericText/WithGenericText.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/WithGenericText/WithGenericTextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/WithGenericText/WithGenericTextFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/WithGenericText/WithGenericText.fusion'
+                ]],
         ];
     }
 
@@ -227,12 +247,13 @@ final class ComponentGeneratorTest extends UnitTestCase
      * @param null|string $packageKey
      * @param string[] $expectedFileNames
      * @param string $fusionNamespace
+     * @param bool $generic
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generatesComponents(string $componentName, array $serializedProps, ?string $packageKey, array $expectedFileNames, string $fusionNamespace = 'Component'): void
+    public function generatesComponents(string $componentName, array $serializedProps, ?string $packageKey, array $expectedFileNames, string $fusionNamespace = 'Component', bool $generic = false): void
     {
-        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey, FusionNamespace::fromString($fusionNamespace));
+        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey, FusionNamespace::fromString($fusionNamespace), $generic);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

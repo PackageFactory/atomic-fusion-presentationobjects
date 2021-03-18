@@ -65,7 +65,6 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
             return new PropTypeIdentifier($this->getSimpleClassName($className), $this->getSimpleClassName($className), $className, $nullable, PropTypeClass::value());
         }
 
-
         if ($this->knowsComponent($packageKey, $type)) {
             $interfaceName = $this->getComponentInterfaceName($packageKey, $type);
             return new PropTypeIdentifier(
@@ -78,13 +77,12 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
         }
 
         if (\mb_strpos($type, 'array<') === 0 && \mb_substr($type, -1, 1) === '>') {
-            $type = \mb_substr($type, 6, \mb_strlen($type) - 7);
             if ($this->knowsGeneric($packageKey, $type)) {
                 $genericName = $this->getGenericClassName($packageKey, $type);
                 return new PropTypeIdentifier(
                     $type,
                     $this->getSimpleClassName($genericName),
-                    $this->getSimpleClassName($genericName),
+                    $genericName,
                     false,
                     PropTypeClass::generic()
                 );
@@ -199,6 +197,7 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
      */
     private function getGenericClassName(string $packageKey, string $type): string
     {
+        $type = \mb_substr($type, 6, \mb_strlen($type) - 7);
         /** @phpstan-var class-string $className */
         $className =  \str_replace('.', '\\', $packageKey)
             . '\Presentation\\' . $type . '\\' . PluralName::forName($type);

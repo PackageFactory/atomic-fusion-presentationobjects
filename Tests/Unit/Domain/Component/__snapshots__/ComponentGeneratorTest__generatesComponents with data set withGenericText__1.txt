@@ -7,7 +7,7 @@ namespace Vendor\Site\Presentation\WithGenericText;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use Texts;
+use Vendor\Site\Presentation\Text\Texts;
 
 /**
  * @Flow\Proxy(false)

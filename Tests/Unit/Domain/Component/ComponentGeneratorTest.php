@@ -108,7 +108,7 @@ final class ComponentGeneratorTest extends UnitTestCase
             ->willReturn(new PropType('Link', 'Link', 'Link', true, PropTypeClass::Component()));
         $this->propTypeRepository
             ->findByType(Argument::any(), Argument::any(), 'array<Text>')
-            ->willReturn(new PropType('Texts', 'Texts', 'Texts', false, PropTypeClass::Generic()));
+            ->willReturn(new PropType('Texts', 'Texts', 'Vendor\Site\Presentation\Text\Texts', false, PropTypeClass::Generic()));
 
         $this->sitePackage = $this->prophet->prophesize(FlowPackageInterface::class);
         $this->sitePackage

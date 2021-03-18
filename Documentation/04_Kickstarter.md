@@ -227,6 +227,8 @@ This data source can be used in your `NodeTypes.*.yaml` configuration like this:
 ## `component:kickstart` command
 
 This command creates all patterns needed for a component. It takes the name of the component and a list of property descriptors which consist of a property name and a type name separated by a colon.
+The package the component resides in can be set via --package-key, otherwise it will be fetched from the configuration option `PackageFactory.AtomicFusion.PresentationObjects.componentGeneration:defaultPackageKey` with fallback to the primary site package. 
+Via --namespace, the component's Fusion namespace can be defined. It can be segmented with . and defaults to `Component` A component `Headline` in package `Vendor.Site` and namespace `Component.Atom` will have the name `Vendor.Site:Component.Atom.Headline` and be placed in the folder `Vendor.Site/Resources/Private/Fusion/Component/Atom/Headline`
 
 For type names, the following rules apply:
 
@@ -240,7 +242,7 @@ For type names, the following rules apply:
 > **Hint:** It is recommended to create all required values and sub-components beforehand, so the kickstarter can find and create proper `use`-statements for them.
 
 ```sh
-./flow component:kickstart --package-key=Vendor.Site
+./flow component:kickstart --package-key=Vendor.Site --namespace=Component
     Headline \
         type:HeadlineType \
         look:HeadlineLook \
@@ -252,8 +254,6 @@ For type names, the following rules apply:
 #### Headline.fusion
 
 The is the fusion code for the component. It consists of a full `@styleguide` configuration for [Sitegeist.Monocle](https://github.com/sitegeist/Sitegeist.Monocle) as well as a dummy renderer that displays all PresentationObject properties as a definition list (see: https://developer.mozilla.org/de/docs/Web/HTML/Element/dl).
-
-The command will figure out the location and namespace of the fusion file by analyzing its dependencies. If it requires other components, it's going to be prefixed with `Vendor.Site:Composite.*`, otherwise it's going to be prefixed with `Vendor.Site:Leaf.*`.
 
 ```fusion
 prototype(Vendor.Site:Leaf.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {

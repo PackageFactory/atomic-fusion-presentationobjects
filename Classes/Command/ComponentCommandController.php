@@ -8,6 +8,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Command;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\ValueGenerator;
 
 /**
@@ -50,12 +51,17 @@ class ComponentCommandController extends CommandController
      *
      * @param string $name The name of the new component
      * @param string|null $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
-     * @param string $namespace
+     * @param string|null $namespace
      * @return void
      */
-    public function kickStartCommand(string $name, ?string $packageKey = null, string $namespace = 'Component'): void
+    public function kickStartCommand(string $name, ?string $packageKey = null, ?string $namespace = null): void
     {
-        $this->componentGenerator->generateComponent($name, $this->request->getExceedingArguments(), $packageKey, $namespace);
+        $this->componentGenerator->generateComponent(
+            $name,
+            $this->request->getExceedingArguments(),
+            $packageKey,
+            $namespace ? FusionNamespace::fromString($namespace) : null
+        );
     }
 
     /**

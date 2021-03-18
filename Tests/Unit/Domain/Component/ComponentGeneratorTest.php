@@ -9,6 +9,7 @@ use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeClass;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeRepositoryInterface;
@@ -214,7 +215,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Even/FancierComponent/Text/Text.fusion'
-                ], 'Even/FancierComponent'],
+                ], 'Even.FancierComponent'],
         ];
     }
 
@@ -231,7 +232,7 @@ final class ComponentGeneratorTest extends UnitTestCase
      */
     public function generatesComponents(string $componentName, array $serializedProps, ?string $packageKey, array $expectedFileNames, string $fusionNamespace = 'Component'): void
     {
-        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey, $fusionNamespace);
+        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey, FusionNamespace::fromString($fusionNamespace));
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

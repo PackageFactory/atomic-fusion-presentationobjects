@@ -7,6 +7,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Comp
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\Component;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeClass;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeIdentifier;
 use PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Helper\DummyPropTypeRepository;
@@ -52,7 +53,7 @@ class ComponentTest extends UnitTestCase
                 'nullableSubComponent:?MySubComponent'
             ],
             $propTypeRepository,
-            'Component'
+            FusionNamespace::default()
         );
     }
 

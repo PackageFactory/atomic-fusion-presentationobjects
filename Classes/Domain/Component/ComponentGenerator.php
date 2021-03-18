@@ -35,21 +35,27 @@ final class ComponentGenerator
      * @param string $componentName
      * @param array $serializedProps
      * @param string|null $packageKey
-     * @param string $namespace
+     * @param FusionNamespace|null $namespace
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null, string $namespace = 'Component'): void
+    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
-        $component = Component::fromInput($package->getPackageKey(), $componentName, $serializedProps, $this->propTypeRepository, $namespace);
+        $component = Component::fromInput(
+            $package->getPackageKey(),
+            $componentName,
+            $serializedProps,
+            $this->propTypeRepository,
+            $namespace ?: FusionNamespace::default()
+        );
 
         $packagePath = $package->getPackagePath();
         $classPath = $packagePath . 'Classes/Presentation/' . $componentName;
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
         }
-        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . $component->getFusionNamespace() . '/' . $componentName;
+        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . $component->getFusionNamespace()->toFilePath() . '/' . $componentName;
         if (!file_exists($fusionPath)) {
             Files::createDirectoryRecursively($fusionPath);
         }

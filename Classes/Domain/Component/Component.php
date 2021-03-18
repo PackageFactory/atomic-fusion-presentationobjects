@@ -29,17 +29,17 @@ final class Component
     private array $props;
 
     /**
-     * @var string
+     * @var FusionNamespace
      */
-    private string $fusionNamespace;
+    private FusionNamespace $fusionNamespace;
 
     /**
      * @param string $packageKey
      * @param string $name
      * @param array|PropType[] $props
-     * @param string $fusionNamespace
+     * @param FusionNamespace $fusionNamespace
      */
-    public function __construct(string $packageKey, string $name, array $props, string $fusionNamespace)
+    public function __construct(string $packageKey, string $name, array $props, FusionNamespace $fusionNamespace)
     {
         $this->packageKey = $packageKey;
         $this->name = $name;
@@ -52,11 +52,16 @@ final class Component
      * @param string $name
      * @param array|string[] $serializedProps
      * @param PropTypeRepositoryInterface $propTypeRepository
-     * @param string $fusionNamespace
+     * @param FusionNamespace $fusionNamespace
      * @return self
      */
-    public static function fromInput(string $packageKey, string $name, array $serializedProps, PropTypeRepositoryInterface $propTypeRepository, string $fusionNamespace): self
-    {
+    public static function fromInput(
+        string $packageKey,
+        string $name,
+        array $serializedProps,
+        PropTypeRepositoryInterface $propTypeRepository,
+        FusionNamespace $fusionNamespace
+    ): self {
         $props = [];
         foreach ($serializedProps as $serializedProp) {
             list($propName, $serializedPropType) = explode(':', $serializedProp);
@@ -100,9 +105,9 @@ final class Component
     }
 
     /**
-     * @return string
+     * @return FusionNamespace
      */
-    public function getFusionNamespace(): string
+    public function getFusionNamespace(): FusionNamespace
     {
         return $this->fusionNamespace;
     }
@@ -170,7 +175,7 @@ final class Component
      */
     public function getFusionPath(string $packagePath): string
     {
-        return $packagePath . 'Resources/Private/Fusion/Presentation/' . $this->getFusionNamespace() . '/' . $this->name . '/' . $this->name . '.fusion';
+        return $packagePath . 'Resources/Private/Fusion/Presentation/' . $this->getFusionNamespace()->toFilePath() . '/' . $this->name . '/' . $this->name . '.fusion';
     }
 
     /**

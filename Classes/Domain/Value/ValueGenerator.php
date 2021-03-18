@@ -17,21 +17,22 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterf
 final class ValueGenerator
 {
     /**
-     * @Flow\Inject
      * @var PackageResolverInterface
      */
-    protected $packageResolver;
+    protected PackageResolverInterface $packageResolver;
 
     /**
      * @var \DateTimeImmutable
      */
-    protected $now;
+    protected \DateTimeImmutable $now;
 
     /**
+     * @param PackageResolverInterface $packageResolver
      * @param null|\DateTimeImmutable $now
      */
-    public function __construct(?\DateTimeImmutable $now = null)
+    public function __construct(PackageResolverInterface $packageResolver, ?\DateTimeImmutable $now = null)
     {
+        $this->packageResolver = $packageResolver;
         $this->now = $now ?? new \DateTimeImmutable();
     }
 

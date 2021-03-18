@@ -9,8 +9,10 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * The exception to be thrown if an invalid prop type was attempted to be used
+ *
+ * @Flow\Proxy(false)
  */
-class PropTypeIsInvalid extends \InvalidArgumentException
+final class PropTypeIsInvalid extends \InvalidArgumentException
 {
     public static function becauseItIsNoKnownComponentValueOrPrimitive(string $attemptedType): self
     {

@@ -16,16 +16,22 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\ValueGenerator;
 class ComponentCommandController extends CommandController
 {
     /**
-     * @Flow\Inject
      * @var ComponentGenerator
      */
-    protected $componentGenerator;
+    protected ComponentGenerator $componentGenerator;
 
     /**
-     * @Flow\Inject
      * @var ValueGenerator
      */
-    protected $valueGenerator;
+    protected ValueGenerator $valueGenerator;
+
+    public function __construct(
+        ComponentGenerator $componentGenerator,
+        ValueGenerator $valueGenerator
+    ) {
+        $this->componentGenerator = $componentGenerator;
+        $this->valueGenerator = $valueGenerator;
+    }
 
     /**
      * Create a new PresentationObject component and factory

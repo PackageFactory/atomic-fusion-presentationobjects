@@ -6,6 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Infrastructure;
  */
 
 use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Annotations as Flow;
@@ -56,7 +57,7 @@ final class UriService implements UriServiceInterface
     /**
      * @param TraversableNodeInterface $documentNode
      * @param bool $absolute
-     * @return string
+     * @return Uri
      * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
@@ -64,19 +65,19 @@ final class UriService implements UriServiceInterface
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception
      */
-    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false): string
+    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false): Uri
     {
-        return $this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, null, $absolute);
+        return new Uri($this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, null, $absolute));
     }
 
     /**
      * @param string $packageKey
      * @param string $resourcePath
-     * @return string
+     * @return Uri
      */
-    public function getResourceUri(string $packageKey, string $resourcePath): string
+    public function getResourceUri(string $packageKey, string $resourcePath): Uri
     {
-        return $this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath);
+        return new Uri($this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath));
     }
 
     /**
@@ -90,9 +91,9 @@ final class UriService implements UriServiceInterface
     }
 
     /**
-     * @return string
+     * @return Uri
      */
-    public function getDummyImageBaseUri(): string
+    public function getDummyImageBaseUri(): Uri
     {
         $uriBuilder = $this->getControllerContext()->getUriBuilder();
 
@@ -133,7 +134,7 @@ final class UriService implements UriServiceInterface
     /**
      * @param string $rawLinkUri
      * @param ContentContext $subgraph
-     * @return string
+     * @return Uri
      * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
@@ -141,7 +142,7 @@ final class UriService implements UriServiceInterface
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception
      */
-    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): string
+    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): Uri
     {
         if (\mb_substr($rawLinkUri, 0, 7) === 'node://') {
             $nodeIdentifier = \mb_substr($rawLinkUri, 7);
@@ -159,6 +160,6 @@ final class UriService implements UriServiceInterface
             $linkUri = '#';
         }
 
-        return $linkUri;
+        return new Uri($linkUri);
     }
 }

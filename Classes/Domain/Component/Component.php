@@ -16,17 +16,17 @@ final class Component
     /**
      * @var string
      */
-    private $packageKey;
+    private string $packageKey;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var array|PropType[];
      */
-    private $props;
+    private array $props;
 
     /**
      * @param string $packageKey

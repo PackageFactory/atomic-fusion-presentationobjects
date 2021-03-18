@@ -15,12 +15,6 @@ use Neos\Flow\Annotations as Flow;
 final class PropTypeRepository implements PropTypeRepositoryInterface
 {
     /**
-     * @Flow\Inject
-     * @var ComponentRepository
-     */
-    protected $componentRepository;
-
-    /**
      * @param null|string $packageKey
      * @param null|string $componentName
      * @param string $type
@@ -73,7 +67,7 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
 
         if ($this->knowsComponent($packageKey, $type)) {
             $interfaceName = $this->getComponentInterfaceName($packageKey, $type);
-            $componentType = $this->componentRepository->getComponentType($interfaceName);
+            $componentType = ComponentRepository::getComponentType($interfaceName);
             return new PropTypeIdentifier(
                 $type,
                 $this->getSimpleClassName($interfaceName),

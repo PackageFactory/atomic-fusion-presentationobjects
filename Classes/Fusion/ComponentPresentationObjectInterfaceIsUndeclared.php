@@ -10,4 +10,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  */
 class ComponentPresentationObjectInterfaceIsUndeclared extends \DomainException
 {
+    public static function butWasSupposedTo(): self
+    {
+        return new self('The component\'s presentation object interface is undeclared, set it via @presentationObjectInterface = \'...\'.', 1616077232);
+    }
 }

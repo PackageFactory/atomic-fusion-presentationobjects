@@ -15,27 +15,27 @@ final class PropTypeIdentifier
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      */
-    private $simpleName;
+    private string $simpleName;
 
     /**
      * @var string
      */
-    private $fullyQualifiedName;
+    private string $fullyQualifiedName;
 
     /**
      * @var bool
      */
-    private $nullable;
+    private bool $nullable;
 
     /**
      * @var PropTypeClass
      */
-    private $class;
+    private PropTypeClass $class;
 
     public function __construct(string $name, string $shortName, string $fullyQualifiedName, bool $nullable, PropTypeClass $class)
     {

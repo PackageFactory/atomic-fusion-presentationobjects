@@ -15,27 +15,27 @@ final class Value
     /**
      * @var string
      */
-    private $packageKey;
+    private string $packageKey;
 
     /**
      * @var string
      */
-    private $componentName;
+    private string $componentName;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      */
-    private $type;
+    private string $type;
 
     /**
      * @var null|string[]
      */
-    private $values;
+    private ?array $values;
 
     /**
      * @param string $packageKey

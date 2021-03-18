@@ -18,7 +18,7 @@ final class PropType
      * @phpstan-var array<string,string>
      * @var array|string[]
      */
-    public static $primitives = [
+    public static array $primitives = [
         'string' => 'string',
         'int' => 'int',
         'float' => 'float',
@@ -37,27 +37,27 @@ final class PropType
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      */
-    private $simpleName;
+    private string $simpleName;
 
     /**
      * @var string
      */
-    private $fullyQualifiedName;
+    private string $fullyQualifiedName;
 
     /**
      * @var bool
      */
-    private $nullable;
+    private bool $nullable;
 
     /**
      * @var PropTypeClass
      */
-    private $class;
+    private PropTypeClass $class;
 
     /**
      * @param string $name

@@ -20,16 +20,22 @@ use Symfony\Component\Yaml\Dumper as YamlWriter;
 final class ComponentGenerator
 {
     /**
-     * @Flow\Inject(lazy=false)
      * @var PropTypeRepository
      */
-    protected $propTypeRepository;
+    protected PropTypeRepository $propTypeRepository;
 
     /**
-     * @Flow\Inject
      * @var PackageResolverInterface
      */
-    protected $packageResolver;
+    protected PackageResolverInterface $packageResolver;
+
+    public function __construct(
+        PropTypeRepository $propTypeRepository,
+        PackageResolverInterface $packageResolver
+    ) {
+        $this->propTypeRepository = $propTypeRepository;
+        $this->packageResolver = $packageResolver;
+    }
 
     /**
      * @param string $componentName

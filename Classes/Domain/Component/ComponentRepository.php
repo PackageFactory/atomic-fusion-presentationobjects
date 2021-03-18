@@ -11,7 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
 /**
  * The repository for all supported components
  *
- * @Flow\Scope("singleton")
+ * @Flow\Proxy(false)
  */
 final class ComponentRepository
 {
@@ -20,7 +20,7 @@ final class ComponentRepository
      * @param string $interfaceName
      * @return ComponentType
      */
-    public function getComponentType(string $interfaceName): ComponentType
+    public static function getComponentType(string $interfaceName): ComponentType
     {
         $reflection = new \ReflectionClass($interfaceName);
         foreach ($reflection->getMethods() as $method) {

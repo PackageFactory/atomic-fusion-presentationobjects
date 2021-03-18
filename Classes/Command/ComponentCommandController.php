@@ -52,15 +52,18 @@ class ComponentCommandController extends CommandController
      * @param string $name The name of the new component
      * @param string|null $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
      * @param string|null $namespace
+     * @param bool $generic
      * @return void
+     * @throws \Neos\Utility\Exception\FilesException
      */
-    public function kickStartCommand(string $name, ?string $packageKey = null, ?string $namespace = null): void
+    public function kickStartCommand(string $name, ?string $packageKey = null, ?string $namespace = null, bool $generic = false): void
     {
         $this->componentGenerator->generateComponent(
             $name,
             $this->request->getExceedingArguments(),
             $packageKey,
-            $namespace ? FusionNamespace::fromString($namespace) : null
+            $namespace ? FusionNamespace::fromString($namespace) : null,
+            $generic
         );
     }
 

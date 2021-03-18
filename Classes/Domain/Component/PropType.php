@@ -192,7 +192,8 @@ final class PropType
             $styleGuideValue = '{
             }';
         } elseif ($this->class->isGeneric()) {
-            $styleGuideValue = '[]';
+            $styleGuideValue = '{
+            }';
         }
 
         return $styleGuideValue;

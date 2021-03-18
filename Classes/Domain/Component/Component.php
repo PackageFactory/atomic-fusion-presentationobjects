@@ -113,20 +113,6 @@ final class Component
     }
 
     /**
-     * @return boolean
-     */
-    public function isLeaf(): bool
-    {
-        foreach ($this->props as $propType) {
-            if ($propType->getClass()->isComponent()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function getFactoryName(): string

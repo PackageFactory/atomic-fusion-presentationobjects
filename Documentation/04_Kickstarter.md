@@ -62,10 +62,7 @@ final class HeadlineLook
     const LOOK_REGULAR = 'REGULAR';
     const LOOK_HERO = 'HERO';
 
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
     private function __construct(string $value)
     {
@@ -256,7 +253,7 @@ For type names, the following rules apply:
 The is the fusion code for the component. It consists of a full `@styleguide` configuration for [Sitegeist.Monocle](https://github.com/sitegeist/Sitegeist.Monocle) as well as a dummy renderer that displays all PresentationObject properties as a definition list (see: https://developer.mozilla.org/de/docs/Web/HTML/Element/dl).
 
 ```fusion
-prototype(Vendor.Site:Leaf.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Site:Component.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Headline\\HeadlineInterface'
 
     @styleguide {
@@ -324,20 +321,11 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
  */
 final class Headline extends AbstractComponentPresentationObject implements HeadlineInterface
 {
-    /**
-     * @var HeadlineType
-     */
-    private $type;
+    private HeadlineType $type;
 
-    /**
-     * @var HeadlineLook
-     */
-    private $look;
+    private HeadlineLook $look;
 
-    /**
-     * @var string
-     */
-    private $content;
+    private string $content;
 
     public function __construct(
         HeadlineType $type,

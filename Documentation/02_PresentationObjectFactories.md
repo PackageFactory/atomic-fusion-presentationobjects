@@ -68,13 +68,13 @@ Neos:
 
 Neos uses the `Neos.Neos:ContentCase` to map nodes to rendering prototypes. For our `Vendor.Site:Content.Image` node, the entry point is going to be a Fusion prototype of the same name.
 
-From here, we just need to extend `Neos.Neos:ContentComponent` and provide our PresentationObject component `Vendor.Site:Leaf.Image` as the renderer. As the `presentationObject` we pass the result of the `forImageNode`-method of our newly registered `ImageFactory`.
+From here, we just need to extend `Neos.Neos:ContentComponent` and provide our PresentationObject component `Vendor.Site:Component.Image` as the renderer. As the `presentationObject` we pass the result of the `forImageNode`-method of our newly registered `ImageFactory`.
 
 <small>*`EXAMPLE: Resources/Private/Fusion/Integration/Content/Image.fusion`*<small>
 
 ```fusion
 prototype(Vendor.Site:Content.Image) < prototype(Neos.Neos:ContentComponent) {
-    renderer = Vendor.Site:Leaf.Image {
+    renderer = Vendor.Site:Component.Image {
         presentationObject = ${Vendor.Site.Image.forImageNode(node)}
     }
 }

@@ -63,10 +63,10 @@ PresentationObject factories provide the protected method `findChildNodesByNodeT
 
 If you have a component that receives arbitrary content, it's fine to create a fallback, so the content can be passed via `props`:
 
-<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Leaf/Container/Container.fusion`*<small>
+<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Component/Container/Container.fusion`*<small>
 
 ```fusion
-prototype(Vendor.Site:Leaf.Container) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Site:Component.Container) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Container\\ContainerInterface'
 
     renderer = afx`
@@ -83,9 +83,9 @@ In Integration, components can be assembled like this:
 
 ```fusion
 prototype(Vendor.Site:Content.Stage) < prototype(Neos.Neos:ContentComponent) {
-    renderer = Vendor.Site:Leaf.Container {
+    renderer = Vendor.Site:Component.Container {
         presentationObject = ${Vendor.Site.Container.forStageNode(node)}
-        content = Vendor.Site:Composite.TextWithHeadline {
+        content = Vendor.Site:Component.TextWithHeadline {
             presentationObject = ${Vendor.Site.TextWithHeadline.forStageNode(node)}
         }
     }
@@ -135,10 +135,10 @@ The `SelfWrapping` trait introduces a method `wrap` to our `Card` object, that w
 
 Now that we have our `wrap` method, we can use it in Fusion with an `@process` annotation like this:
 
-<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Composite/Card/Card.fusion`*<small>
+<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Component/Card/Card.fusion`*<small>
 
 ```fusion
-prototype(Vendor.Site:Composite.Card) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Site:Component.Card) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Card\\CardInterface'
 
     renderer.@process.wrap.@position = 'end 9999'
@@ -184,7 +184,7 @@ We can now invoke the `forTeaserList` in Fusion. In the example below, you can s
 
 ```fusion
 prototype(Vendor.Site:Generated.TeaserList) < prototype(Neos.Neos:ContentComponent) {
-    renderer = Vendor.Site:Composite.Deck {
+    renderer = Vendor.Site:Component.Deck {
         presentationObject = ${Vendor.Site.Deck.forTeaserList(node, this)}
     }
 }

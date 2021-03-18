@@ -11,27 +11,21 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGe
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\ValueGenerator;
 
 /**
- * The command controller for kickstarting PresentationObject components
+ * The command controller for kick-starting PresentationObject components
  */
 class ComponentCommandController extends CommandController
 {
     /**
+     * @Flow\Inject
      * @var ComponentGenerator
      */
     protected ComponentGenerator $componentGenerator;
 
     /**
+     * @Flow\Inject
      * @var ValueGenerator
      */
     protected ValueGenerator $valueGenerator;
-
-    public function __construct(
-        ComponentGenerator $componentGenerator,
-        ValueGenerator $valueGenerator
-    ) {
-        $this->componentGenerator = $componentGenerator;
-        $this->valueGenerator = $valueGenerator;
-    }
 
     /**
      * Create a new PresentationObject component and factory
@@ -55,12 +49,13 @@ class ComponentCommandController extends CommandController
      * * Uri
      *
      * @param string $name The name of the new component
-     * @param null|string $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
+     * @param string|null $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
+     * @param string $namespace
      * @return void
      */
-    public function kickStartCommand(string $name, ?string $packageKey = null): void
+    public function kickStartCommand(string $name, ?string $packageKey = null, string $namespace = 'Component'): void
     {
-        $this->componentGenerator->generateComponent($name, $this->request->getExceedingArguments(), $packageKey);
+        $this->componentGenerator->generateComponent($name, $this->request->getExceedingArguments(), $packageKey, $namespace);
     }
 
     /**

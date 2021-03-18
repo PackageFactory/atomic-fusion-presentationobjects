@@ -33,22 +33,23 @@ final class ComponentGenerator
 
     /**
      * @param string $componentName
-     * @phpstan-param array<mixed> $serializedProps
      * @param array $serializedProps
      * @param string|null $packageKey
+     * @param string $namespace
      * @return void
+     * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null): void
+    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null, string $namespace = 'Component'): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
-        $component = Component::fromInput($package->getPackageKey(), $componentName, $serializedProps, $this->propTypeRepository);
+        $component = Component::fromInput($package->getPackageKey(), $componentName, $serializedProps, $this->propTypeRepository, $namespace);
 
         $packagePath = $package->getPackagePath();
         $classPath = $packagePath . 'Classes/Presentation/' . $componentName;
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
         }
-        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst((string) $component->getType()) . '/' . $componentName;
+        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . $component->getFusionNamespace() . '/' . $componentName;
         if (!file_exists($fusionPath)) {
             Files::createDirectoryRecursively($fusionPath);
         }

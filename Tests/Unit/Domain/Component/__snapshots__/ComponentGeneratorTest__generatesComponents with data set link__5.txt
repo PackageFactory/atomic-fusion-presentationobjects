@@ -1,4 +1,4 @@
-prototype(Vendor.Site:Leaf.Link) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Site:Component.Link) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Link\\LinkInterface'
 
     @styleguide {

@@ -98,13 +98,13 @@ final class ComponentGeneratorTest extends UnitTestCase
             ->willReturn(new PropType('UriInterface', 'UriInterface', 'UriInterface', false, PropTypeClass::globalValue()));
         $this->propTypeRepository
             ->findByType(Argument::any(), Argument::any(), '?Image')
-            ->willReturn(new PropType('Image', 'Image', 'Image', true, PropTypeClass::leaf()));
+            ->willReturn(new PropType('Image', 'Image', 'Image', true, PropTypeClass::Component()));
         $this->propTypeRepository
             ->findByType(Argument::any(), Argument::any(), '?Text')
-            ->willReturn(new PropType('Text', 'Text', 'Text', true, PropTypeClass::leaf()));
+            ->willReturn(new PropType('Text', 'Text', 'Text', true, PropTypeClass::Component()));
         $this->propTypeRepository
             ->findByType(Argument::any(), Argument::any(), '?Link')
-            ->willReturn(new PropType('Link', 'Link', 'Link', true, PropTypeClass::leaf()));
+            ->willReturn(new PropType('Link', 'Link', 'Link', true, PropTypeClass::Component()));
 
         $this->sitePackage = $this->prophet->prophesize(FlowPackageInterface::class);
         $this->sitePackage
@@ -157,7 +157,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Text/Text.fusion'
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Text/Text.fusion'
                 ]],
             'text in default package' =>
                 ['Text', ['content:string'], null, [
@@ -165,7 +165,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Text/TextInterface.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Text/TextFactory.php',
                     'vfs://DistributionPackages/Vendor.Default/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Default/Resources/Private/Fusion/Presentation/Leaf/Text/Text.fusion'
+                    'vfs://DistributionPackages/Vendor.Default/Resources/Private/Fusion/Presentation/Component/Text/Text.fusion'
                 ]],
             'headline' =>
                 ['Headline', ['type:HeadlineType', 'look:HeadlineLook', 'content:string'], 'Vendor.Site', [
@@ -173,7 +173,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/HeadlineInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/HeadlineFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Headline/Headline.fusion'
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/Headline.fusion'
                 ]],
             'image' =>
                 ['Image', ['src:ImageSourceHelperInterface', 'alt:string', 'title:?string'], 'Vendor.Site', [
@@ -181,7 +181,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Image/ImageInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Image/ImageFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Image/Image.fusion'
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Image/Image.fusion'
                 ]],
             'link' =>
                 ['Link', ['href:UriInterface', 'title:?string'], 'Vendor.Site', [
@@ -189,7 +189,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Link/LinkInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Link/LinkFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Link/Link.fusion'
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Link/Link.fusion'
                 ]],
             'card' =>
                 ['Card', ['image:?Image', 'text:?Text', 'link:?Link'], 'Vendor.Site', [
@@ -197,8 +197,24 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Card/CardInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Card/CardFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Composite/Card/Card.fusion'
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
                 ]],
+            'fancyText' =>
+                ['Text', ['text:?Text'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/Text.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/FancyComponent/Text/Text.fusion'
+                ], 'FancyComponent'],
+            'evenFancierText' =>
+                ['Text', ['text:?Text'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/Text.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Even/FancierComponent/Text/Text.fusion'
+                ], 'Even/FancierComponent'],
         ];
     }
 
@@ -209,11 +225,13 @@ final class ComponentGeneratorTest extends UnitTestCase
      * @param string[] $serializedProps
      * @param null|string $packageKey
      * @param string[] $expectedFileNames
+     * @param string $fusionNamespace
      * @return void
+     * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generatesComponents(string $componentName, array $serializedProps, ?string $packageKey, array $expectedFileNames): void
+    public function generatesComponents(string $componentName, array $serializedProps, ?string $packageKey, array $expectedFileNames, string $fusionNamespace = 'Component'): void
     {
-        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey);
+        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey, $fusionNamespace);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

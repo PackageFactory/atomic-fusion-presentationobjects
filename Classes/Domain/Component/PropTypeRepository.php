@@ -67,13 +67,12 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
 
         if ($this->knowsComponent($packageKey, $type)) {
             $interfaceName = $this->getComponentInterfaceName($packageKey, $type);
-            $componentType = ComponentRepository::getComponentType($interfaceName);
             return new PropTypeIdentifier(
                 $type,
                 $this->getSimpleClassName($interfaceName),
                 $interfaceName,
                 $nullable,
-                $componentType->isLeaf() ? PropTypeClass::leaf() : PropTypeClass::composite()
+                PropTypeClass::component()
             );
         }
 

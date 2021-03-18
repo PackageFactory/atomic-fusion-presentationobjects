@@ -1,4 +1,4 @@
-prototype(Vendor.Site:Composite.Card) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Site:Component.Card) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Card\\CardInterface'
 
     @styleguide {
@@ -16,10 +16,10 @@ prototype(Vendor.Site:Composite.Card) < prototype(PackageFactory.AtomicFusion.Pr
 
     renderer = afx`<dl>
         <dt>image:</dt>
-        <dd><Vendor.Site:Leaf.Image presentationObject={presentationObject.image} @if.isToBeRendered={presentationObject.image} /></dd>
+        <dd><Vendor.Site:Component.Image presentationObject={presentationObject.image} @if.isToBeRendered={presentationObject.image} /></dd>
         <dt>text:</dt>
-        <dd><Vendor.Site:Leaf.Text presentationObject={presentationObject.text} @if.isToBeRendered={presentationObject.text} /></dd>
+        <dd><Vendor.Site:Component.Text presentationObject={presentationObject.text} @if.isToBeRendered={presentationObject.text} /></dd>
         <dt>link:</dt>
-        <dd><Vendor.Site:Leaf.Link presentationObject={presentationObject.link} @if.isToBeRendered={presentationObject.link} /></dd>
+        <dd><Vendor.Site:Component.Link presentationObject={presentationObject.link} @if.isToBeRendered={presentationObject.link} /></dd>
     </dl>`
 }

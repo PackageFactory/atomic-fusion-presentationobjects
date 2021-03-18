@@ -1,4 +1,4 @@
-prototype(Vendor.Default:Leaf.Text) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Default:Component.Text) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Default\\Presentation\\Text\\TextInterface'
 
     @styleguide {

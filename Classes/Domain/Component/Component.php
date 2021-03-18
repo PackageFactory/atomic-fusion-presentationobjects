@@ -29,15 +29,22 @@ final class Component
     private array $props;
 
     /**
+     * @var string
+     */
+    private string $fusionNamespace;
+
+    /**
      * @param string $packageKey
      * @param string $name
      * @param array|PropType[] $props
+     * @param string $fusionNamespace
      */
-    public function __construct(string $packageKey, string $name, array $props)
+    public function __construct(string $packageKey, string $name, array $props, string $fusionNamespace)
     {
         $this->packageKey = $packageKey;
         $this->name = $name;
         $this->props = $props;
+        $this->fusionNamespace = $fusionNamespace;
     }
 
     /**
@@ -45,9 +52,10 @@ final class Component
      * @param string $name
      * @param array|string[] $serializedProps
      * @param PropTypeRepositoryInterface $propTypeRepository
+     * @param string $fusionNamespace
      * @return self
      */
-    public static function fromInput(string $packageKey, string $name, array $serializedProps, PropTypeRepositoryInterface $propTypeRepository): self
+    public static function fromInput(string $packageKey, string $name, array $serializedProps, PropTypeRepositoryInterface $propTypeRepository, string $fusionNamespace): self
     {
         $props = [];
         foreach ($serializedProps as $serializedProp) {
@@ -62,7 +70,8 @@ final class Component
         return new self(
             $packageKey,
             $name,
-            $props
+            $props,
+            $fusionNamespace
         );
     }
 
@@ -91,6 +100,14 @@ final class Component
     }
 
     /**
+     * @return string
+     */
+    public function getFusionNamespace(): string
+    {
+        return $this->fusionNamespace;
+    }
+
+    /**
      * @return boolean
      */
     public function isLeaf(): bool
@@ -102,20 +119,6 @@ final class Component
         }
 
         return true;
-    }
-
-    /**
-     * @return ComponentType
-     */
-    public function getType(): ComponentType
-    {
-        foreach ($this->props as $propType) {
-            if ($propType->getClass()->isComponent()) {
-                return ComponentType::composite();
-            }
-        }
-
-        return ComponentType::leaf();
     }
 
     /**
@@ -167,7 +170,7 @@ final class Component
      */
     public function getFusionPath(string $packagePath): string
     {
-        return $packagePath . 'Resources/Private/Fusion/Presentation/' . ucfirst((string) $this->getType()) . '/' . $this->name . '/' . $this->name . '.fusion';
+        return $packagePath . 'Resources/Private/Fusion/Presentation/' . $this->getFusionNamespace() . '/' . $this->name . '/' . $this->name . '.fusion';
     }
 
     /**
@@ -260,7 +263,7 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
         <dd>' . $definitionData . '</dd>';
         }
 
-        return 'prototype(' . $this->packageKey . ':' . ucfirst((string) $this->getType()) . '.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+        return 'prototype(' . $this->packageKey . ':' . $this->getFusionNamespace() . '.' . $this->name . ') < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = \'' . str_replace('\\', '\\\\', ucfirst($this->getNamespace())) .  '\\\\' . $this->name . 'Interface\'
 
     @styleguide {

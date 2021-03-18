@@ -80,7 +80,7 @@ final class PropTypeRepository implements PropTypeRepositoryInterface
             if ($this->knowsGeneric($packageKey, $type)) {
                 $genericName = $this->getGenericClassName($packageKey, $type);
                 return new PropTypeIdentifier(
-                    $type,
+                    \mb_substr($type, 6, \mb_strlen($type) - 7),
                     $this->getSimpleClassName($genericName),
                     $genericName,
                     false,

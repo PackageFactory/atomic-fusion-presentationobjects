@@ -21,44 +21,34 @@ use Neos\Neos\Service\ContentElementWrappingService;
 abstract class AbstractComponentPresentationObjectFactory implements ComponentPresentationObjectFactoryInterface, ProtectedContextAwareInterface
 {
     /**
+     * @Flow\Inject
      * @var ContentElementWrappingService
      */
-    protected ContentElementWrappingService $contentElementWrappingService;
+    protected $contentElementWrappingService;
 
     /**
+     * @Flow\Inject
      * @var ContentElementEditableService
      */
-    protected ContentElementEditableService $contentElementEditableService;
+    protected $contentElementEditableService;
 
     /**
+     * @Flow\Inject
      * @var UriServiceInterface
      */
-    protected UriServiceInterface $uriService;
+    protected $uriService;
 
     /**
+     * @Flow\Inject
      * @var Translator
      */
-    protected Translator $translator;
+    protected $translator;
 
     /**
+     * @Flow\Inject
      * @var NodeTypeConstraintFactory
      */
-    protected NodeTypeConstraintFactory $nodeTypeConstraintFactory;
-
-    public function __construct(
-        ContentElementWrappingService $contentElementWrappingService,
-        ContentElementEditableService $contentElementEditableService,
-        UriServiceInterface $uriService,
-        Translator $translator,
-        NodeTypeConstraintFactory $nodeTypeConstraintFactory
-    )
-    {
-        $this->contentElementWrappingService = $contentElementWrappingService;
-        $this->contentElementEditableService = $contentElementEditableService;
-        $this->uriService = $uriService;
-        $this->translator = $translator;
-        $this->nodeTypeConstraintFactory = $nodeTypeConstraintFactory;
-    }
+    protected $nodeTypeConstraintFactory;
 
     /**
      * @param TraversableNodeInterface $node

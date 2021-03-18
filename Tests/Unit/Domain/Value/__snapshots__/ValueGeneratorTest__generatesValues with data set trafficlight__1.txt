@@ -16,10 +16,7 @@ final class TrafficLight
     const LIGHT_YELLOW = 'YELLOW';
     const LIGHT_GREEN = 'GREEN';
 
-    /**
-     * @var int
-     */
-    private $value;
+    private int $value;
 
     private function __construct(int $value)
     {

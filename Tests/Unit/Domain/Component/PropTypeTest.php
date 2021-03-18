@@ -75,7 +75,6 @@ final class PropTypeTest extends UnitTestCase
         $this->assertEquals(true, $propType->getClass()->isPrimitive());
         $this->assertEquals('string', $propType->toUse());
         $this->assertEquals('?string', $propType->toType());
-        $this->assertEquals('string|null', $propType->toVar());
         $this->assertEquals('= \'Text\'', $propType->toStyleGuidePropValue());
     }
 

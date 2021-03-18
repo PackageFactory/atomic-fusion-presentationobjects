@@ -16,20 +16,11 @@ use Link;
  */
 final class Card extends AbstractComponentPresentationObject implements CardInterface
 {
-    /**
-     * @var Image|null
-     */
-    private $image;
+    private ?Image $image;
 
-    /**
-     * @var Text|null
-     */
-    private $text;
+    private ?Text $text;
 
-    /**
-     * @var Link|null
-     */
-    private $link;
+    private ?Link $link;
 
     public function __construct(
         ?Image $image,

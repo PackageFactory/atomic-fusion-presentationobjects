@@ -293,10 +293,7 @@ final class ' . $this->getName() . 'Factory extends AbstractComponentPresentatio
     {
         $properties = [];
         foreach ($this->props as $propName => $propType) {
-            $properties[] = '/**
-     * @var ' . $propType->toVar() . '
-     */
-    private $' . $propName . ';';
+            $properties[] = 'private ' . $propType->toType() . ' $' . $propName . ';';
         }
 
         return $properties;

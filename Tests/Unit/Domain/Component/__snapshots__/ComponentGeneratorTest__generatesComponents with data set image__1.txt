@@ -14,20 +14,11 @@ use ImageSourceHelperInterface;
  */
 final class Image extends AbstractComponentPresentationObject implements ImageInterface
 {
-    /**
-     * @var ImageSourceHelperInterface
-     */
-    private $src;
+    private ImageSourceHelperInterface $src;
 
-    /**
-     * @var string
-     */
-    private $alt;
+    private string $alt;
 
-    /**
-     * @var string|null
-     */
-    private $title;
+    private ?string $title;
 
     public function __construct(
         ImageSourceHelperInterface $src,

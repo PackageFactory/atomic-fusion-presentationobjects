@@ -127,10 +127,7 @@ final class ' . $this->getName() . '
 {
     ' . $this->renderConstants() . '
 
-    /**
-     * @var ' . $this->type . '
-     */
-    private $value;
+    private ' . $this->type . ' $value;
 
     private function __construct(' . $this->type . ' $value)
     {

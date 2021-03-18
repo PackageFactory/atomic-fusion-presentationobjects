@@ -126,75 +126,33 @@ use Acme\Site\Presentation\MySubComponent\MySubComponentInterface;
  */
 final class MyComponent extends AbstractComponentPresentationObject implements MyComponentInterface
 {
-    /**
-     * @var bool
-     */
-    private $bool;
+    private bool $bool;
 
-    /**
-     * @var bool|null
-     */
-    private $nullableBool;
+    private ?bool $nullableBool;
 
-    /**
-     * @var float
-     */
-    private $float;
+    private float $float;
 
-    /**
-     * @var float|null
-     */
-    private $nullableFloat;
+    private ?float $nullableFloat;
 
-    /**
-     * @var int
-     */
-    private $int;
+    private int $int;
 
-    /**
-     * @var int|null
-     */
-    private $nullableInt;
+    private ?int $nullableInt;
 
-    /**
-     * @var string
-     */
-    private $string;
+    private string $string;
 
-    /**
-     * @var string|null
-     */
-    private $nullableString;
+    private ?string $nullableString;
 
-    /**
-     * @var UriInterface
-     */
-    private $uri;
+    private UriInterface $uri;
 
-    /**
-     * @var UriInterface|null
-     */
-    private $nullableUri;
+    private ?UriInterface $nullableUri;
 
-    /**
-     * @var ImageSourceHelperInterface
-     */
-    private $image;
+    private ImageSourceHelperInterface $image;
 
-    /**
-     * @var ImageSourceHelperInterface|null
-     */
-    private $nullableImage;
+    private ?ImageSourceHelperInterface $nullableImage;
 
-    /**
-     * @var MySubComponentInterface
-     */
-    private $subComponent;
+    private MySubComponentInterface $subComponent;
 
-    /**
-     * @var MySubComponentInterface|null
-     */
-    private $nullableSubComponent;
+    private ?MySubComponentInterface $nullableSubComponent;
 
     public function __construct(
         bool $bool,

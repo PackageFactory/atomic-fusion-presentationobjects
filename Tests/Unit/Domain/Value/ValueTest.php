@@ -55,10 +55,7 @@ final class MyComponentType
     const TYPE_PRIMARY = \'primary\';
     const TYPE_SECONDARY = \'secondary\';
 
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
     private function __construct(string $value)
     {

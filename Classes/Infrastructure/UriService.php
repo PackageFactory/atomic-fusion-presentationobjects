@@ -82,12 +82,13 @@ final class UriService implements UriServiceInterface
 
     /**
      * @param AssetInterface $asset
-     * @return string
+     * @return Uri
      */
-    public function getAssetUri(AssetInterface $asset): string
+    public function getAssetUri(AssetInterface $asset): Uri
     {
         $uri = $this->resourceManager->getPublicPersistentResourceUri($asset->getResource());
-        return is_string($uri) ? $uri : '#';
+
+        return new Uri(is_string($uri) ? $uri : '#');
     }
 
     /**
@@ -97,12 +98,12 @@ final class UriService implements UriServiceInterface
     {
         $uriBuilder = $this->getControllerContext()->getUriBuilder();
 
-        return $uriBuilder->uriFor(
+        return new Uri($uriBuilder->uriFor(
             'image',
             [],
             'dummyImage',
             'Sitegeist.Kaleidoscope'
-        );
+        ));
     }
 
     /**

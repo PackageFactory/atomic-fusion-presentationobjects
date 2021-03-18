@@ -15,20 +15,11 @@ use HeadlineLook;
  */
 final class Headline extends AbstractComponentPresentationObject implements HeadlineInterface
 {
-    /**
-     * @var HeadlineType
-     */
-    private $type;
+    private HeadlineType $type;
 
-    /**
-     * @var HeadlineLook
-     */
-    private $look;
+    private HeadlineLook $look;
 
-    /**
-     * @var string
-     */
-    private $content;
+    private string $content;
 
     public function __construct(
         HeadlineType $type,

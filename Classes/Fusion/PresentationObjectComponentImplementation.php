@@ -23,7 +23,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
      *
      * @var array|string[]
      */
-    protected array $ignoreProperties = ['__meta', 'renderer'];
+    protected $ignoreProperties = ['__meta', 'renderer'];
 
     /**
      * Evaluate the fusion-keys and transfer the result into the context as ``props``

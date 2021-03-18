@@ -13,10 +13,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
  */
 final class Text extends AbstractComponentPresentationObject implements TextInterface
 {
-    /**
-     * @var string
-     */
-    private $content;
+    private string $content;
 
     public function __construct(
         string $content

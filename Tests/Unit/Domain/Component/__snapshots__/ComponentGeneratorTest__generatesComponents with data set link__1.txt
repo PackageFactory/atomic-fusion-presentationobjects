@@ -14,15 +14,9 @@ use UriInterface;
  */
 final class Link extends AbstractComponentPresentationObject implements LinkInterface
 {
-    /**
-     * @var UriInterface
-     */
-    private $href;
+    private UriInterface $href;
 
-    /**
-     * @var string|null
-     */
-    private $title;
+    private ?string $title;
 
     public function __construct(
         UriInterface $href,

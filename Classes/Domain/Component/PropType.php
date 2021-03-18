@@ -156,14 +156,6 @@ final class PropType
     /**
      * @return string
      */
-    public function toVar(): string
-    {
-        return $this->simpleName . ($this->isNullable() ? '|null' : '');
-    }
-
-    /**
-     * @return string
-     */
     public function toStyleGuidePropValue(): string
     {
         $styleGuideValue = '';

@@ -15,15 +15,15 @@ final class Texts extends \ArrayObject
     public function __construct($array = array(), $flags = 0, $iteratorClass = "ArrayIterator")
     {
         foreach ($array as $element) {
-            if (!$element instanceof Text) {
-                throw new \InvalidArgumentException(self::class . ' can only consist of ' . Text::class);
+            if (!$element instanceof TextInterface) {
+                throw new \InvalidArgumentException(self::class . ' can only consist of ' . TextInterface::class);
             }
         }
         parent::__construct($array, $flags, $iteratorClass);
     }
 
     /**
-     * @return \ArrayIterator|Text[]
+     * @return \ArrayIterator|TextInterface[]
      */
     public function getIterator(): \ArrayIterator
     {

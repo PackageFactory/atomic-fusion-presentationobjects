@@ -283,15 +283,15 @@ final class ' . PluralName::forName($this->getName()) . ' extends \ArrayObject
     public function __construct($array = array(), $flags = 0, $iteratorClass = "ArrayIterator")
     {
         foreach ($array as $element) {
-            if (!$element instanceof ' . $this->getName() . ') {
-                throw new \InvalidArgumentException(self::class . \' can only consist of \' . ' . $this->getName() . '::class);
+            if (!$element instanceof ' . $this->getName() . 'Interface) {
+                throw new \InvalidArgumentException(self::class . \' can only consist of \' . ' . $this->getName() . 'Interface::class);
             }
         }
         parent::__construct($array, $flags, $iteratorClass);
     }
 
     /**
-     * @return \ArrayIterator|' . $this->getName() . '[]
+     * @return \ArrayIterator|' . $this->getName() . 'Interface[]
      */
     public function getIterator(): \ArrayIterator
     {
@@ -316,7 +316,7 @@ final class ' . PluralName::forName($this->getName()) . ' extends \ArrayObject
             } elseif ($propType->getClass()->isGeneric()) {
                 $definitionData = '
             <Neos.Fusion:Loop items={presentationObject.' . $propName. '}>
-                <' . $this->packageKey . ':Component.' . $propType->getName() . ' presentationObject={item} />
+                <' . $this->packageKey . ':Component.' . PluralName::toName($propType->getName()) . ' presentationObject={item} />
             </Neos.Fusion:Loop>
         ';
             } else {

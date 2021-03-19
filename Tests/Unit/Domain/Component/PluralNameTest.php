@@ -19,4 +19,11 @@ final class PluralNameTest extends UnitTestCase
         Assert::assertSame('Properties', PluralName::forName('Property'));
         Assert::assertSame('Cards', PluralName::forName('Card'));
     }
+
+    public function testToName(): void
+    {
+        Assert::assertSame('Property', PluralName::toName('Properties'));
+        Assert::assertSame('Card', PluralName::toName('Cards'));
+        Assert::assertSame('Card', PluralName::toName('Card'));
+    }
 }

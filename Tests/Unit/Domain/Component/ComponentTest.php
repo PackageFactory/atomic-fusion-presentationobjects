@@ -375,15 +375,15 @@ final class MyComponents extends \ArrayObject
     public function __construct($array = array(), $flags = 0, $iteratorClass = "ArrayIterator")
     {
         foreach ($array as $element) {
-            if (!$element instanceof MyComponent) {
-                throw new \InvalidArgumentException(self::class . \' can only consist of \' . MyComponent::class);
+            if (!$element instanceof MyComponentInterface) {
+                throw new \InvalidArgumentException(self::class . \' can only consist of \' . MyComponentInterface::class);
             }
         }
         parent::__construct($array, $flags, $iteratorClass);
     }
 
     /**
-     * @return \ArrayIterator|MyComponent[]
+     * @return \ArrayIterator|MyComponentInterface[]
      */
     public function getIterator(): \ArrayIterator
     {

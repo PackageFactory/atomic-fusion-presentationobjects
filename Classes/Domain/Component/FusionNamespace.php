@@ -33,9 +33,7 @@ final class FusionNamespace
     public static function fromString(string $string): self
     {
         return new self(array_map(
-            function(string $segment) {
-                return ucfirst($segment);
-            },
+            'ucfirst',
             explode('.', $string)
         ));
     }

@@ -33,11 +33,11 @@ final class ComponentGenerator
      * @param array|string[] $serializedProps
      * @param string|null $packageKey
      * @param FusionNamespace|null $namespace
-     * @param bool $generic
+     * @param bool $listable
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generateComponent(string $name, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null, bool $generic = false): void
+    public function generateComponent(string $name, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null, bool $listable = false): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
         $componentName = new ComponentName(
@@ -46,7 +46,7 @@ final class ComponentGenerator
             $name
         );
         $props = Props::fromInputArray($package->getPackageKey(), $name, $serializedProps);
-        $component = new Component($componentName, $props, $generic);
+        $component = new Component($componentName, $props, $listable);
 
         $packagePath = $package->getPackagePath();
         $classPath = $componentName->getPhpFilePath($packagePath);
@@ -61,7 +61,7 @@ final class ComponentGenerator
         file_put_contents($componentName->getClassPath($packagePath), $component->getClassContent());
         file_put_contents($componentName->getFactoryPath($packagePath), $component->getFactoryContent());
         file_put_contents($componentName->getFusionComponentPath($packagePath), $component->getFusionContent());
-        if ($generic) {
+        if ($listable) {
             file_put_contents($componentName->getComponentArrayPath($packagePath), $component->getComponentArrayContent());
         }
         $this->registerFactory($package, $componentName);

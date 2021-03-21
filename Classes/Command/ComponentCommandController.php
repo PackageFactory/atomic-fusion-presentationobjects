@@ -48,22 +48,23 @@ class ComponentCommandController extends CommandController
      *   package
      * * ImageSource
      * * Uri
+     * * array<...> with any of the above as an argument
      *
      * @param string $name The name of the new component
      * @param string|null $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
-     * @param string|null $namespace
-     * @param bool $generic
+     * @param string|null $namespace Optional fusion namespace (by default that will be "Component")
+     * @param bool $listable If set, an additional list type will be generated
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function kickStartCommand(string $name, ?string $packageKey = null, ?string $namespace = null, bool $generic = false): void
+    public function kickStartCommand(string $name, ?string $packageKey = null, ?string $namespace = null, bool $listable = false): void
     {
         $this->componentGenerator->generateComponent(
             $name,
             $this->request->getExceedingArguments(),
             $packageKey,
             $namespace ? FusionNamespace::fromString($namespace) : null,
-            $generic
+            $listable
         );
     }
 

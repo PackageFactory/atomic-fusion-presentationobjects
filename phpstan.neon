@@ -1,5 +1,9 @@
 includes:
-    - Packages/Libraries/jangregor/phpstan-prophecy/extension.neon
+	- Packages/Libraries/jangregor/phpstan-prophecy/extension.neon
 parameters:
+	bootstrapFiles:
+		- Packages/Framework/Neos.Flow/Tests/BaseTestCase.php
+		- Packages/Framework/Neos.Flow/Tests/UnitTestCase.php
+		- Packages/Framework/Neos.Flow/Tests/FunctionalTestCase.php
 	excludes_analyse:
 		- Tests/Unit/Helper/*

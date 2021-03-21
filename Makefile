@@ -34,11 +34,7 @@ lint::
 		Classes/ Tests/
 
 analyse::
-	@bin/phpstan analyse \
-		--autoload-file Build/BuildEssentials/PhpUnit/UnitTestBootstrap.php \
-		--level 8 \
-		Tests/Unit
-	@bin/phpstan analyse --level 8 Classes
+	@bin/phpstan analyse --level 8 Tests/Unit Classes
 
 test::
 	@bin/phpunit -c phpunit.xml \

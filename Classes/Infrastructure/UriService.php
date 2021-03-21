@@ -149,18 +149,18 @@ final class UriService implements UriServiceInterface
             $nodeIdentifier = \mb_substr($rawLinkUri, 7);
             /** @var null|TraversableNodeInterface $node */
             $node = $subgraph->getNodeByIdentifier($nodeIdentifier);
-            $linkUri = $node ? $this->getNodeUri($node) : '#';
+            $linkUri = $node ? $this->getNodeUri($node) : new Uri('#');
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'asset://') {
             $assetIdentifier = \mb_substr($rawLinkUri, 8);
             /** @var null|AssetInterface $asset */
             $asset = $this->assetRepository->findByIdentifier($assetIdentifier);
-            $linkUri = $asset ? $this->getAssetUri($asset) : '#';
+            $linkUri = $asset ? $this->getAssetUri($asset) : new Uri('#');
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'https://' || \mb_substr($rawLinkUri, 0, 7) === 'http://') {
-            $linkUri = $rawLinkUri;
+            $linkUri = new Uri($rawLinkUri);
         } else {
-            $linkUri = '#';
+            $linkUri = new Uri('#');
         }
 
-        return new Uri($linkUri);
+        return $linkUri;
     }
 }

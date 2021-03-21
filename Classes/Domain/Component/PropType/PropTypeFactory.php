@@ -5,6 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\Psr7\Uri;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;

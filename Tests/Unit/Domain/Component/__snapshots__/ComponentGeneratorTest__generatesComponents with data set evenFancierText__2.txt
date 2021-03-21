@@ -1,14 +1,13 @@
 <?php
-namespace Vendor\Site\Presentation\Text;
+namespace Vendor\Site\Presentation\Even\FancierComponent\NewText;
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Text;
 
-interface TextInterface extends ComponentPresentationObjectInterface
+interface NewTextInterface extends ComponentPresentationObjectInterface
 {
-    public function getText(): ?Text;
+    public function getText(): ?string;
 }

@@ -1,4 +1,0 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.WithGenericText: Vendor\Site\Presentation\WithGenericText\WithGenericTextFactory

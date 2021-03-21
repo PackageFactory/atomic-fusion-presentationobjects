@@ -1,20 +1,21 @@
 <?php
-namespace Vendor\Default\Presentation\Crossing;
+namespace Vendor\Default\Presentation\Component\Crossing;
 
 /*
  * This file is part of the Vendor.Default package.
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface
 
 /**
  * @Flow\Proxy(false)
  */
-final class TrafficLight
+final class TrafficLight implements EnumInterface
 {
-    const LIGHT_RED = 'RED';
-    const LIGHT_YELLOW = 'YELLOW';
-    const LIGHT_GREEN = 'GREEN';
+    const LIGHT_RED = 1;
+    const LIGHT_YELLOW = 2;
+    const LIGHT_GREEN = 3;
 
     private int $value;
 
@@ -32,32 +33,32 @@ final class TrafficLight
         return new self($int);
     }
 
-    public static function RED(): self
+    public static function red(): self
     {
         return new self(self::LIGHT_RED);
     }
 
-    public static function YELLOW(): self
+    public static function yellow(): self
     {
         return new self(self::LIGHT_YELLOW);
     }
 
-    public static function GREEN(): self
+    public static function green(): self
     {
         return new self(self::LIGHT_GREEN);
     }
 
-    public function getIsRED(): bool
+    public function getIsRed(): bool
     {
         return $this->value === self::LIGHT_RED;
     }
 
-    public function getIsYELLOW(): bool
+    public function getIsYellow(): bool
     {
         return $this->value === self::LIGHT_YELLOW;
     }
 
-    public function getIsGREEN(): bool
+    public function getIsGreen(): bool
     {
         return $this->value === self::LIGHT_GREEN;
     }

@@ -8,6 +8,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum
 use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -104,17 +105,23 @@ final class EnumGeneratorTest extends UnitTestCase
     {
         return [
             'headlinetype' =>
-                ['Headline', 'HeadlineType', 'string', ['H1', 'H2', 'DIV'], 'Vendor.Site', [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/HeadlineType.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/HeadlineTypeIsInvalid.php',
+                ['Headline', 'HeadlineType', 'string', ['h1', 'h2', 'div'], 'Vendor.Site', null, [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineType.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineTypeIsInvalid.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Application/HeadlineTypeProvider.php',
                 ]],
             'trafficlight' =>
-                ['Crossing', 'TrafficLight', 'int', ['RED', 'YELLOW', 'GREEN'], null, [
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Crossing/TrafficLight.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Crossing/TrafficLightIsInvalid.php',
+                ['Crossing', 'TrafficLight', 'int', ['red:1', 'yellow:2', 'green:3'], null, null, [
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLight.php',
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLightIsInvalid.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Application/TrafficLightProvider.php',
                 ]],
+            'duration' =>
+                ['Crossing', 'Duration', 'float', ['short:1.2', 'medium:2.4', 'long:3.6'], null, FusionNamespace::fromString('Custom.Type'), [
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/Duration.php',
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/DurationIsInvalid.php',
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Application/DurationProvider.php',
+                ]]
         ];
     }
 
@@ -130,9 +137,9 @@ final class EnumGeneratorTest extends UnitTestCase
      * @param string[] $expectedFileNames
      * @return void
      */
-    public function generatesEnums(string $componentName, string $name, string $type, array $values, ?string $packageKey, array $expectedFileNames): void
+    public function generatesEnums(string $componentName, string $name, string $type, array $values, ?string $packageKey, ?FusionNamespace $fusionNamespace, array $expectedFileNames): void
     {
-        $this->enumGenerator->generateEnum($componentName, $name, $type, $values, $packageKey);
+        $this->enumGenerator->generateEnum($componentName, $name, $type, $values, $packageKey, $fusionNamespace);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

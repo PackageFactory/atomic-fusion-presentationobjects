@@ -35,7 +35,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PackageFactory\\AtomicFusion\\PresentationObjects\\Tests\\": "Tests"
+            "PackageFactory\\AtomicFusion\\PresentationObjects\\Tests\\": "Tests",
+            "Vendor\\Default\\": "Tests/Unit/Fixtures/Default",
+            "Vendor\\Site\\": "Tests/Unit/Fixtures/Site",
+            "Vendor\\Shared\\": "Tests/Unit/Fixtures/Shared"
         }
     },
     "extra": {

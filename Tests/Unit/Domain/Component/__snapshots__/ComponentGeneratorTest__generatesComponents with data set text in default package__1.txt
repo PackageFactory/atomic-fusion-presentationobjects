@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Default\Presentation\Text;
+namespace Vendor\Default\Presentation\Component\NewText;
 
 /*
  * This file is part of the Vendor.Default package.
@@ -11,7 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
 /**
  * @Flow\Proxy(false)
  */
-final class Text extends AbstractComponentPresentationObject implements TextInterface
+final class NewText extends AbstractComponentPresentationObject implements NewTextInterface
 {
     private string $content;
 

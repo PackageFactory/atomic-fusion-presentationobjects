@@ -1,20 +1,21 @@
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface
 
 /**
  * @Flow\Proxy(false)
  */
-final class HeadlineType
+final class HeadlineType implements EnumInterface
 {
-    const TYPE_H1 = 'H1';
-    const TYPE_H2 = 'H2';
-    const TYPE_DIV = 'DIV';
+    const TYPE_H1 = 'h1';
+    const TYPE_H2 = 'h2';
+    const TYPE_DIV = 'div';
 
     private string $value;
 
@@ -32,17 +33,17 @@ final class HeadlineType
         return new self($string);
     }
 
-    public static function H1(): self
+    public static function h1(): self
     {
         return new self(self::TYPE_H1);
     }
 
-    public static function H2(): self
+    public static function h2(): self
     {
         return new self(self::TYPE_H2);
     }
 
-    public static function DIV(): self
+    public static function div(): self
     {
         return new self(self::TYPE_DIV);
     }
@@ -57,7 +58,7 @@ final class HeadlineType
         return $this->value === self::TYPE_H2;
     }
 
-    public function getIsDIV(): bool
+    public function getIsDiv(): bool
     {
         return $this->value === self::TYPE_DIV;
     }

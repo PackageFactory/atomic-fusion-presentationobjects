@@ -1,0 +1,50 @@
+<?php
+namespace Vendor\Site\Presentation\Component\NewText;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class NewTexts extends AbstractComponentArray
+{
+    public function __construct($array)
+    {
+        foreach ($array as $element) {
+            if (!$element instanceof NewTextInterface) {
+                throw new \InvalidArgumentException(self::class . ' can only consist of ' . NewTextInterface::class);
+            }
+        }
+        parent::__construct($array);
+    }
+
+    /**
+     * @param mixed $key
+     * @return NewTextInterface|false
+     */
+    public function offsetGet($key)
+    {
+        return parent::offsetGet($key);
+    }
+
+    /**
+     * @return array|NewTextInterface[]
+     */
+    public function getArrayCopy(): array
+    {
+        return parent::getArrayCopy();
+    }
+
+    /**
+     * @return \ArrayIterator|NewTextInterface[]
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return parent::getIterator();
+    }
+}

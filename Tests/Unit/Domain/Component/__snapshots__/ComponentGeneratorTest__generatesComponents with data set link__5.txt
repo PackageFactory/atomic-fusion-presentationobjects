@@ -1,11 +1,11 @@
-prototype(Vendor.Site:Component.Link) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Link\\LinkInterface'
+prototype(Vendor.Site:Component.NewLink) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\NewLink\\NewLinkInterface'
 
     @styleguide {
-        title = 'Link'
+        title = 'NewLink'
 
         props {
-            href = 'https://neos.io'
+            href = 'https://www.neos.io'
             title = 'Text'
         }
     }

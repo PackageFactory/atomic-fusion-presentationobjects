@@ -14,96 +14,30 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PluralName;
 final class Enum
 {
     /**
-     * @var string
+     * @var EnumName
      */
-    private string $packageKey;
+    private EnumName $name;
 
     /**
-     * @var string
+     * @var EnumType
      */
-    private string $componentName;
+    private EnumType $type;
 
     /**
-     * @var string
-     */
-    private string $name;
-
-    /**
-     * @var string
-     */
-    private string $type;
-
-    /**
-     * @var null|string[]
+     * @var null|string[]|int[]|float[]
      */
     private ?array $values;
 
     /**
-     * @param string $packageKey
-     * @param string $componentName
-     * @param string $name
-     * @param string $type
-     * @param null|string[] $values
+     * @param EnumName $name
+     * @param EnumType $type
+     * @param null|string[]|int[]|float[] $values
      */
-    public function __construct(string $packageKey, string $componentName, string $name, string $type, ?array $values)
+    public function __construct(EnumName $name, EnumType $type, ?array $values)
     {
-        $this->packageKey = $packageKey;
-        $this->componentName = $componentName;
         $this->name = $name;
-        if ($type !== 'string' && $type !== 'int') {
-            throw new \InvalidArgumentException('Only values of type string or int are supported at this point.', 1582502049);
-        }
         $this->type = $type;
         $this->values = $values;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPackageKey(): string
-    {
-        return $this->packageKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getComponentName(): string
-    {
-        return $this->componentName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @return null|string[]
-     */
-    public function getValues(): ?array
-    {
-        return $this->values;
-    }
-
-    /**
-     * @param string $packagePath
-     * @return string
-     */
-    public function getClassPath(string $packagePath): string
-    {
-        return $packagePath . 'Classes/Presentation/' . $this->componentName . '/' . $this->name . '.php';
     }
 
     /**
@@ -113,18 +47,19 @@ final class Enum
     {
         $variable = '$' . $this->type;
         return '<?php
-namespace ' . $this->getNamespace() . ';
+namespace ' . $this->name->getNamespace() . ';
 
 /*
- * This file is part of the ' . $this->getPackageKey() . ' package.
+ * This file is part of the ' . $this->name->getPackageKey() . ' package.
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface
 
 /**
  * @Flow\Proxy(false)
  */
-final class ' . $this->getName() . '
+final class ' . $this->name->getName() . ' implements EnumInterface
 {
     ' . $this->renderConstants() . '
 
@@ -135,10 +70,10 @@ final class ' . $this->getName() . '
         $this->value = $value;
     }
 
-    public static function from' . ucfirst($this->type) . '(' . $this->type . ' ' . $variable . '): self
+    public static function from' . ucfirst((string)$this->type) . '(' . $this->type . ' ' . $variable . '): self
     {
         if (!in_array(' . $variable . ', self::getValues())) {
-            throw ' . $this->name . 'IsInvalid::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
+            throw ' . $this->name->getExceptionName() . '::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
         }
 
         return new self(' . $variable . ');
@@ -161,7 +96,7 @@ final class ' . $this->getName() . '
     public function getValue(): ' . $this->type . '
     {
         return $this->value;
-    }' . ($this->type === 'string' ? '
+    }' . ($this->type->isString() ? '
 
     public function __toString(): string
     {
@@ -172,25 +107,16 @@ final class ' . $this->getName() . '
     }
 
     /**
-     * @param string $packagePath
-     * @return string
-     */
-    public function getExceptionPath(string $packagePath): string
-    {
-        return $packagePath . 'Classes/Presentation/' . $this->componentName . '/' . $this->name . 'IsInvalid.php';
-    }
-
-    /**
      * @param \DateTimeImmutable $now
      * @return string
      */
     public function getExceptionContent(\DateTimeImmutable $now): string
     {
         return '<?php
-namespace ' . $this->getNamespace() . ';
+namespace ' . $this->name->getNamespace() . ';
 
 /*
- * This file is part of the ' . $this->getPackageKey() . ' package.
+ * This file is part of the ' . $this->name->getPackageKey() . ' package.
  */
 
 use Neos\Flow\Annotations as Flow;
@@ -198,23 +124,14 @@ use Neos\Flow\Annotations as Flow;
 /**
  * @Flow\Proxy(false)
  */
-final class ' . $this->getName() . 'IsInvalid extends \DomainException
+final class ' . $this->name->getExceptionName() . ' extends \DomainException
 {
     public static function becauseItMustBeOneOfTheDefinedConstants(' . $this->type . ' $attemptedValue): self
     {
-        return new self(\'The given value "\' . $attemptedValue . \'" is no valid ' . $this->name . ', must be one of the defined constants. \', ' . $now->getTimestamp() . ');
+        return new self(\'The given value "\' . $attemptedValue . \'" is no valid ' . $this->name->getName() . ', must be one of the defined constants. \', ' . $now->getTimestamp() . ');
     }
 }
 ';
-    }
-
-    /**
-     * @param string $packagePath
-     * @return string
-     */
-    public function getProviderPath(string $packagePath): string
-    {
-        return $packagePath . 'Classes/Application/' . $this->name . 'Provider.php';
     }
 
     /**
@@ -222,12 +139,12 @@ final class ' . $this->getName() . 'IsInvalid extends \DomainException
      */
     public function getProviderContent(): string
     {
-        $arrayName = lcfirst(PluralName::forName($this->name));
+        $arrayName = lcfirst(PluralName::forName($this->name->getName()));
         return '<?php
-namespace ' . $this->getDataSourceNamespace() . ';
+namespace ' . $this->name->getProviderNamespace() . ';
 
 /*
- * This file is part of the ' . $this->packageKey . ' package.
+ * This file is part of the ' . $this->name->getPackageKey() . ' package.
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
@@ -235,9 +152,9 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
-use ' . $this->getNamespace() . '\\' . $this->name . ';
+use ' . $this->name->getFullyQualifiedName() . ';
 
-class ' . $this->name . 'Provider extends AbstractDataSource implements ProtectedContextAwareInterface
+class ' . $this->name->getProviderName() . ' extends AbstractDataSource implements ProtectedContextAwareInterface
 {
     /**
      * @Flow\Inject
@@ -248,13 +165,20 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
     /**
      * @var string
      */
-    protected static $identifier = \'' . $this->getDataSourceIdentifier() . '\';
+    protected static $identifier = \'' . $this->name->getDataSourceIdentifier() . '\';
 
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $' . $arrayName . ' = [];
-        foreach (' . $this->name . '::getValues() as $value) {
-            $' . $arrayName . '[$value][\'label\'] = $this->translator->translateById(\'' . lcfirst($this->name) . '.\' . $value, [], null, null, \'' . $this->componentName . '\', \'' . $this->packageKey . '\') ?: $value;
+        foreach (' . $this->name->getName() . '::getValues() as $value) {
+            $' . $arrayName . '[$value][\'label\'] = $this->translator->translateById(
+                \'' . lcfirst($this->name->getName()) . '.\' . $value,
+                [],
+                null,
+                null,
+                \'' . $this->name->getComponentName() . '\',
+                \'' . $this->name->getPackageKey() . '\'
+            ) ?: $value;
         }
 
         return $' . $arrayName . ';
@@ -265,7 +189,7 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
      */
     public function getValues(): array
     {
-        return ' . $this->name . '::getValues();
+        return ' . $this->name->getName() . '::getValues();
     }
 
     public function allowsCallOfMethod($methodName): bool
@@ -279,36 +203,15 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
     /**
      * @return string
      */
-    private function getDataSourceIdentifier(): string
-    {
-        return strtolower(str_replace('.', '-', $this->packageKey) . '-' .  implode('-', $this->splitName(true)));
-    }
-
-    /**
-     * @return string
-     */
-    private function getDataSourceNamespace(): string
-    {
-        return \str_replace('.', '\\', $this->packageKey) . '\Application';
-    }
-
-    /**
-     * @return string
-     */
-    private function getNamespace(): string
-    {
-        return \str_replace('.', '\\', $this->packageKey) . '\Presentation\\' . $this->componentName;
-    }
-
-    /**
-     * @return string
-     */
     private function renderConstants(): string
     {
         $constants = [];
         if (is_array($this->values)) {
-            foreach ($this->values as $value) {
-                $constants[] = 'const ' . $this->getConstantName($value) . ' = \'' . $value . '\';';
+            foreach ($this->values as $name => $value) {
+                $renderedValue = $this->type->isString()
+                    ? '\'' . $value . '\''
+                    : $value;
+                $constants[] = 'const ' . $this->getConstantName($name) . ' = ' . $renderedValue . ';';
             }
         }
 
@@ -322,10 +225,10 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
     {
         $constructors = [];
         if (is_array($this->values)) {
-            foreach ($this->values as $value) {
-                $constructors[]  = 'public static function ' . $value . '(): self
+            foreach ($this->values as $name => $value) {
+                $constructors[]  = 'public static function ' . $name . '(): self
     {
-        return new self(self::' . $this->getConstantName($value) . ');
+        return new self(self::' . $this->getConstantName($name) . ');
     }';
             }
         }
@@ -340,10 +243,10 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
     {
         $comparators = [];
         if (is_array($this->values)) {
-            foreach ($this->values as $value) {
-                $comparators[]  = 'public function getIs' . ucfirst($value) . '(): bool
+            foreach ($this->values as $name => $value) {
+                $comparators[]  = 'public function getIs' . ucfirst($name) . '(): bool
     {
-        return $this->value === self::' . $this->getConstantName($value) . ';
+        return $this->value === self::' . $this->getConstantName($name) . ';
     }';
             }
         }
@@ -359,8 +262,8 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
         $values = [];
 
         if (is_array($this->values)) {
-            foreach ($this->values as $value) {
-                $values[] = 'self::' . $this->getConstantName($value) . ',';
+            foreach ($this->values as $name => $value) {
+                $values[] = 'self::' . $this->getConstantName($name) . ',';
             }
         }
 
@@ -385,11 +288,10 @@ class ' . $this->name . 'Provider extends AbstractDataSource implements Protecte
      * @param boolean $plural
      * @return string[]
      */
-    private function splitName(bool $plural = false): array
+    private function splitName(): array
     {
-        $name = $plural ? PluralName::forName($this->name) : $this->name;
         $nameParts = [];
-        $parts = preg_split("/([A-Z])/", $name, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $parts = preg_split("/([A-Z])/", $this->name->getName(), -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
         if (is_array($parts)) {
             foreach ($parts as $i => $part) {

@@ -1,4 +1,0 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.Text: Vendor\Site\Presentation\Text\TextFactory

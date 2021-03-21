@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Default\Presentation\Crossing;
+namespace Vendor\Default\Presentation\Component\Crossing;
 
 /*
  * This file is part of the Vendor.Default package.

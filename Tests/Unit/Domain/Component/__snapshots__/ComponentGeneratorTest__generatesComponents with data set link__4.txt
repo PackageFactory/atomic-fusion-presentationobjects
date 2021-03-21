@@ -1,4 +1,4 @@
 Neos:
   Fusion:
     defaultContext:
-      Site.Link: Vendor\Site\Presentation\Link\LinkFactory
+      Site.NewLink: Vendor\Site\Presentation\Component\NewLink\NewLinkFactory

@@ -10,7 +10,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
-use Vendor\Site\Presentation\Headline\HeadlineType;
+use Vendor\Site\Presentation\Component\Headline\HeadlineType;
 
 class HeadlineTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface
 {
@@ -29,7 +29,14 @@ class HeadlineTypeProvider extends AbstractDataSource implements ProtectedContex
     {
         $headlineTypes = [];
         foreach (HeadlineType::getValues() as $value) {
-            $headlineTypes[$value]['label'] = $this->translator->translateById('headlineType.' . $value, [], null, null, 'Headline', 'Vendor.Site') ?: $value;
+            $headlineTypes[$value]['label'] = $this->translator->translateById(
+                'headlineType.' . $value,
+                [],
+                null,
+                null,
+                'Headline',
+                'Vendor.Site'
+            ) ?: $value;
         }
 
         return $headlineTypes;

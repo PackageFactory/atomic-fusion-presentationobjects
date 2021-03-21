@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Site\Presentation\Card;
+namespace Vendor\Site\Presentation\Component\Card;
 
 /*
  * This file is part of the Vendor.Site package.

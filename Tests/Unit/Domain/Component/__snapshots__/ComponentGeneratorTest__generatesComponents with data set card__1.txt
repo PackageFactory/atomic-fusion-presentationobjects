@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Site\Presentation\Card;
+namespace Vendor\Site\Presentation\Component\Card;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,42 +7,42 @@ namespace Vendor\Site\Presentation\Card;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use Image;
-use Text;
-use Link;
+use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use Vendor\Site\Presentation\Component\Text\TextInterface;
+use Vendor\Site\Presentation\Component\Link\LinkInterface;
 
 /**
  * @Flow\Proxy(false)
  */
 final class Card extends AbstractComponentPresentationObject implements CardInterface
 {
-    private ?Image $image;
+    private ?ImageSourceHelperInterface $image;
 
-    private ?Text $text;
+    private ?TextInterface $text;
 
-    private ?Link $link;
+    private ?LinkInterface $link;
 
     public function __construct(
-        ?Image $image,
-        ?Text $text,
-        ?Link $link
+        ?ImageSourceHelperInterface $image,
+        ?TextInterface $text,
+        ?LinkInterface $link
     ) {
         $this->image = $image;
         $this->text = $text;
         $this->link = $link;
     }
 
-    public function getImage(): ?Image
+    public function getImage(): ?ImageSourceHelperInterface
     {
         return $this->image;
     }
 
-    public function getText(): ?Text
+    public function getText(): ?TextInterface
     {
         return $this->text;
     }
 
-    public function getLink(): ?Link
+    public function getLink(): ?LinkInterface
     {
         return $this->link;
     }

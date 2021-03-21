@@ -7,6 +7,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\Files;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
 
 /**
@@ -43,23 +45,30 @@ final class EnumGenerator
      * @param null|string $packageKey
      * @return void
      */
-    public function generateEnum(string $componentName, string $name, string $type, array $values, ?string $packageKey = null): void
+    public function generateEnum(string $componentName, string $name, string $type, array $values, ?string $packageKey = null, ?FusionNamespace $namespace = null): void
     {
+        $enumType = EnumType::fromInput($type);
         $package = $this->packageResolver->resolvePackage($packageKey);
+        $enumName = new EnumName(
+            PackageKey::fromPackage($package),
+            $namespace ?: FusionNamespace::default(),
+            $componentName,
+            $name
+        );
+        $enum = new Enum($enumName, $enumType, $enumType->processValueArray($values));
 
-        $enum = new Enum($package->getPackageKey(), $componentName, $name, $type, $values);
         $packagePath = $package->getPackagePath();
-        $classPath = $packagePath . 'Classes/Presentation/' . $componentName;
+        $classPath = $enumName->getPhpFilePath($packagePath);
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
         }
-        file_put_contents($enum->getClassPath($packagePath), $enum->getClassContent());
-        file_put_contents($enum->getExceptionPath($packagePath), $enum->getExceptionContent($this->now));
+        file_put_contents($enumName->getClassPath($packagePath), $enum->getClassContent());
+        file_put_contents($enumName->getExceptionPath($packagePath), $enum->getExceptionContent($this->now));
 
-        $dataSourcePath = $packagePath . 'Classes/Application/';
-        if (!is_dir($dataSourcePath)) {
-            Files::createDirectoryRecursively($dataSourcePath);
+        $providerBasePath = $enumName->getProviderBasePath($packagePath);
+        if (!is_dir($providerBasePath)) {
+            Files::createDirectoryRecursively($providerBasePath);
         }
-        file_put_contents($enum->getProviderPath($packagePath), $enum->getProviderContent());
+        file_put_contents($enumName->getProviderPath($packagePath), $enum->getProviderContent());
     }
 }

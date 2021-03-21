@@ -1,17 +1,16 @@
-prototype(Vendor.Site:Even.FancierComponent.Text) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Text\\TextInterface'
+prototype(Vendor.Site:Even.FancierComponent.NewText) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Even\\FancierComponent\\NewText\\NewTextInterface'
 
     @styleguide {
-        title = 'Text'
+        title = 'NewText'
 
         props {
-            text {
-            }
+            text = 'Text'
         }
     }
 
     renderer = afx`<dl>
         <dt>text:</dt>
-        <dd><Vendor.Site:Component.Text presentationObject={presentationObject.text} @if.isToBeRendered={presentationObject.text} /></dd>
+        <dd>{presentationObject.text}</dd>
     </dl>`
 }

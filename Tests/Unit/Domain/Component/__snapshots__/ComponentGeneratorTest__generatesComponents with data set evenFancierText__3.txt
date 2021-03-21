@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Site\Presentation\Text;
+namespace Vendor\Site\Presentation\Even\FancierComponent\NewText;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,6 +7,6 @@ namespace Vendor\Site\Presentation\Text;
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
 
-final class TextFactory extends AbstractComponentPresentationObjectFactory
+final class NewTextFactory extends AbstractComponentPresentationObjectFactory
 {
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Site\Presentation\Text;
+namespace Vendor\Site\Presentation\Even\FancierComponent\NewText;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,22 +7,21 @@ namespace Vendor\Site\Presentation\Text;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use Text;
 
 /**
  * @Flow\Proxy(false)
  */
-final class Text extends AbstractComponentPresentationObject implements TextInterface
+final class NewText extends AbstractComponentPresentationObject implements NewTextInterface
 {
-    private ?Text $text;
+    private ?string $text;
 
     public function __construct(
-        ?Text $text
+        ?string $text
     ) {
         $this->text = $text;
     }
 
-    public function getText(): ?Text
+    public function getText(): ?string
     {
         return $this->text;
     }

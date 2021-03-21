@@ -1,0 +1,29 @@
+<?php
+namespace Vendor\Site\Presentation\Component\WithTextArray;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use Vendor\Site\Presentation\Component\Text\Texts;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class WithTextArray extends AbstractComponentPresentationObject implements WithTextArrayInterface
+{
+    private Texts $texts;
+
+    public function __construct(
+        Texts $texts
+    ) {
+        $this->texts = $texts;
+    }
+
+    public function getTexts(): Texts
+    {
+        return $this->texts;
+    }
+}

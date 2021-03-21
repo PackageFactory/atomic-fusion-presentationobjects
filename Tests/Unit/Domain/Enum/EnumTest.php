@@ -6,7 +6,12 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum
  */
 
 use Neos\Flow\Tests\UnitTestCase;
+use Neos\Fusion\Tests\Functional\FusionObjects\FusionArrayTest;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\Enum;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumType;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -24,13 +29,16 @@ class EnumTest extends UnitTestCase
         parent::setUp();
 
         $this->subject = new Enum(
-            'Acme.Site',
-            'MyComponent',
-            'MyComponentType',
-            'string',
+            new EnumName(
+                new PackageKey('Vendor.Site'),
+                FusionNamespace::default(),
+                'MyComponent',
+                'MyComponentType'
+            ),
+            EnumType::string(),
             [
-                'primary',
-                'secondary'
+                'primary' => 'primary',
+                'secondary' => 'secondary'
             ]
         );
     }
@@ -39,18 +47,19 @@ class EnumTest extends UnitTestCase
     {
         Assert::assertSame(
             '<?php
-namespace Acme\Site\Presentation\MyComponent;
+namespace Vendor\Site\Presentation\Component\MyComponent;
 
 /*
- * This file is part of the Acme.Site package.
+ * This file is part of the Vendor.Site package.
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface
 
 /**
  * @Flow\Proxy(false)
  */
-final class MyComponentType
+final class MyComponentType implements EnumInterface
 {
     const TYPE_PRIMARY = \'primary\';
     const TYPE_SECONDARY = \'secondary\';
@@ -121,10 +130,10 @@ final class MyComponentType
     {
         Assert::assertSame(
             '<?php
-namespace Acme\Site\Presentation\MyComponent;
+namespace Vendor\Site\Presentation\Component\MyComponent;
 
 /*
- * This file is part of the Acme.Site package.
+ * This file is part of the Vendor.Site package.
  */
 
 use Neos\Flow\Annotations as Flow;
@@ -148,10 +157,10 @@ final class MyComponentTypeIsInvalid extends \DomainException
     {
         Assert::assertSame(
             '<?php
-namespace Acme\Site\Application;
+namespace Vendor\Site\Application;
 
 /*
- * This file is part of the Acme.Site package.
+ * This file is part of the Vendor.Site package.
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
@@ -159,7 +168,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
-use Acme\Site\Presentation\MyComponent\MyComponentType;
+use Vendor\Site\Presentation\Component\MyComponent\MyComponentType;
 
 class MyComponentTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface
 {
@@ -172,13 +181,20 @@ class MyComponentTypeProvider extends AbstractDataSource implements ProtectedCon
     /**
      * @var string
      */
-    protected static $identifier = \'acme-site-my-component-types\';
+    protected static $identifier = \'vendor-site-my-component-types\';
 
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $myComponentTypes = [];
         foreach (MyComponentType::getValues() as $value) {
-            $myComponentTypes[$value][\'label\'] = $this->translator->translateById(\'myComponentType.\' . $value, [], null, null, \'MyComponent\', \'Acme.Site\') ?: $value;
+            $myComponentTypes[$value][\'label\'] = $this->translator->translateById(
+                \'myComponentType.\' . $value,
+                [],
+                null,
+                null,
+                \'MyComponent\',
+                \'Vendor.Site\'
+            ) ?: $value;
         }
 
         return $myComponentTypes;

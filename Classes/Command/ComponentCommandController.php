@@ -8,7 +8,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Command;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\FusionNamespace;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 
 /**

@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,8 +7,8 @@ namespace Vendor\Site\Presentation\Headline;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use HeadlineType;
-use HeadlineLook;
+use Vendor\Site\Presentation\Component\Headline\HeadlineType;
+use Vendor\Site\Presentation\Component\Headline\HeadlineLook;
 
 /**
  * @Flow\Proxy(false)

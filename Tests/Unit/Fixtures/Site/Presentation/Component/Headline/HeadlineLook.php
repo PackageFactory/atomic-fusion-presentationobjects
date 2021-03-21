@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\Headline;
+
+/*
+ * This file is part of the Vendor.Site package
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+
+/**
+ * HeadlineLook enum for test purposes
+ * @Flow\Proxy(false)
+ */
+final class HeadlineLook implements EnumInterface
+{
+    private string $value;
+
+    public static function getValues(): array
+    {
+        return [
+            'large'
+        ];
+    }
+}

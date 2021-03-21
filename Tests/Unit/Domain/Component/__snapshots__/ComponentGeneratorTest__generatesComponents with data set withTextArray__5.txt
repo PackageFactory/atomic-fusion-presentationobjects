@@ -1,0 +1,27 @@
+prototype(Vendor.Site:Component.WithTextArray) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\WithTextArray\\WithTextArrayInterface'
+
+    @styleguide {
+        title = 'WithTextArray'
+
+        props {
+            texts {
+                {
+                    text = 'Text'
+                },
+                {
+                    text = 'Text'
+                }
+            }
+        }
+    }
+
+    renderer = afx`<dl>
+        <dt>texts:</dt>
+        <dd>
+            <Neos.Fusion:Loop items={presentationObject.texts}>
+                <Vendor.Site:Component.Text presentationObject={item} />
+            </Neos.Fusion:Loop>
+        </dd>
+    </dl>`
+}

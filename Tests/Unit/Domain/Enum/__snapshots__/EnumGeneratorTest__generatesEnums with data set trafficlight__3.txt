@@ -10,7 +10,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
-use Vendor\Default\Presentation\Crossing\TrafficLight;
+use Vendor\Default\Presentation\Component\Crossing\TrafficLight;
 
 class TrafficLightProvider extends AbstractDataSource implements ProtectedContextAwareInterface
 {
@@ -29,7 +29,14 @@ class TrafficLightProvider extends AbstractDataSource implements ProtectedContex
     {
         $trafficLights = [];
         foreach (TrafficLight::getValues() as $value) {
-            $trafficLights[$value]['label'] = $this->translator->translateById('trafficLight.' . $value, [], null, null, 'Crossing', 'Vendor.Default') ?: $value;
+            $trafficLights[$value]['label'] = $this->translator->translateById(
+                'trafficLight.' . $value,
+                [],
+                null,
+                null,
+                'Crossing',
+                'Vendor.Default'
+            ) ?: $value;
         }
 
         return $trafficLights;

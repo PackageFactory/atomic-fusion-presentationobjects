@@ -8,6 +8,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Utility\Files;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Dumper as YamlWriter;
@@ -20,19 +22,13 @@ use Symfony\Component\Yaml\Dumper as YamlWriter;
 final class ComponentGenerator
 {
     /**
-     * @Flow\Inject(lazy=false)
-     * @var PropTypeRepository
-     */
-    protected $propTypeRepository;
-
-    /**
      * @Flow\Inject
      * @var PackageResolverInterface
      */
     protected $packageResolver;
 
     /**
-     * @param string $componentName
+     * @param string $name
      * @param array $serializedProps
      * @param string|null $packageKey
      * @param FusionNamespace|null $namespace
@@ -40,55 +36,54 @@ final class ComponentGenerator
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generateComponent(string $componentName, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null, bool $generic = false): void
+    public function generateComponent(string $name, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null, bool $generic = false): void
     {
         $package = $this->packageResolver->resolvePackage($packageKey);
-        $component = Component::fromInput(
-            $package->getPackageKey(),
-            $componentName,
-            $serializedProps,
-            $this->propTypeRepository,
+        $componentName = new ComponentName(
+            PackageKey::fromPackage($package),
             $namespace ?: FusionNamespace::default(),
-            $generic
+            $name
         );
+        $props = Props::fromInputArray($package->getPackageKey(), $name, $serializedProps);
+        $component = new Component($componentName, $props, $generic);
 
         $packagePath = $package->getPackagePath();
-        $classPath = $packagePath . 'Classes/Presentation/' . $componentName;
+        $classPath = $componentName->getPhpFilePath($packagePath);
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
         }
-        $fusionPath = $packagePath . 'Resources/Private/Fusion/Presentation/' . $component->getFusionNamespace()->toFilePath() . '/' . $componentName;
+        $fusionPath = $componentName->getFusionFilePath($packagePath);
         if (!file_exists($fusionPath)) {
             Files::createDirectoryRecursively($fusionPath);
         }
-        file_put_contents($component->getInterfacePath($packagePath), $component->getInterfaceContent());
-        file_put_contents($component->getClassPath($packagePath), $component->getClassContent());
-        file_put_contents($component->getFactoryPath($packagePath), $component->getFactoryContent());
-        file_put_contents($component->getFusionPath($packagePath), $component->getFusionContent());
+        file_put_contents($componentName->getInterfacePath($packagePath), $component->getInterfaceContent());
+        file_put_contents($componentName->getClassPath($packagePath), $component->getClassContent());
+        file_put_contents($componentName->getFactoryPath($packagePath), $component->getFactoryContent());
+        file_put_contents($componentName->getFusionComponentPath($packagePath), $component->getFusionContent());
         if ($generic) {
-            file_put_contents($component->getGenericPath($packagePath), $component->getGenericContent());
+            file_put_contents($componentName->getComponentArrayPath($packagePath), $component->getComponentArrayContent());
         }
-        $this->registerFactory($package, $component);
+        $this->registerFactory($package, $componentName);
     }
 
     /**
      * @param FlowPackageInterface $package
-     * @param Component $component
+     * @param ComponentName $componentName
      * @return void
      */
-    private function registerFactory(FlowPackageInterface $package, Component $component): void
+    private function registerFactory(FlowPackageInterface $package, ComponentName $componentName): void
     {
         $configurationPath = $package->getPackagePath() . 'Configuration/';
         $configurationFilePath = $configurationPath . 'Settings.PresentationHelpers.yaml';
         if (!file_exists($configurationFilePath)) {
             Files::createDirectoryRecursively($configurationPath);
             $configuration = ['Neos' => ['Fusion' => ['defaultContext' => [
-                $component->getHelperName() => $component->getFactoryName()
+                $componentName->getHelperName() => $componentName->getFullyQualifiedFactoryName()
             ]]]];
         } else {
             $parser = new YamlParser();
             $configuration = $parser->parseFile($configurationFilePath);
-            $configuration['Neos']['Fusion']['defaultContext'][$component->getHelperName()] = $component->getFactoryName();
+            $configuration['Neos']['Fusion']['defaultContext'][$componentName->getHelperName()] = $componentName->getFullyQualifiedFactoryName();
         }
 
         $writer = new YamlWriter(2);

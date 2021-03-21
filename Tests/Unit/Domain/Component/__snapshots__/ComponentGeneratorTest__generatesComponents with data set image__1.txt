@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\Site\Presentation\Image;
+namespace Vendor\Site\Presentation\Component\Image;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,7 +7,7 @@ namespace Vendor\Site\Presentation\Image;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use ImageSourceHelperInterface;
+use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 
 /**
  * @Flow\Proxy(false)

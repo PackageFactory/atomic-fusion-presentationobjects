@@ -37,22 +37,23 @@ class ComponentTest extends UnitTestCase
                 'Vendor.Site',
                 'MyNewComponent',
                 [
-                'bool:bool',
-                'nullableBool:?bool',
-                'float:float',
-                'nullableFloat:?float',
-                'int:int',
-                'nullableInt:?int',
-                'string:string',
-                'nullableString:?string',
-                'uri:Uri',
-                'nullableUri:?Uri',
-                'image:ImageSource',
-                'nullableImage:?ImageSource',
-                'subComponent:MyComponent',
-                'nullableSubComponent:?MyComponent',
-                'componentArray:array<MyComponent>'
-            ]),
+                    'bool:bool',
+                    'nullableBool:?bool',
+                    'float:float',
+                    'nullableFloat:?float',
+                    'int:int',
+                    'nullableInt:?int',
+                    'string:string',
+                    'nullableString:?string',
+                    'uri:Uri',
+                    'nullableUri:?Uri',
+                    'image:ImageSource',
+                    'nullableImage:?ImageSource',
+                    'subComponent:MyComponent',
+                    'nullableSubComponent:?MyComponent',
+                    'componentArray:array<MyComponent>'
+                ]
+            ),
             true
         );
     }

@@ -1,7 +1,5 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\CustomType\MyComponent;
-
 
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponentInterface;
 

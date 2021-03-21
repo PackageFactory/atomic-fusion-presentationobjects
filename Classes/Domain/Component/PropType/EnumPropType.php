@@ -12,10 +12,17 @@ use Neos\Flow\Annotations as Flow;
  */
 final class EnumPropType implements PropTypeInterface
 {
+    /**
+     * @var class-string<mixed>
+     */
     private string $className;
 
     private bool $nullable;
 
+    /**
+     * @param class-string<mixed> $className
+     * @param boolean $nullable
+     */
     public function __construct(
         string $className,
         bool $nullable

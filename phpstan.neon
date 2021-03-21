@@ -5,5 +5,8 @@ parameters:
 		- Packages/Framework/Neos.Flow/Tests/BaseTestCase.php
 		- Packages/Framework/Neos.Flow/Tests/UnitTestCase.php
 		- Packages/Framework/Neos.Flow/Tests/FunctionalTestCase.php
+		- Tests/Unit/Fixtures/Site/Presentation/Component/MyReflectionComponent/MyReflectionComponent.php
+		- Tests/Unit/Fixtures/Site/Presentation/Component/MyNewComponent/MyStringEnum.php
 	excludes_analyse:
 		- Tests/Unit/Helper/*
+		- Tests/Unit/Fixtures/*

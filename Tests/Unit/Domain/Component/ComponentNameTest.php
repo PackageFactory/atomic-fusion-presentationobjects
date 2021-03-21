@@ -19,12 +19,18 @@ final class ComponentNameTest extends UnitTestCase
 {
     /**
      * @dataProvider classNameProvider
+     * @param string $className
+     * @param ComponentName $expectedName
+     * @return void
      */
     public function testFromClassName(string $className, ComponentName $expectedName): void
     {
         Assert::assertEquals($expectedName, ComponentName::fromClassName($className));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function classNameProvider(): array
     {
         $packageKey = new PackageKey('Vendor.Site');
@@ -54,12 +60,18 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider fusionNameProvider
+     * @param ComponentName $subject
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetFullyQualifiedFusionName(ComponentName $subject, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getFullyQualifiedFusionName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function fusionNameProvider(): array
     {
         return [
@@ -80,12 +92,18 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider phpNamespaceProvider
+     * @param ComponentName $subject
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetPhpNamespace(ComponentName $subject, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getPhpNamespace());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function phpNamespaceProvider(): array
     {
         return [
@@ -106,12 +124,18 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider factoryNameProvider
+     * @param ComponentName $subject
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetFullyQualifiedFactoryName(ComponentName $subject, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getFullyQualifiedFactoryName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function factoryNameProvider(): array
     {
         return [
@@ -132,12 +156,18 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider interfaceNameProvider
+     * @param ComponentName $subject
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetFullyQualifiedInterfaceName(ComponentName $subject, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getFullyQualifiedInterfaceName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function interfaceNameProvider(): array
     {
         return [
@@ -158,12 +188,18 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider helperNameProvider
+     * @param ComponentName $subject
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetHelperName(ComponentName $subject, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getHelperName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function helperNameProvider(): array
     {
         return [
@@ -184,12 +220,19 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider phpFilePathProvider
+     * @param ComponentName $subject
+     * @param string $packagePath
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetPhpFilePath(ComponentName $subject, string $packagePath, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getPhpFilePath($packagePath));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function phpFilePathProvider(): array
     {
         return [
@@ -213,12 +256,19 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider fusionFilePathProvider
+     * @param ComponentName $subject
+     * @param string $packagePath
+     * @param string $expectedValue
+     * @return void
      */
     public function testGetFusionFilePath(ComponentName $subject, string $packagePath, string $expectedValue)
     {
         Assert::assertSame($expectedValue, $subject->getFusionFilePath($packagePath));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function fusionFilePathProvider(): array
     {
         return [

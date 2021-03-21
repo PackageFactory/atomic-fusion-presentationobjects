@@ -64,36 +64,43 @@ final class PropTypeFactory
 
     public static function fromReflectionProperty(\ReflectionProperty $property): PropTypeInterface
     {
-        $nullable = $property->getType()->allowsNull();
-        $type = (string) $property->getType();
-        switch ($type) {
-            case 'string':
-                return new StringPropType($nullable);
-            case 'int':
-                return new IntPropType($nullable);
-            case 'float':
-                return new FloatPropType($nullable);
-            case 'bool':
-                return new BoolPropType($nullable);
-            case UriInterface::class:
-            case Uri::class:
-                return new UriPropType($nullable);
-            case ImageSourceHelperInterface::class:
-                return new ImageSourcePropType($nullable);
-            default:
-                if (IsEnum::isSatisfiedByClassName($type)) {
-                    return new EnumPropType($type, $nullable);
-                }
-                if (IsComponent::isSatisfiedByInterfaceName($type)) {
-                    $componentName = ComponentName::fromClassName($type);
-                    return new ComponentPropType($componentName, $nullable);
-                }
-                if (IsComponentArray::isSatisfiedByClassName($type)) {
-                    $componentName = ComponentName::fromClassName($type);
-                    return new ComponentArrayPropType($componentName);
-                }
+        if ($type = $property->getType()) {
+            $nullable = $type->allowsNull();
+            $type = (string) $type;
+            switch ($type) {
+                case 'string':
+                    return new StringPropType($nullable);
+                case 'int':
+                    return new IntPropType($nullable);
+                case 'float':
+                    return new FloatPropType($nullable);
+                case 'bool':
+                    return new BoolPropType($nullable);
+                case UriInterface::class:
+                case Uri::class:
+                    return new UriPropType($nullable);
+                case ImageSourceHelperInterface::class:
+                    return new ImageSourcePropType($nullable);
+                default:
+                    if (IsEnum::isSatisfiedByClassName($type)) {
+                        /** @phpstan-var class-string<mixed> $type */
+                        return new EnumPropType($type, $nullable);
+                    }
+                    if (IsComponent::isSatisfiedByInterfaceName($type)) {
+                        /** @phpstan-var class-string<mixed> $type */
+                        $componentName = ComponentName::fromClassName($type);
+                        return new ComponentPropType($componentName, $nullable);
+                    }
+                    if (IsComponentArray::isSatisfiedByClassName($type)) {
+                        /** @phpstan-var class-string<mixed> $type */
+                        $componentName = ComponentName::fromClassName($type);
+                        return new ComponentArrayPropType($componentName);
+                    }
+            }
+
+            throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($type);
         }
 
-        throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($type);
+        throw PropTypeIsInvalid::becausePropertyIsNotTyped($property);
     }
 }

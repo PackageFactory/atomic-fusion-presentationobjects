@@ -16,12 +16,18 @@ final class UriPropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
+     * @param UriPropType $subject
+     * @param string $expectedName
+     * @return void
      */
     public function testGetSimpleName(UriPropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getSimpleName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function simpleNameProvider(): array
     {
         return [
@@ -38,12 +44,18 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
+     * @param UriPropType $subject
+     * @param string $expectedName
+     * @return void
      */
     public function testGetUseStatement(UriPropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getUseStatement());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function useStatementProvider(): array
     {
         return [
@@ -62,12 +74,18 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider typeProvider
+     * @param UriPropType $subject
+     * @param string $expectedType
+     * @return void
      */
     public function testGetType(UriPropType $subject, string $expectedType): void
     {
         Assert::assertSame($expectedType, $subject->getType());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function typeProvider(): array
     {
         return [
@@ -84,12 +102,18 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
+     * @param UriPropType $subject
+     * @param string $expectedStyleGuideValue
+     * @return void
      */
     public function testGetStyleGuideValue(UriPropType $subject, string $expectedStyleGuideValue): void
     {
         Assert::assertSame($expectedStyleGuideValue, $subject->getStyleGuideValue());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function styleGuideValueProvider(): array
     {
         return [
@@ -107,12 +131,19 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider definitionDataProvider
+     * @param UriPropType $subject
+     * @param string $propName
+     * @param string $expectedStyleGuideValue
+     * @return void
      */
     public function testGetDefinitionData(UriPropType $subject, string $propName, string $expectedStyleGuideValue): void
     {
         Assert::assertSame($expectedStyleGuideValue, $subject->getDefinitionData($propName));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function definitionDataProvider(): array
     {
         return [

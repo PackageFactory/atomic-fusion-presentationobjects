@@ -102,9 +102,14 @@ final class ComponentName
         return $this->name . 'Factory';
     }
 
+    /**
+     * @return class-string<mixed>
+     */
     public function getFullyQualifiedFactoryName(): string
     {
-        return $this->getPhpNamespace() . '\\' . $this->getSimpleFactoryName();
+        /** @phpstan-var class-string<mixed> $className */
+        $className = $this->getPhpNamespace() . '\\' . $this->getSimpleFactoryName();
+        return $className;
     }
 
     public function getSimpleInterfaceName(): string
@@ -112,9 +117,14 @@ final class ComponentName
         return $this->name . 'Interface';
     }
 
+    /**
+     * @return class-string<mixed>
+     */
     public function getFullyQualifiedInterfaceName(): string
     {
-        return $this->getPhpNamespace() . '\\' . $this->getSimpleInterfaceName();
+        /** @phpstan-var class-string<mixed> $className */
+        $className = $this->getPhpNamespace() . '\\' . $this->getSimpleInterfaceName();
+        return $className;
     }
 
     public function getSimpleClassName(): string
@@ -122,9 +132,14 @@ final class ComponentName
         return $this->name;
     }
 
+    /**
+     * @return class-string<mixed>
+     */
     public function getFullyQualifiedClassName(): string
     {
-        return $this->getPhpNamespace() . '\\' . $this->getSimpleClassName();
+        /** @phpstan-var class-string<mixed> $className */
+        $className = $this->getPhpNamespace() . '\\' . $this->getSimpleClassName();
+        return $className;
     }
 
     public function getSimpleComponentArrayName(): string
@@ -132,20 +147,31 @@ final class ComponentName
         return PluralName::forName($this->name);
     }
 
+    /**
+     * @return class-string<mixed>
+     */
     public function getFullyQualifiedComponentArrayName(): string
     {
-        return $this->getPhpNamespace() . '\\' . $this->getSimpleComponentArrayName();
+        /** @phpstan-var class-string<mixed> $className */
+        $className = $this->getPhpNamespace() . '\\' . $this->getSimpleComponentArrayName();
+        return $className;
     }
 
+    /**
+     * @param string $parentComponentName
+     * @return class-string<mixed>
+     */
     public function getFullyQualifiedEnumName(string $parentComponentName): string
     {
-        return implode('\\', [
+        /** @phpstan-var class-string<mixed> $className */
+        $className =  implode('\\', [
             $this->packageKey->toPhpNamespace(),
             'Presentation',
             $this->fusionNamespace->toPhpNameSpace(),
             $parentComponentName,
             $this->name
         ]);
+        return $className;
     }
 
     public function getHelperName(): string

@@ -41,7 +41,8 @@ final class FusionNamespace
     public static function fromInput(string $input): self
     {
         if (\mb_substr_count($input, '.') > 1) {
-            return self::fromString(\mb_substr($input, 0, \mb_strrpos($input, '.')));
+            $rightMostDotPosition = \mb_strrpos($input, '.');
+            return self::fromString(\mb_substr($input, 0, $rightMostDotPosition === false ? null : $rightMostDotPosition));
         }
 
         return self::default();

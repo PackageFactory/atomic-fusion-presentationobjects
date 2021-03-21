@@ -30,7 +30,7 @@ final class Component
 
     /**
      * @param ComponentName $name
-     * @param FusionNamespace $fusionNamespace
+     * @param Props $props
      * @param bool $generic
      */
     public function __construct(ComponentName $name, Props $props, bool $generic)

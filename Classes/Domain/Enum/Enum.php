@@ -285,7 +285,6 @@ class ' . $this->name->getProviderName() . ' extends AbstractDataSource implemen
     }
 
     /**
-     * @param boolean $plural
      * @return string[]
      */
     private function splitName(): array

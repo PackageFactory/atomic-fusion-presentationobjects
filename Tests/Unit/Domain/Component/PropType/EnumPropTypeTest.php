@@ -17,12 +17,18 @@ final class EnumPropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
+     * @param EnumPropType $subject
+     * @param string $expectedName
+     * @return void
      */
     public function testGetSimpleName(EnumPropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getSimpleName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function simpleNameProvider(): array
     {
         return [
@@ -39,12 +45,18 @@ final class EnumPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
+     * @param EnumPropType $subject
+     * @param string $expectedName
+     * @return void
      */
     public function testGetUseStatement(EnumPropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getUseStatement());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function useStatementProvider(): array
     {
         return [
@@ -63,12 +75,18 @@ final class EnumPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider typeProvider
+     * @param EnumPropType $subject
+     * @param string $expectedType
+     * @return void
      */
     public function testGetType(EnumPropType $subject, string $expectedType): void
     {
         Assert::assertSame($expectedType, $subject->getType());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function typeProvider(): array
     {
         return [
@@ -85,12 +103,18 @@ final class EnumPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
+     * @param EnumPropType $subject
+     * @param string $expectedStyleGuideValue
+     * @return void
      */
     public function testGetStyleGuideValue(EnumPropType $subject, string $expectedStyleGuideValue): void
     {
         Assert::assertSame($expectedStyleGuideValue, $subject->getStyleGuideValue());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function styleGuideValueProvider(): array
     {
         return [

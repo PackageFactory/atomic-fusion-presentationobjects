@@ -12,5 +12,8 @@ use Neos\Flow\Annotations as Flow;
  */
 interface EnumInterface
 {
+    /**
+     * @return array<mixed>
+     */
     public static function getValues(): array;
 }

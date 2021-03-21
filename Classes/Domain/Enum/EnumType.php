@@ -57,6 +57,10 @@ final class EnumType
         return $this->value;
     }
 
+    /**
+     * @param array<mixed> $valueArray
+     * @return array<mixed>
+     */
     public function processValueArray(array $valueArray): array
     {
         $processedValueArray = [];

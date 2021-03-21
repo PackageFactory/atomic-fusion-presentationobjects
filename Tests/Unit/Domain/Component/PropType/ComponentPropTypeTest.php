@@ -19,12 +19,18 @@ final class ComponentPropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
+     * @param ComponentPropType $subject
+     * @param string $expectedName
+     * @return void
      */
     public function testGetSimpleName(ComponentPropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getSimpleName());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function simpleNameProvider(): array
     {
         return [
@@ -57,12 +63,18 @@ final class ComponentPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
+     * @param ComponentPropType $subject
+     * @param string $expectedName
+     * @return void
      */
     public function testGetUseStatement(ComponentPropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getUseStatement());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function useStatementProvider(): array
     {
         return [
@@ -101,12 +113,18 @@ final class ComponentPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider typeProvider
+     * @param ComponentPropType $subject
+     * @param string $expectedType
+     * @return void
      */
     public function testGetType(ComponentPropType $subject, string $expectedType): void
     {
         Assert::assertSame($expectedType, $subject->getType());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function typeProvider(): array
     {
         return [
@@ -139,12 +157,18 @@ final class ComponentPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
+     * @param ComponentPropType $subject
+     * @param string $expectedStyleGuideValue
+     * @return void
      */
     public function testGetStyleGuideValue(ComponentPropType $subject, string $expectedStyleGuideValue): void
     {
         Assert::assertSame($expectedStyleGuideValue, $subject->getStyleGuideValue());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function styleGuideValueProvider(): array
     {
         return [
@@ -213,12 +237,19 @@ final class ComponentPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider definitionDataProvider
+     * @param ComponentPropType $subject
+     * @param string $propName
+     * @param string $expectedStyleGuideValue
+     * @return void
      */
     public function testGetDefinitionData(ComponentPropType $subject, string $propName, string $expectedStyleGuideValue): void
     {
         Assert::assertSame($expectedStyleGuideValue, $subject->getDefinitionData($propName));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function definitionDataProvider(): array
     {
         return [

@@ -17,12 +17,12 @@ final class IsComponent
     public static function isSatisfiedByClassName(string $className): bool
     {
         return class_exists($className)
-            && in_array(ComponentPresentationObjectInterface::class, class_implements($className));
+            && is_a($className, ComponentPresentationObjectInterface::class);
     }
 
     public static function isSatisfiedByInterfaceName(string $interfaceName): bool
     {
         return interface_exists($interfaceName)
-            && in_array(ComponentPresentationObjectInterface::class, class_implements($interfaceName));
+            && is_a($interfaceName, ComponentPresentationObjectInterface::class);
     }
 }

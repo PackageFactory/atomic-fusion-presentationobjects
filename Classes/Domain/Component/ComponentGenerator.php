@@ -29,7 +29,6 @@ final class ComponentGenerator
 
     /**
      * @param string $name
-     * @param string $componentName
      * @param array|string[] $serializedProps
      * @param string|null $packageKey
      * @param FusionNamespace|null $namespace

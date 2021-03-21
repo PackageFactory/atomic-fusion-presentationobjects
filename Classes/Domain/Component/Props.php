@@ -14,15 +14,23 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\AbstractImmutableArra
 
 /**
  * @Flow\Proxy(false)
+ * @extends AbstractImmutableArrayObject<string,PropTypeInterface>
  */
 final class Props extends AbstractImmutableArrayObject
 {
+    /**
+     * @param array<string,PropTypeInterface> $array
+     */
     private function __construct(array $array)
     {
         parent::__construct($array);
     }
 
     /**
+     * @param string $packageKey
+     * @param string $componentName
+     * @param string[] $input
+     * @return self
      * @throws PropTypeIsInvalid
      */
     public static function fromInputArray(string $packageKey, string $componentName, array $input): self
@@ -36,6 +44,11 @@ final class Props extends AbstractImmutableArrayObject
         return new self($props);
     }
 
+    /**
+     * @phpstan-param class-string<mixed> $className
+     * @param string $className
+     * @return self
+     */
     public static function fromClassName(string $className): self
     {
         if (!IsComponent::isSatisfiedByClassName($className)) {
@@ -96,12 +109,12 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @param mixed $key
+     * @param string $key
      * @return PropTypeInterface|false
      */
     public function offsetGet($key)
     {
-        return parent::offsetGet($key);
+        return parent::offsetGet($key) ?: false;
     }
 
     /**
@@ -113,7 +126,7 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @return \ArrayIterator|PropTypeInterface[]
+     * @return \ArrayIterator<string,PropTypeInterface>|PropTypeInterface[]
      */
     public function getIterator()
     {

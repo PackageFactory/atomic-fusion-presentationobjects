@@ -18,4 +18,9 @@ final class PropTypeIsInvalid extends \InvalidArgumentException
     {
         return new self('Given prop type "' . $attemptedType . '" is invalid. It must be either a primitive or a known sub component.', 1582385578);
     }
+
+    public static function becausePropertyIsNotTyped(\ReflectionProperty $property): self
+    {
+        return new self('Given property "' . $property->getName() . '" is not typed.', 1616365306);
+    }
 }

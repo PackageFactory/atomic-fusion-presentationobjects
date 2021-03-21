@@ -17,6 +17,6 @@ final class IsEnum
     public static function isSatisfiedByClassName(string $className): bool
     {
         return class_exists($className)
-            && is_a($className, EnumInterface::class);
+            && is_subclass_of($className, EnumInterface::class);
     }
 }

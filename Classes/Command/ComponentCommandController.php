@@ -9,7 +9,6 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;

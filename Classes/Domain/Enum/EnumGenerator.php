@@ -34,7 +34,7 @@ final class EnumGenerator
      * @param string $name
      * @param string $type
      * @param array|string[] $values
-     * @param string $packageKey
+     * @param string $packagePath
      * @return void
      */
     public function generateEnum(

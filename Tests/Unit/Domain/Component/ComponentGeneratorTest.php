@@ -49,7 +49,7 @@ final class ComponentGeneratorTest extends UnitTestCase
     }
 
     /**
-     * @return array<string,array{string,string[],null|string}>
+     * @return array<string,array{ComponentName,string[],string,bool,string[]}>
      */
     public function exampleProvider(): array
     {

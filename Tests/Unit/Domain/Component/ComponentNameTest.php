@@ -28,6 +28,9 @@ final class ComponentNameTest extends UnitTestCase
         Assert::assertEquals($expectedName, ComponentName::fromInput($input, $defaultPackageKey));
     }
 
+    /**
+     * @return array<array{string,PackageKey,ComponentName}>
+     */
     public function inputProvider(): array
     {
         $defaultPackageKey = new PackageKey('Vendor.Default');

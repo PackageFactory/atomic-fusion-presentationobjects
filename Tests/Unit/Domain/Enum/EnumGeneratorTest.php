@@ -40,7 +40,7 @@ final class EnumGeneratorTest extends UnitTestCase
     }
 
     /**
-     * @return array<string,array{string,string,string,string[],null|string}>
+     * @return array<string,array{ComponentName,string,string,string[],string,string[]}>
      */
     public function exampleProvider(): array
     {

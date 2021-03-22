@@ -11,6 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Pr
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeIsInvalid;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\AbstractImmutableArrayObject;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
 /**
  * @Flow\Proxy(false)
@@ -27,13 +28,13 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @param string $packageKey
+     * @param PackageKey $packageKey
      * @param string $componentName
      * @param string[] $input
      * @return self
      * @throws PropTypeIsInvalid
      */
-    public static function fromInputArray(string $packageKey, string $componentName, array $input): self
+    public static function fromInputArray(PackageKey $packageKey, string $componentName, array $input): self
     {
         $props = [];
         foreach ($input as $serializedProp) {

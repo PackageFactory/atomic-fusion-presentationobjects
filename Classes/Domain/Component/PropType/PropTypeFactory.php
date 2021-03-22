@@ -20,7 +20,7 @@ final class PropTypeFactory
     /**
      * @throws PropTypeIsInvalid
      */
-    public static function fromInputString(string $serializedPackageKey, string $parentComponentName, string $input): PropTypeInterface
+    public static function fromInputString(PackageKey $packageKey, string $parentComponentName, string $input): PropTypeInterface
     {
         $nullable = false;
         if (\mb_substr($input, 0, 1) === '?') {
@@ -44,7 +44,7 @@ final class PropTypeFactory
                 if ($isComponentArray = IsComponentArray::isSatisfiedByInputString($input)) {
                     $input = \mb_substr($input, 6, \mb_strlen($input) - 7);
                 }
-                $componentName = ComponentName::fromInput($input, new PackageKey($serializedPackageKey));
+                $componentName = ComponentName::fromInput($input, $packageKey);
 
                 if (IsComponent::isSatisfiedByInterfaceName($componentName->getFullyQualifiedInterfaceName())) {
                     return $isComponentArray

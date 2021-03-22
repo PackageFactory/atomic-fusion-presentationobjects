@@ -34,7 +34,7 @@ class ComponentTest extends UnitTestCase
                 'MyNewComponent',
             ),
             Props::fromInputArray(
-                'Vendor.Site',
+                new PackageKey('Vendor.Site'),
                 'MyNewComponent',
                 [
                     'bool:bool',

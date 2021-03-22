@@ -6,11 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Utility\Files;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Dumper as YamlWriter;
 
@@ -22,32 +18,22 @@ use Symfony\Component\Yaml\Dumper as YamlWriter;
 final class ComponentGenerator
 {
     /**
-     * @Flow\Inject
-     * @var PackageResolverInterface
-     */
-    protected $packageResolver;
-
-    /**
-     * @param string $name
+     * @param ComponentName $componentName
      * @param array|string[] $serializedProps
-     * @param string|null $packageKey
-     * @param FusionNamespace|null $namespace
+     * @param string $packagePath
      * @param bool $listable
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generateComponent(string $name, array $serializedProps, ?string $packageKey = null, ?FusionNamespace $namespace = null, bool $listable = false): void
-    {
-        $package = $this->packageResolver->resolvePackage($packageKey);
-        $componentName = new ComponentName(
-            PackageKey::fromPackage($package),
-            $namespace ?: FusionNamespace::default(),
-            $name
-        );
-        $props = Props::fromInputArray($package->getPackageKey(), $name, $serializedProps);
+    public function generateComponent(
+        ComponentName $componentName,
+        array $serializedProps,
+        string $packagePath,
+        bool $listable = false
+    ): void {
+        $props = Props::fromInputArray($componentName->getPackageKey(), $componentName->getName(), $serializedProps);
         $component = new Component($componentName, $props, $listable);
 
-        $packagePath = $package->getPackagePath();
         $classPath = $componentName->getPhpFilePath($packagePath);
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);
@@ -63,17 +49,17 @@ final class ComponentGenerator
         if ($listable) {
             file_put_contents($componentName->getComponentArrayPath($packagePath), $component->getComponentArrayContent());
         }
-        $this->registerFactory($package, $componentName);
+        $this->registerFactory($packagePath, $componentName);
     }
 
     /**
-     * @param FlowPackageInterface $package
+     * @param string $packagePath
      * @param ComponentName $componentName
      * @return void
      */
-    private function registerFactory(FlowPackageInterface $package, ComponentName $componentName): void
+    private function registerFactory(string $packagePath, ComponentName $componentName): void
     {
-        $configurationPath = $package->getPackagePath() . 'Configuration/';
+        $configurationPath = $packagePath . 'Configuration/';
         $configurationFilePath = $configurationPath . 'Settings.PresentationHelpers.yaml';
         if (!file_exists($configurationFilePath)) {
             Files::createDirectoryRecursively($configurationPath);

@@ -31,25 +31,25 @@ final class PropTypeFactoryTest extends UnitTestCase
 {
     /**
      * @dataProvider validInputStringProvider
-     * @param string $packageKey
+     * @param PackageKey $packageKey
      * @param string $componentName
      * @param string $inputString
      * @param PropTypeInterface $expectedPropType
      * @return void
      */
-    public function testFromInputString(string $packageKey, string $componentName, string $inputString, PropTypeInterface $expectedPropType): void
+    public function testFromInputString(PackageKey $packageKey, string $componentName, string $inputString, PropTypeInterface $expectedPropType): void
     {
         Assert::assertEquals($expectedPropType, PropTypeFactory::fromInputString($packageKey, $componentName, $inputString));
     }
 
     /**
      * @dataProvider invalidInputStringProvider
-     * @param string $packageKey
+     * @param PackageKey $packageKey
      * @param string $componentName
      * @param string $inputString
      * @return void
      */
-    public function testFromInputStringCatchesInvalidInputs(string $packageKey, string $componentName, string $inputString): void
+    public function testFromInputStringCatchesInvalidInputs(PackageKey $packageKey, string $componentName, string $inputString): void
     {
         $this->expectException(PropTypeIsInvalid::class);
         PropTypeFactory::fromInputString($packageKey, $componentName, $inputString);
@@ -63,121 +63,121 @@ final class PropTypeFactoryTest extends UnitTestCase
         $packageKey = new PackageKey('Vendor.Site');
         return [
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'bool',
                 new BoolPropType(false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?bool',
                 new BoolPropType(true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'string',
                 new StringPropType(false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?string',
                 new StringPropType(true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'int',
                 new IntPropType(false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?int',
                 new IntPropType(true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'float',
                 new FloatPropType(false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?float',
                 new FloatPropType(true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'Uri',
                 new UriPropType(false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?Uri',
                 new UriPropType(true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'ImageSource',
                 new ImageSourcePropType(false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?ImageSource',
                 new ImageSourcePropType(true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'MyStringEnum',
                 new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?MyStringEnum',
                 new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyComponent'), false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyComponent'), true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'Custom.Type.MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent'), false)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 '?Custom.Type.MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent'), true)
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'array<MyComponent>',
                 new ComponentArrayPropType(new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyComponent'))
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'array<Custom.Type.MyComponent>',
                 new ComponentArrayPropType(new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent'))
@@ -190,39 +190,40 @@ final class PropTypeFactoryTest extends UnitTestCase
      */
     public function invalidInputStringProvider(): array
     {
+        $packageKey = new PackageKey('Vendor.Site');
         return [
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'integer'
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'array<MyStringEnum>'
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'UndefinedComponent'
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'Undefined.Type.MyComponent'
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'UndefinedEnum'
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'InvalidComponent',
                 'InvalidEnum'
             ],
             [
-                'Vendor.Site',
+                $packageKey,
                 'MyNewComponent',
                 'InvalidComponent'
             ]

@@ -7,9 +7,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\Files;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 
 /**
  * The enum generator domain service
@@ -18,12 +16,6 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterf
  */
 final class EnumGenerator
 {
-    /**
-     * @Flow\Inject
-     * @var PackageResolverInterface
-     */
-    protected $packageResolver;
-
     /**
      * @var \DateTimeImmutable
      */
@@ -38,26 +30,27 @@ final class EnumGenerator
     }
 
     /**
-     * @param string $componentName
+     * @param ComponentName $componentName
      * @param string $name
      * @param string $type
      * @param array|string[] $values
-     * @param null|string $packageKey
+     * @param string $packageKey
      * @return void
      */
-    public function generateEnum(string $componentName, string $name, string $type, array $values, ?string $packageKey = null, ?FusionNamespace $namespace = null): void
-    {
+    public function generateEnum(
+        ComponentName $componentName,
+        string $name,
+        string $type,
+        array $values,
+        string $packagePath
+    ): void {
         $enumType = EnumType::fromInput($type);
-        $package = $this->packageResolver->resolvePackage($packageKey);
         $enumName = new EnumName(
-            PackageKey::fromPackage($package),
-            $namespace ?: FusionNamespace::default(),
             $componentName,
             $name
         );
         $enum = new Enum($enumName, $enumType, $enumType->processValueArray($values));
 
-        $packagePath = $package->getPackagePath();
         $classPath = $enumName->getPhpFilePath($packagePath);
         if (!file_exists($classPath)) {
             Files::createDirectoryRecursively($classPath);

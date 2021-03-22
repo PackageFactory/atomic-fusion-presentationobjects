@@ -47,7 +47,7 @@ final class Enum
     {
         $variable = '$' . $this->type;
         return '<?php
-namespace ' . $this->name->getNamespace() . ';
+namespace ' . $this->name->getPhpNamespace() . ';
 
 /*
  * This file is part of the ' . $this->name->getPackageKey() . ' package.
@@ -113,7 +113,7 @@ final class ' . $this->name->getName() . ' implements EnumInterface
     public function getExceptionContent(\DateTimeImmutable $now): string
     {
         return '<?php
-namespace ' . $this->name->getNamespace() . ';
+namespace ' . $this->name->getPhpNamespace() . ';
 
 /*
  * This file is part of the ' . $this->name->getPackageKey() . ' package.
@@ -176,7 +176,7 @@ class ' . $this->name->getProviderName() . ' extends AbstractDataSource implemen
                 [],
                 null,
                 null,
-                \'' . $this->name->getComponentName() . '\',
+                \'' . $this->name->getComponentName()->getName() . '\',
                 \'' . $this->name->getPackageKey() . '\'
             ) ?: $value;
         }

@@ -6,6 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PluralName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
@@ -15,37 +16,29 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
  */
 final class EnumName
 {
-    private PackageKey $packageKey;
-
-    private FusionNamespace $fusionNamespace;
-
-    private string $componentName;
+    private ComponentName $componentName;
 
     private string $name;
 
     public function __construct(
-        PackageKey $packageKey,
-        FusionNamespace $fusionNamespace,
-        string $componentName,
+        ComponentName $componentName,
         string $name
     ) {
-        $this->packageKey = $packageKey;
-        $this->fusionNamespace = $fusionNamespace;
         $this->componentName = $componentName;
         $this->name = $name;
     }
 
     public function getPackageKey(): PackageKey
     {
-        return $this->packageKey;
+        return $this->componentName->getPackageKey();
     }
 
     public function getFusionNamespace(): FusionNamespace
     {
-        return $this->fusionNamespace;
+        return $this->componentName->getFusionNamespace();
     }
 
-    public function getComponentName(): string
+    public function getComponentName(): ComponentName
     {
         return $this->componentName;
     }
@@ -55,14 +48,14 @@ final class EnumName
         return $this->name;
     }
 
-    public function getNamespace(): string
+    public function getPhpNamespace(): string
     {
-        return $this->packageKey->toPhpNamespace() . '\Presentation\\' . $this->fusionNamespace->toPhpNameSpace() . '\\' . $this->componentName;
+        return $this->componentName->getPhpNamespace();
     }
 
     public function getFullyQualifiedName(): string
     {
-        return $this->getNamespace() . '\\' . $this->name;
+        return $this->getPhpNamespace() . '\\' . $this->name;
     }
 
     public function getExceptionName(): string
@@ -77,7 +70,7 @@ final class EnumName
 
     public function getPhpFilePath(string $packagePath): string
     {
-        return $packagePath . 'Classes/Presentation/' . $this->fusionNamespace->toFilePath() . '/' . $this->componentName;
+        return $this->componentName->getPhpFilePath($packagePath);
     }
 
     public function getClassPath(string $packagePath): string
@@ -102,12 +95,12 @@ final class EnumName
 
     public function getProviderNamespace(): string
     {
-        return $this->packageKey->toPhpNamespace() . '\\Application';
+        return $this->getPackageKey()->toPhpNamespace() . '\\Application';
     }
 
     public function getDataSourceIdentifier(): string
     {
-        return strtolower(str_replace('.', '-', (string)$this->packageKey) . '-' .  implode('-', $this->splitName()));
+        return strtolower(str_replace('.', '-', (string)$this->getPackageKey()) . '-' .  implode('-', $this->splitName()));
     }
 
     /**

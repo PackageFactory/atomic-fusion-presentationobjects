@@ -89,12 +89,19 @@ class ComponentCommandController extends CommandController
      * @param string $componentName The name of the component the new pseudo-enum belongs to
      * @param string $name The name of the new pseudo-enum
      * @param string $type The type of the new pseudo-enum (must be one of: "string", "int")
-     * @param array|string[] $values A comma-separated list of values for the new pseudo-enum
+     * @param array|string[] $values A comma-separated colon list of names:values for the new pseudo-enum, e.g. a,b,c , a:1,b:2,c:3 or a:1.2,b:2.4,c:3.6
      * @param null|string $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
      * @return void
      */
     public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], ?string $packageKey = null): void
     {
-        $this->valueGenerator->generateEnum($componentName, $name, $type, $values, $packageKey);
+        $package = $this->packageResolver->resolvePackage();
+        $this->valueGenerator->generateEnum(
+            ComponentName::fromInput($componentName, PackageKey::fromPackage($package)),
+            $name,
+            $type,
+            $values,
+            $package->getPackagePath()
+        );
     }
 }

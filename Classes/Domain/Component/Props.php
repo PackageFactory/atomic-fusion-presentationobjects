@@ -28,18 +28,23 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @param PackageKey $packageKey
-     * @param string $componentName
+     * @param ComponentName $componentName
      * @param string[] $input
      * @return self
      * @throws PropTypeIsInvalid
      */
-    public static function fromInputArray(PackageKey $packageKey, string $componentName, array $input): self
+    public static function fromInputArray(ComponentName $componentName, array $input): self
     {
         $props = [];
         foreach ($input as $serializedProp) {
-            list($propName, $serializedPropType) = explode(':', $serializedProp);
-            $props[$propName] = PropTypeFactory::fromInputString($packageKey, $componentName, $serializedPropType);
+            $pivot = \mb_strpos($serializedProp, ':');
+            if (is_int($pivot)) {
+                $propName = \mb_substr($serializedProp, 0, $pivot);
+                $serializedPropType = \mb_substr($serializedProp, $pivot + 1);
+                $props[$propName] = PropTypeFactory::fromInputString($componentName, $serializedPropType);
+            } else {
+                throw PropsCannotBeDeserialized::becauseTheyAreNoColonList($serializedProp);
+            }
         }
 
         return new self($props);

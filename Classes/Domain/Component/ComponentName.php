@@ -72,6 +72,32 @@ final class ComponentName
         return new self($packageKey, $fusionNamespace, $componentName);
     }
 
+    public function mergeInput(string $input): self
+    {
+        if (\mb_strrpos($input, ':') !== false) {
+            list($serializedPackageKey, $componentNamespaceAndName) = explode(':', $input);
+            $packageKey = new PackageKey($serializedPackageKey);
+        } else {
+            $componentNamespaceAndName = $input;
+            $packageKey = $this->packageKey;
+        }
+
+        if (\mb_strrpos($componentNamespaceAndName, '.') !== false) {
+            $pivot = \mb_strrpos($componentNamespaceAndName, '.');
+            $fusionNamespace = FusionNamespace::fromString(\mb_substr($componentNamespaceAndName, 0, $pivot));
+            $name = \mb_substr($componentNamespaceAndName, $pivot + 1);
+        } else {
+            $fusionNamespace = $this->fusionNamespace;
+            $name = $componentNamespaceAndName;
+        }
+
+        return new self(
+            $packageKey,
+            $fusionNamespace,
+            $name
+        );
+    }
+
     public function getPackageKey(): PackageKey
     {
         return $this->packageKey;
@@ -158,17 +184,17 @@ final class ComponentName
     }
 
     /**
-     * @param string $parentComponentName
+     * @param ComponentName $parentComponentName
      * @return class-string<mixed>
      */
-    public function getFullyQualifiedEnumName(string $parentComponentName): string
+    public function getFullyQualifiedEnumName(ComponentName $parentComponentName): string
     {
         /** @phpstan-var class-string<mixed> $className */
-        $className =  implode('\\', [
+        $className = implode('\\', [
             $this->packageKey->toPhpNamespace(),
             'Presentation',
             $this->fusionNamespace->toPhpNameSpace(),
-            $parentComponentName,
+            $parentComponentName->getName(),
             $this->name
         ]);
         return $className;

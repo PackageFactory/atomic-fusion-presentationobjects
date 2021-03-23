@@ -31,28 +31,26 @@ final class PropTypeFactoryTest extends UnitTestCase
 {
     /**
      * @dataProvider validInputStringProvider
-     * @param PackageKey $packageKey
-     * @param string $componentName
+     * @param ComponentName $componentName
      * @param string $inputString
      * @param PropTypeInterface $expectedPropType
      * @return void
      */
-    public function testFromInputString(PackageKey $packageKey, string $componentName, string $inputString, PropTypeInterface $expectedPropType): void
+    public function testFromInputString(ComponentName $componentName, string $inputString, PropTypeInterface $expectedPropType): void
     {
-        Assert::assertEquals($expectedPropType, PropTypeFactory::fromInputString($packageKey, $componentName, $inputString));
+        Assert::assertEquals($expectedPropType, PropTypeFactory::fromInputString($componentName, $inputString));
     }
 
     /**
      * @dataProvider invalidInputStringProvider
-     * @param PackageKey $packageKey
-     * @param string $componentName
+     * @param ComponentName $componentName
      * @param string $inputString
      * @return void
      */
-    public function testFromInputStringCatchesInvalidInputs(PackageKey $packageKey, string $componentName, string $inputString): void
+    public function testFromInputStringCatchesInvalidInputs(ComponentName $componentName, string $inputString): void
     {
         $this->expectException(PropTypeIsInvalid::class);
-        PropTypeFactory::fromInputString($packageKey, $componentName, $inputString);
+        PropTypeFactory::fromInputString($componentName, $inputString);
     }
 
     /**
@@ -61,124 +59,105 @@ final class PropTypeFactoryTest extends UnitTestCase
     public function validInputStringProvider(): array
     {
         $packageKey = new PackageKey('Vendor.Site');
+        $componentName = new ComponentName($packageKey, FusionNamespace::default(), 'MyNewComponent');
         return [
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'bool',
                 new BoolPropType(false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?bool',
                 new BoolPropType(true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'string',
                 new StringPropType(false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?string',
                 new StringPropType(true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'int',
                 new IntPropType(false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?int',
                 new IntPropType(true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'float',
                 new FloatPropType(false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?float',
                 new FloatPropType(true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'Uri',
                 new UriPropType(false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?Uri',
                 new UriPropType(true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'ImageSource',
                 new ImageSourcePropType(false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?ImageSource',
                 new ImageSourcePropType(true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'MyStringEnum',
                 new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?MyStringEnum',
                 new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyComponent'), false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyComponent'), true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'Custom.Type.MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent'), false)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 '?Custom.Type.MyComponent',
                 new ComponentPropType(new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent'), true)
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'array<MyComponent>',
                 new ComponentArrayPropType(new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyComponent'))
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'array<Custom.Type.MyComponent>',
                 new ComponentArrayPropType(new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent'))
             ],
@@ -190,41 +169,34 @@ final class PropTypeFactoryTest extends UnitTestCase
      */
     public function invalidInputStringProvider(): array
     {
-        $packageKey = new PackageKey('Vendor.Site');
+        $componentName = new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyNewComponent');
         return [
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'integer'
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'array<MyStringEnum>'
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'UndefinedComponent'
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'Undefined.Type.MyComponent'
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'UndefinedEnum'
             ],
             [
-                $packageKey,
-                'InvalidComponent',
+                $componentName,
                 'InvalidEnum'
             ],
             [
-                $packageKey,
-                'MyNewComponent',
+                $componentName,
                 'InvalidComponent'
             ]
         ];

@@ -31,7 +31,7 @@ final class ComponentGenerator
         string $packagePath,
         bool $listable = false
     ): void {
-        $props = Props::fromInputArray($componentName->getPackageKey(), $componentName->getName(), $serializedProps);
+        $props = Props::fromInputArray($componentName, $serializedProps);
         $component = new Component($componentName, $props, $listable);
 
         $classPath = $componentName->getPhpFilePath($packagePath);

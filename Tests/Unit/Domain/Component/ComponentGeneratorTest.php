@@ -184,6 +184,45 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/WithTextArray/WithTextArray.fusion'
                 ]
+            ],
+            'cardWithSharedText' => [
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
+                ['image:?ImageSource', 'text:?Vendor.Shared:Text', 'link:?Link'],
+                'vfs://DistributionPackages/Vendor.Site/',
+                false,
+                [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
+                ]
+            ],
+            'cardWithSharedCustomNamespacedText' => [
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
+                ['image:?ImageSource', 'text:?Vendor.Shared:Custom.Type.Text', 'link:?Link'],
+                'vfs://DistributionPackages/Vendor.Site/',
+                false,
+                [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
+                ]
+            ],
+            'cardWithSharedTexts' => [
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
+                ['image:?ImageSource', 'text:array<Vendor.Shared:Text>', 'link:?Link'],
+                'vfs://DistributionPackages/Vendor.Site/',
+                false,
+                [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
+                ]
             ]
         ];
     }

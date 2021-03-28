@@ -52,7 +52,7 @@ namespace Vendor\Site\Presentation\Component\MyComponent;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
 
 /**
  * @Flow\Proxy(false)

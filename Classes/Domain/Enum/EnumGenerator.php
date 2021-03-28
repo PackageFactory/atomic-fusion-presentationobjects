@@ -6,27 +6,24 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Utility\Files;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FileWriterInterface;
 
 /**
  * The enum generator domain service
  *
- * @Flow\Scope("singleton")
+ * @Flow\Proxy(false)
  */
 final class EnumGenerator
 {
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $now;
+    protected \DateTimeImmutable $now;
 
-    /**
-     * @param null|\DateTimeImmutable $now
-     */
-    public function __construct(?\DateTimeImmutable $now = null)
+    private FileWriterInterface $fileWriter;
+
+    public function __construct(?\DateTimeImmutable $now = null, FileWriterInterface $fileWriter)
     {
         $this->now = $now ?? new \DateTimeImmutable();
+        $this->fileWriter = $fileWriter;
     }
 
     /**
@@ -51,17 +48,8 @@ final class EnumGenerator
         );
         $enum = new Enum($enumName, $enumType, $enumType->processValueArray($values));
 
-        $classPath = $enumName->getPhpFilePath($packagePath);
-        if (!file_exists($classPath)) {
-            Files::createDirectoryRecursively($classPath);
-        }
-        file_put_contents($enumName->getClassPath($packagePath), $enum->getClassContent());
-        file_put_contents($enumName->getExceptionPath($packagePath), $enum->getExceptionContent($this->now));
-
-        $providerBasePath = $enumName->getProviderBasePath($packagePath);
-        if (!is_dir($providerBasePath)) {
-            Files::createDirectoryRecursively($providerBasePath);
-        }
-        file_put_contents($enumName->getProviderPath($packagePath), $enum->getProviderContent());
+        $this->fileWriter->writeFile($enumName->getClassPath($packagePath), $enum->getClassContent());
+        $this->fileWriter->writeFile($enumName->getExceptionPath($packagePath), $enum->getExceptionContent($this->now));
+        $this->fileWriter->writeFile($enumName->getProviderPath($packagePath), $enum->getProviderContent());
     }
 }

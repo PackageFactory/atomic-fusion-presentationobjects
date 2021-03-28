@@ -12,6 +12,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentNa
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
+use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\DefensiveConfirmationFileWriter;
 
 /**
  * The command controller for kick-starting PresentationObject components
@@ -23,18 +24,6 @@ class ComponentCommandController extends CommandController
      * @var PackageResolver
      */
     protected $packageResolver;
-
-    /**
-     * @Flow\Inject
-     * @var ComponentGenerator
-     */
-    protected $componentGenerator;
-
-    /**
-     * @Flow\Inject
-     * @var EnumGenerator
-     */
-    protected $valueGenerator;
 
     /**
      * Create a new PresentationObject component and factory
@@ -63,10 +52,14 @@ class ComponentCommandController extends CommandController
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function kickStartCommand(string $name, bool $listable = false): void
+    public function kickStartCommand(string $name, bool $listable = false, bool $yes = false): void
     {
+        $componentGenerator = new ComponentGenerator(
+            new DefensiveConfirmationFileWriter($this->output, $yes)
+        );
         $package = $this->packageResolver->resolvePackage();
-        $this->componentGenerator->generateComponent(
+
+        $componentGenerator->generateComponent(
             ComponentName::fromInput($name, PackageKey::fromPackage($package)),
             $this->request->getExceedingArguments(),
             $package->getPackagePath(),
@@ -91,10 +84,15 @@ class ComponentCommandController extends CommandController
      * @param array|string[] $values A comma-separated colon list of names:values for the new pseudo-enum, e.g. a,b,c , a:1,b:2,c:3 or a:1.2,b:2.4,c:3.6
      * @return void
      */
-    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = []): void
+    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], bool $yes = false): void
     {
+        $enumGenerator = new EnumGenerator(
+            new \DateTimeImmutable(),
+            new DefensiveConfirmationFileWriter($this->output, $yes)
+        );
         $package = $this->packageResolver->resolvePackage();
-        $this->valueGenerator->generateEnum(
+
+        $enumGenerator->generateEnum(
             ComponentName::fromInput($componentName, PackageKey::fromPackage($package)),
             $name,
             $type,

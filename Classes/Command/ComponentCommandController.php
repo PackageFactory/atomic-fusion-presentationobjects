@@ -49,6 +49,7 @@ class ComponentCommandController extends CommandController
      *
      * @param string $name The name of the new component
      * @param bool $listable If set, an additional list type will be generated
+     * @param bool $yes If set, no confirmation is going to be required for overwriting files
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
@@ -82,6 +83,7 @@ class ComponentCommandController extends CommandController
      * @param string $name The name of the new pseudo-enum
      * @param string $type The type of the new pseudo-enum (must be one of: "string", "int")
      * @param array|string[] $values A comma-separated colon list of names:values for the new pseudo-enum, e.g. a,b,c , a:1,b:2,c:3 or a:1.2,b:2.4,c:3.6
+     * @param bool $yes If set, no confirmation is going to be required for overwriting files
      * @return void
      */
     public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], bool $yes = false): void

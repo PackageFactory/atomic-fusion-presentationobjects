@@ -18,6 +18,48 @@ use PHPUnit\Framework\Assert;
 final class ComponentNameTest extends UnitTestCase
 {
     /**
+     * @dataProvider inputProvider
+     * @param string $input
+     * @param PackageKey $defaultPackageKey
+     * @param ComponentName $expectedName
+     */
+    public function testFromInput(string $input, PackageKey $defaultPackageKey, ComponentName $expectedName): void
+    {
+        Assert::assertEquals($expectedName, ComponentName::fromInput($input, $defaultPackageKey));
+    }
+
+    /**
+     * @return array<array{string,PackageKey,ComponentName}>
+     */
+    public function inputProvider(): array
+    {
+        $defaultPackageKey = new PackageKey('Vendor.Default');
+
+        return [
+            [
+                'MyComponent',
+                $defaultPackageKey,
+                new ComponentName($defaultPackageKey, FusionNamespace::default(), 'MyComponent')
+            ],
+            [
+                'Custom.Type.MyComponent',
+                $defaultPackageKey,
+                new ComponentName($defaultPackageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent')
+            ],
+            [
+                'Vendor.Site:MyComponent',
+                $defaultPackageKey,
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent')
+            ],
+            [
+                'Vendor.Site:Custom.Type.MyComponent',
+                $defaultPackageKey,
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent')
+            ]
+        ];
+    }
+
+    /**
      * @dataProvider classNameProvider
      * @param string $className
      * @param ComponentName $expectedName

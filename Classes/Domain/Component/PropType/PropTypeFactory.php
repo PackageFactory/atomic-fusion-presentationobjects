@@ -8,7 +8,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
 use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\Psr7\Uri;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 
@@ -20,7 +19,7 @@ final class PropTypeFactory
     /**
      * @throws PropTypeIsInvalid
      */
-    public static function fromInputString(string $serializedPackageKey, string $parentComponentName, string $input): PropTypeInterface
+    public static function fromInputString(ComponentName $parentComponentName, string $input): PropTypeInterface
     {
         $nullable = false;
         if (\mb_substr($input, 0, 1) === '?') {
@@ -44,7 +43,7 @@ final class PropTypeFactory
                 if ($isComponentArray = IsComponentArray::isSatisfiedByInputString($input)) {
                     $input = \mb_substr($input, 6, \mb_strlen($input) - 7);
                 }
-                $componentName = ComponentName::fromInput($input, new PackageKey($serializedPackageKey));
+                $componentName = $parentComponentName->mergeInput($input);
 
                 if (IsComponent::isSatisfiedByInterfaceName($componentName->getFullyQualifiedInterfaceName())) {
                     return $isComponentArray

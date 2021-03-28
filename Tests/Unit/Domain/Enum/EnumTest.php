@@ -6,7 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum
  */
 
 use Neos\Flow\Tests\UnitTestCase;
-use Neos\Fusion\Tests\Functional\FusionObjects\FusionArrayTest;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\Enum;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumType;
@@ -30,9 +30,7 @@ class EnumTest extends UnitTestCase
 
         $this->subject = new Enum(
             new EnumName(
-                new PackageKey('Vendor.Site'),
-                FusionNamespace::default(),
-                'MyComponent',
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'),
                 'MyComponentType'
             ),
             EnumType::string(),

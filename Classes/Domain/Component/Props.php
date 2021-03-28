@@ -11,6 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Pr
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeIsInvalid;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\AbstractImmutableArrayObject;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
 /**
  * @Flow\Proxy(false)
@@ -27,18 +28,23 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @param string $packageKey
-     * @param string $componentName
+     * @param ComponentName $componentName
      * @param string[] $input
      * @return self
      * @throws PropTypeIsInvalid
      */
-    public static function fromInputArray(string $packageKey, string $componentName, array $input): self
+    public static function fromInputArray(ComponentName $componentName, array $input): self
     {
         $props = [];
         foreach ($input as $serializedProp) {
-            list($propName, $serializedPropType) = explode(':', $serializedProp);
-            $props[$propName] = PropTypeFactory::fromInputString($packageKey, $componentName, $serializedPropType);
+            $pivot = \mb_strpos($serializedProp, ':');
+            if (is_int($pivot)) {
+                $propName = \mb_substr($serializedProp, 0, $pivot);
+                $serializedPropType = \mb_substr($serializedProp, $pivot + 1);
+                $props[$propName] = PropTypeFactory::fromInputString($componentName, $serializedPropType);
+            } else {
+                throw PropsCannotBeDeserialized::becauseTheyAreNoColonList($serializedProp);
+            }
         }
 
         return new self($props);

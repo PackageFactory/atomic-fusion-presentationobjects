@@ -1,0 +1,20 @@
+<?php
+namespace Vendor\Site\Presentation\Component\Card;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
+use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use Vendor\Shared\Presentation\Component\Text\Texts;
+use Vendor\Site\Presentation\Component\Link\LinkInterface;
+
+interface CardInterface extends ComponentPresentationObjectInterface
+{
+    public function getImage(): ?ImageSourceHelperInterface;
+
+    public function getText(): Texts;
+
+    public function getLink(): ?LinkInterface;
+}

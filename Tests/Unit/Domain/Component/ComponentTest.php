@@ -27,15 +27,15 @@ class ComponentTest extends UnitTestCase
     {
         parent::setUp();
 
+        $componentName = new ComponentName(
+            new PackageKey('Vendor.Site'),
+            FusionNamespace::default(),
+            'MyNewComponent',
+        );
         $this->subject = new Component(
-            new ComponentName(
-                new PackageKey('Vendor.Site'),
-                FusionNamespace::default(),
-                'MyNewComponent',
-            ),
+            $componentName,
             Props::fromInputArray(
-                'Vendor.Site',
-                'MyNewComponent',
+                $componentName,
                 [
                     'bool:bool',
                     'nullableBool:?bool',

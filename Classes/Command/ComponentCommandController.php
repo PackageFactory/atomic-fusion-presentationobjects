@@ -8,14 +8,22 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Command;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
 
 /**
  * The command controller for kick-starting PresentationObject components
  */
 class ComponentCommandController extends CommandController
 {
+    /**
+     * @Flow\Inject
+     * @var PackageResolver
+     */
+    protected $packageResolver;
+
     /**
      * @Flow\Inject
      * @var ComponentGenerator
@@ -51,19 +59,17 @@ class ComponentCommandController extends CommandController
      * * array<...> with any of the above as an argument
      *
      * @param string $name The name of the new component
-     * @param string|null $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
-     * @param string|null $namespace Optional fusion namespace (by default that will be "Component")
      * @param bool $listable If set, an additional list type will be generated
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function kickStartCommand(string $name, ?string $packageKey = null, ?string $namespace = null, bool $listable = false): void
+    public function kickStartCommand(string $name, bool $listable = false): void
     {
+        $package = $this->packageResolver->resolvePackage();
         $this->componentGenerator->generateComponent(
-            $name,
+            ComponentName::fromInput($name, PackageKey::fromPackage($package)),
             $this->request->getExceedingArguments(),
-            $packageKey,
-            $namespace ? FusionNamespace::fromString($namespace) : null,
+            $package->getPackagePath(),
             $listable
         );
     }
@@ -82,12 +88,18 @@ class ComponentCommandController extends CommandController
      * @param string $componentName The name of the component the new pseudo-enum belongs to
      * @param string $name The name of the new pseudo-enum
      * @param string $type The type of the new pseudo-enum (must be one of: "string", "int")
-     * @param array|string[] $values A comma-separated list of values for the new pseudo-enum
-     * @param null|string $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
+     * @param array|string[] $values A comma-separated colon list of names:values for the new pseudo-enum, e.g. a,b,c , a:1,b:2,c:3 or a:1.2,b:2.4,c:3.6
      * @return void
      */
-    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], ?string $packageKey = null): void
+    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = []): void
     {
-        $this->valueGenerator->generateEnum($componentName, $name, $type, $values, $packageKey);
+        $package = $this->packageResolver->resolvePackage();
+        $this->valueGenerator->generateEnum(
+            ComponentName::fromInput($componentName, PackageKey::fromPackage($package)),
+            $name,
+            $type,
+            $values,
+            $package->getPackagePath()
+        );
     }
 }

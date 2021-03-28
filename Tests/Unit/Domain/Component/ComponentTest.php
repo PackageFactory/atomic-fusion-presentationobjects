@@ -61,7 +61,7 @@ class ComponentTest extends UnitTestCase
     public function testGetInterfaceContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
@@ -114,7 +114,7 @@ interface MyNewComponentInterface extends ComponentPresentationObjectInterface
     public function testGetClassContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
@@ -280,7 +280,7 @@ final class MyNewComponent extends AbstractComponentPresentationObject implement
     public function testGetFactoryContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
@@ -407,7 +407,7 @@ final class MyNewComponentFactory extends AbstractComponentPresentationObjectFac
     public function testGetComponentArrayContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*

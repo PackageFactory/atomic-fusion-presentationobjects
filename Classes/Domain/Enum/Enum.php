@@ -46,7 +46,7 @@ final class Enum
     public function getClassContent(): string
     {
         $variable = '$' . $this->type;
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 /*
@@ -112,7 +112,7 @@ final class ' . $this->name->getName() . ' implements EnumInterface
      */
     public function getExceptionContent(\DateTimeImmutable $now): string
     {
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 /*
@@ -140,7 +140,7 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     public function getProviderContent(): string
     {
         $arrayName = lcfirst(PluralName::forName($this->name->getName()));
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getProviderNamespace() . ';
 
 /*

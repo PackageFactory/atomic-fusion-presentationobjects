@@ -44,7 +44,7 @@ class EnumTest extends UnitTestCase
     public function testGetClassContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyComponent;
 
 /*
@@ -127,7 +127,7 @@ final class MyComponentType implements EnumInterface
     public function testGetExceptionContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyComponent;
 
 /*
@@ -154,7 +154,7 @@ final class MyComponentTypeIsInvalid extends \DomainException
     public function testGetProviderContent(): void
     {
         Assert::assertSame(
-            '<?php
+            '<?php declare(strict_types=1);
 namespace Vendor\Site\Application;
 
 /*

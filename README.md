@@ -50,7 +50,7 @@ Luckily, there's tools like [phpstan](https://phpstan.org/) or [psalm](https://p
 
 Typesafety and static analysis comes with a lot of benefits:
 
-1. **Catch type-related bugs before runtime.** Consequent use of [Typehints](https://docs.phpdoc.org/latest/guides/types.html) ensures the correctness of your code during static analysis. Using [phpDoc types](https://docs.phpdoc.org/latest/guides/types.html) allows you to even go beyond the capabilities of PHP and use patterns like Generics or Union types without them being actually supported by PHPs type system.
+1. **Catch type-related bugs before runtime.** Consequent use of [Typehints](https://docs.phpdoc.org/latest/guide/guides/types.html) ensures the correctness of your code during static analysis. Using [phpDoc types](https://docs.phpdoc.org/latest/guide/guides/types.html) allows you to even go beyond the capabilities of PHP and use patterns like Generics or Union types without them being actually supported by PHPs type system.
 2. **Self-documenting interfaces.** Typehints and type annotations amend parameters and properties with the important information of what kind of data they require without the need to look it up in a separate documentation.
 3. **IDE support.** Modern PHP IDEs understand Typehints and phpDoc types and can use them to provide code completion, intelligent parameter suggestions and advanced refactoring capabilities.
 
@@ -94,7 +94,7 @@ So when using `PackageFactory.AtomicFusion.PresentationObjects`, you need to pay
 
 ### Verbosity
 
-PresentationObjects require you to write more code than plain AtomicFusion. To remedy that, this package comes with a [scaffolding tool](./Documentation/Kickstarter.md) to ease the creation of initial code structures.
+PresentationObjects require you to write more code than plain AtomicFusion. To remedy that, this package comes with a [scaffolding tool](./Documentation/04_Kickstarter.md) to ease the creation of initial code structures.
 
 Currently, there's also a lot of concepts involved that spread information over the Codebase (`Classes/Presentation/`, `Resources/Private/Fusion/`, `Configuration/`), thus breaking the principle of co-location.
 

@@ -7,6 +7,7 @@ parameters:
 		- Packages/Framework/Neos.Flow/Tests/FunctionalTestCase.php
 		- Tests/Unit/Fixtures/Site/Presentation/Component/MyReflectionComponent/MyReflectionComponent.php
 		- Tests/Unit/Fixtures/Site/Presentation/Component/MyNewComponent/MyStringEnum.php
+		- phpstan.bootstrap.php
 	excludes_analyse:
 		- Tests/Unit/Helper/*
 		- Tests/Unit/Fixtures/*

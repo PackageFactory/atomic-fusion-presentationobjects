@@ -11,6 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGe
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
+use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\SimpleFileWriter;
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
@@ -45,7 +46,9 @@ final class ComponentGeneratorTest extends UnitTestCase
             ],
         ]);
 
-        $this->componentGenerator = new ComponentGenerator();
+        $this->componentGenerator = new ComponentGenerator(
+            new SimpleFileWriter()
+        );
     }
 
     /**

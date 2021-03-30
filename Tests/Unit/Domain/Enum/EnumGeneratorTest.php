@@ -11,6 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentNa
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
+use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\SimpleFileWriter;
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
@@ -36,7 +37,10 @@ final class EnumGeneratorTest extends UnitTestCase
             'Vendor.Default' => [],
         ]);
 
-        $this->enumGenerator = new EnumGenerator(new \DateTimeImmutable('@1602423895'));
+        $this->enumGenerator = new EnumGenerator(
+            new \DateTimeImmutable('@1602423895'),
+            new SimpleFileWriter()
+        );
     }
 
     /**

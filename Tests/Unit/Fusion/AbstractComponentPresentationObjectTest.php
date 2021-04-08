@@ -70,7 +70,7 @@ final class AbstractComponentPresentationObjectTest extends UnitTestCase
      * @test
      * @small
      * @param AbstractComponentPresentationObject $implementation
-     * @param string] $expectedPrototypeName
+     * @param string $expectedPrototypeName
      * @return void
      */
     public function implementsSlotInterfaceAndSmartlyGuessesFusionPrototypeNameFromInheritingClassNames(

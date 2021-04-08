@@ -1,0 +1,5 @@
+prototype(PackageFactory.AtomicFusion.PresentationObjects:Value) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\ValueInterface'
+
+    renderer = ${String.toString(presentationObject)}
+}

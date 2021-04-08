@@ -1,0 +1,24 @@
+prototype(PackageFactory.AtomicFusion.PresentationObjects:Slot) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\SlotInterface'
+
+    renderer = Neos.Fusion:Case {
+        hasPresentationObject {
+            condition = ${presentationObject.prototypeName}
+            renderer = Neos.Fusion:Renderer {
+                type = ${presentationObject.prototypeName}
+                element.presentationObject = ${presentationObject}
+            }
+        }
+
+        renderStringsInStyleguide {
+            condition = ${Type.isString(presentationObject)}
+            renderer = ${presentationObject}
+        }
+
+        fallbackForMissingPresentationObjectInStyleguide {
+            @position = 'end 9999'
+            condition = true
+            renderer = afx`<pre>- Missing Slot -</pre>`
+        }
+    }
+}

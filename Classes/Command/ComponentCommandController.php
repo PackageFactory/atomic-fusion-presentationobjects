@@ -39,6 +39,7 @@ class ComponentCommandController extends CommandController
      * The following values are allowed for types:
      *
      * * string, int, float, bool
+     * * slot
      * * Value class names created with <u>component:kickstartvalue</u> in the same
      *   component namespace
      * * Component class names created with <u>component:kickstart</u> in the same

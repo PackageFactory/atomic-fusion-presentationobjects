@@ -12,11 +12,14 @@ composer require packagefactory/atomicfusion-presentationobjects
 
 ## Documentation
 
+**Attention:** You are reading the README for version 3.0! You'll find the README for 2.0 [here](https://github.com/PackageFactory/atomic-fusion-presentationobjects/blob/2.0/README.md).
+
 1. [PresentationObjects and Components](./Documentation/01_PresentationObjectsAndComponents.md)
 2. [Content integration with PresentationObject Factories](./Documentation/02_PresentationObjectFactories.md)
-3. [Integration Recipes](./Documentation/03_IntegrationRecipes.md)
-4. [Scaffolding with the Component Kickstarter](./Documentation/04_Kickstarter.md)
-5. [Preview Mode](./Documentation/05_PreviewMode.md)
+3. [Slots](./Documentation/03_Slots.md)
+4. [Integration Recipes](./Documentation/04_IntegrationRecipes.md)
+5. [Scaffolding with the Component Kickstarter](./Documentation/05_Kickstarter.md)
+6. [Preview Mode](./Documentation/06_PreviewMode.md)
 
 ## Why
 

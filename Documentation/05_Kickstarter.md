@@ -1,14 +1,14 @@
 <div align="center">
-    <a href="./03_IntegrationRecipes.md">&lt; 3. Integration Recipes</a>
+    <a href="./04_IntegrationRecipes.md">&lt; 3. Integration Recipes</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./05_PreviewMode.md">5. Preview Mode &gt;</a>
+    <a href="./06_PreviewMode.md">5. Preview Mode &gt;</a>
 </div>
 
 ---
 
-# Scaffolding with the Component Kickstarter
+# 5. Scaffolding with the Component Kickstarter
 
 Due to the elaborate nature of PresentationObjects `PackageFactory.AtomicFusion.PresentationObjects` ships with a scaffolding tool that eases the creation of all required code patterns. This tool comes in the form of a set of Neos.Flow commands and enables you to generate code from the command line.
 
@@ -224,7 +224,7 @@ This data source can be used in your `NodeTypes.*.yaml` configuration like this:
 ## `component:kickstart` command
 
 This command creates all patterns needed for a component. It takes the name of the component and a list of property descriptors which consist of a property name and a type name separated by a colon.
-The package the component resides in can be set via --package-key, otherwise it will be fetched from the configuration option `PackageFactory.AtomicFusion.PresentationObjects.componentGeneration:defaultPackageKey` with fallback to the primary site package. 
+The package the component resides in can be set via --package-key, otherwise it will be fetched from the configuration option `PackageFactory.AtomicFusion.PresentationObjects.componentGeneration:defaultPackageKey` with fallback to the primary site package.
 Via --namespace, the component's Fusion namespace can be defined. It can be segmented with . and defaults to `Component` A component `Headline` in package `Vendor.Site` and namespace `Component.Atom` will have the name `Vendor.Site:Component.Atom.Headline` and be placed in the folder `Vendor.Site/Resources/Private/Fusion/Component/Atom/Headline`
 
 For type names, the following rules apply:
@@ -387,9 +387,9 @@ Neos:
 ---
 
 <div align="center">
-    <a href="./03_IntegrationRecipes.md">&lt; 3. Integration Recipes</a>
+    <a href="./04_IntegrationRecipes.md">&lt; 3. Integration Recipes</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./05_PreviewMode.md">5. Preview Mode &gt;</a>
+    <a href="./06_PreviewMode.md">5. Preview Mode &gt;</a>
 </div>

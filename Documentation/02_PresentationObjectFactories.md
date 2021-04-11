@@ -3,7 +3,7 @@
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./03_IntegrationRecipes.md">3. Integration Recipes &gt;</a>
+    <a href="./03_Slots.md">3. Slots &gt;</a>
 </div>
 
 ---
@@ -89,5 +89,5 @@ That's it! Our image component is now fully integrated and can be edited in the 
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./03_IntegrationRecipes.md">3. Integration Recipes &gt;</a>
+    <a href="./03_Slots.md">3. Slots &gt;</a>
 </div>

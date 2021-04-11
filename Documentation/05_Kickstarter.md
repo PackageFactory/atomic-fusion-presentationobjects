@@ -1,9 +1,9 @@
 <div align="center">
-    <a href="./04_IntegrationRecipes.md">&lt; 3. Integration Recipes</a>
+    <a href="./04_IntegrationRecipes.md">&lt; 4. Integration Recipes</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./06_PreviewMode.md">5. Preview Mode &gt;</a>
+    <a href="./06_PreviewMode.md">6. Preview Mode &gt;</a>
 </div>
 
 ---
@@ -387,9 +387,9 @@ Neos:
 ---
 
 <div align="center">
-    <a href="./04_IntegrationRecipes.md">&lt; 3. Integration Recipes</a>
+    <a href="./04_IntegrationRecipes.md">&lt; 4. Integration Recipes</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./06_PreviewMode.md">5. Preview Mode &gt;</a>
+    <a href="./06_PreviewMode.md">6. Preview Mode &gt;</a>
 </div>

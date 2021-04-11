@@ -97,7 +97,7 @@ So when using `PackageFactory.AtomicFusion.PresentationObjects`, you need to pay
 
 ### Verbosity
 
-PresentationObjects require you to write more code than plain AtomicFusion. To remedy that, this package comes with a [scaffolding tool](./Documentation/04_Kickstarter.md) to ease the creation of initial code structures.
+PresentationObjects require you to write more code than plain AtomicFusion. To remedy that, this package comes with a [scaffolding tool](./Documentation/05_Kickstarter.md) to ease the creation of initial code structures.
 
 Currently, there's also a lot of concepts involved that spread information over the Codebase (`Classes/Presentation/`, `Resources/Private/Fusion/`, `Configuration/`), thus breaking the principle of co-location.
 

@@ -8,7 +8,7 @@
 
 # 1. PresentationObjects and Components
 
-> **Hint:** This section describes the manual creation of PresentationObjects and PresentationObject components. Both patterns can also be scaffolded by the [Kickstarter](./04_Kickstarter.md).
+> **Hint:** This section describes the manual creation of PresentationObjects and PresentationObject components. Both patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
 
 In this tutorial, we're going to write a PresentationObject for an image component. Our image consists of a `src`, an `alt` and an optional `title` property.
 

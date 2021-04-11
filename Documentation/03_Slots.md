@@ -3,7 +3,7 @@
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./04_IntegrationRecipes.md">3. Integration Recipes &gt;</a>
+    <a href="./04_IntegrationRecipes.md">4. Integration Recipes &gt;</a>
 </div>
 
 ---
@@ -248,5 +248,5 @@ The third argument is optional. If true, an additional `<div>` is wrapped around
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./04_IntegrationRecipes.md">3. Integration Recipes &gt;</a>
+    <a href="./04_IntegrationRecipes.md">4. Integration Recipes &gt;</a>
 </div>

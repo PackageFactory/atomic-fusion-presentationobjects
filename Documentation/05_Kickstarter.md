@@ -150,6 +150,7 @@ final class HeadlineLookIsInvalid extends \DomainException
 #### HeadlineLookProvider.php
 
 This file contains a data provider to use the enum values for SelectBoxes in the Neos backend UI.
+You can use it as a data source or node type postprocessor, what ever suits you best.
 
 ```php
 <?php
@@ -160,13 +161,15 @@ namespace Vendor\Site\Application;
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Vendor\Site\Presentation\Headline\HeadlineLook;
 
-class HeadlineLookProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+class HeadlineLookProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -182,11 +185,34 @@ class HeadlineLookProvider extends AbstractDataSource implements ProtectedContex
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $headlineLooks = [];
-        foreach (HeadlineLook::getValues() as $value) {
-            $headlineLooks[$value]['label'] = $this->translator->translateById('headlineLook.' . $value, [], null, null, 'Headline', 'Vendor.Site') ?: $value;
+        foreach ($this->getValues() as $value) {
+            $headlineLooks[$value]['label'] = $this->getLabel($value);
         }
 
         return $headlineLooks;
+    }
+
+    public function process(NodeType $nodeType, array &$configuration, array $options)
+    {
+        foreach ($options['propertyNames'] as $propertyName) {
+            foreach ($this->getValues() as $value) {
+                $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
+                    'label' => $this->getLabel($value)
+                ];
+            }
+        }
+    }
+
+    private function getLabel(string $value): string
+    {
+        return $this->translator->translateById(
+            'headlineLook.' . $value,
+            [],
+            null,
+            null,
+            'Headline',
+            'Vendor.Site'
+        ) ?: $value;
     }
 
     /**
@@ -204,7 +230,7 @@ class HeadlineLookProvider extends AbstractDataSource implements ProtectedContex
 }
 ```
 
-This data source can be used in your `NodeTypes.*.yaml` configuration like this:
+This provider can be used as a data source in your `NodeTypes.*.yaml` configuration like this:
 
 ```yaml
   properties:
@@ -220,6 +246,31 @@ This data source can be used in your `NodeTypes.*.yaml` configuration like this:
             placeholder: Choose a headline look...
             dataSourceIdentifier: vendor-site-headline-looks
 ```
+
+... or as a node type postprocessor like this:
+
+```yaml
+  properties:
+    headlineLook:
+      type: string
+      ui:
+        label: 'Headline look'
+        reloadIfChanged: true
+        inspector:
+          group: 'headline'
+          editor: Neos.Neos/Inspector/Editors/SelectBoxEditor
+          editorOptions:
+            placeholder: Choose a headline look...
+            values: []
+  postprocessors:
+    headline-looks:
+      postprocessor: Vendor\Site\Application\HeadlineLookProvider
+      options:
+        propertyNames:
+          - headlineLook
+```
+
+> **Hint:** The usage of node type postprocessors is recommended as their processing result is cached, while data sources trigger an additional request each time the inspector is loaded.
 
 ## `component:kickstart` command
 

@@ -385,12 +385,12 @@ Neos:
 ```
 
 
-### Component file co-location
+### Component file colocation
 
 One great feature of Fusion components is that all files constituting this component are located in the same folder.
 This does not work by default, since Flow packages' classes reside in `Classes`, while presentational components reside in `Resources/Private/Fusion/Presentation`.
 
-To still achieve co-location, two parameters have to be adjusted:
+To still achieve colocation, two parameters have to be adjusted:
 
 #### composer.json
 
@@ -418,7 +418,7 @@ PackageFactory:
         colocate: true
 ```
 
-> **Hint:** It is highly recommended to decide on co-location once at the start of a project.
+> **Hint:** It is highly recommended to decide on colocation once at the start of a project.
 
 ---
 

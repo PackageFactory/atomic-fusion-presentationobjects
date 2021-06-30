@@ -11,7 +11,6 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Pr
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeIsInvalid;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\AbstractImmutableArrayObject;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
 /**
  * @Flow\Proxy(false)
@@ -20,7 +19,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 final class Props extends AbstractImmutableArrayObject
 {
     /**
-     * @param array<int|string,PropTypeInterface> $array
+     * @param array<string,PropTypeInterface> $array
      */
     private function __construct(array $array)
     {
@@ -132,7 +131,7 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @return \ArrayIterator<int|string,PropTypeInterface>|PropTypeInterface[]
+     * @return \ArrayIterator<string,PropTypeInterface>|PropTypeInterface[]
      */
     public function getIterator()
     {

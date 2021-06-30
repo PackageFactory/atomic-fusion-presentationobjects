@@ -10,20 +10,24 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Is
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeFactory;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeIsInvalid;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\AbstractImmutableArrayObject;
 
 /**
  * @Flow\Proxy(false)
- * @extends AbstractImmutableArrayObject<string,PropTypeInterface>
+ * @extends IteratorAggregate<string,PropTypeInterface>
  */
-final class Props extends AbstractImmutableArrayObject
+final class Props implements \IteratorAggregate
 {
     /**
-     * @param array<string,PropTypeInterface> $array
+     * @var array<string,PropTypeInterface>
      */
-    private function __construct(array $array)
+    private array $props;
+
+    /**
+     * @param array<string,PropTypeInterface> $props
+     */
+    private function __construct(array $props)
     {
-        parent::__construct($array);
+        $this->props = $props;
     }
 
     /**
@@ -114,27 +118,10 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @param string $key
-     * @return PropTypeInterface|false
-     */
-    public function offsetGet($key)
-    {
-        return parent::offsetGet($key) ?: false;
-    }
-
-    /**
-     * @return array|PropTypeInterface[]
-     */
-    public function getArrayCopy(): array
-    {
-        return parent::getArrayCopy();
-    }
-
-    /**
      * @return \ArrayIterator<string,PropTypeInterface>|PropTypeInterface[]
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
-        return parent::getIterator();
+        return new \ArrayIterator($this->props);
     }
 }

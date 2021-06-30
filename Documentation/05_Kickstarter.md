@@ -381,7 +381,7 @@ The PresentationObject factory from above is automatically registered for the de
 Neos:
   Fusion:
     defaultContext:
-      Site.Headline: Vendor\Site\Presentation\Headline\HeadlineFactory
+      Site.Component.Headline: Vendor\Site\Presentation\Component\Headline\HeadlineFactory
 ```
 
 

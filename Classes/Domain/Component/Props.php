@@ -20,7 +20,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 final class Props extends AbstractImmutableArrayObject
 {
     /**
-     * @param array<string,PropTypeInterface> $array
+     * @param array<int|string,PropTypeInterface> $array
      */
     private function __construct(array $array)
     {
@@ -132,7 +132,7 @@ final class Props extends AbstractImmutableArrayObject
     }
 
     /**
-     * @return \ArrayIterator<string,PropTypeInterface>|PropTypeInterface[]
+     * @return \ArrayIterator<int|string,PropTypeInterface>|PropTypeInterface[]
      */
     public function getIterator()
     {

@@ -415,7 +415,7 @@ PackageFactory:
   AtomicFusion:
     PresentationObjects:
       componentGeneration:
-        co-locate: true
+        colocate: true
 ```
 
 > **Hint:** It is highly recommended to decide on co-location once at the start of a project.

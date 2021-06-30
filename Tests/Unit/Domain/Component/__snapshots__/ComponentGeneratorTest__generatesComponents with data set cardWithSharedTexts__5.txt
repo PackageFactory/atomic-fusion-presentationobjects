@@ -10,10 +10,10 @@ prototype(Vendor.Site:Component.Card) < prototype(PackageFactory.AtomicFusion.Pr
                 width = 1080
             }
             text {
-                {
+                0 {
                     text = 'Text'
-                },
-                {
+                }
+                1 {
                     text = 'Text'
                 }
             }

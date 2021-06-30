@@ -48,8 +48,8 @@ final class ComponentArrayPropType implements PropTypeInterface
         $componentPropType = new ComponentPropType($this->componentName, false);
         $componentStyleGuideValue = $componentPropType->getStyleGuideValue($nestingLevel + 1);
         return '{
-' . self::innerLeftPad($nestingLevel) . $componentStyleGuideValue . ',
-' . self::innerLeftPad($nestingLevel) . $componentStyleGuideValue . '
+' . self::innerLeftPad($nestingLevel) . '0 ' . $componentStyleGuideValue . '
+' . self::innerLeftPad($nestingLevel) . '1 ' .$componentStyleGuideValue . '
 ' . self::outerLeftPad($nestingLevel) . '}';
     }
 

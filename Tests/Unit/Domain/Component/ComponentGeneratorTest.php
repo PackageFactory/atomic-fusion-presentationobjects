@@ -62,6 +62,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['content:string'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewText.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextInterface.php',
@@ -74,6 +75,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 new ComponentName(new PackageKey('Vendor.Default'), FusionNamespace::default(), 'NewText'),
                 ['content:string'],
                 'vfs://DistributionPackages/Vendor.Default/',
+                false,
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewText.php',
@@ -88,6 +90,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['type:HeadlineType', 'look:HeadlineLook', 'content:string'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/Headline.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineInterface.php',
@@ -100,6 +103,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Image'),
                 ['src:ImageSource', 'alt:string', 'title:?string'],
                 'vfs://DistributionPackages/Vendor.Site/',
+                false,
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/Image.php',
@@ -114,6 +118,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['href:Uri', 'title:?string'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLink.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLinkInterface.php',
@@ -126,6 +131,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
                 ['image:?ImageSource', 'text:?Text', 'link:?Link'],
                 'vfs://DistributionPackages/Vendor.Site/',
+                false,
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
@@ -140,6 +146,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['text:?string'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewText.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewTextInterface.php',
@@ -153,6 +160,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['text:?string'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewText.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewTextInterface.php',
@@ -165,6 +173,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'NewText'),
                 ['content:string'],
                 'vfs://DistributionPackages/Vendor.Site/',
+                false,
                 true,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewText.php',
@@ -180,6 +189,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['texts:array<Text>'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArray.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArrayInterface.php',
@@ -192,6 +202,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
                 ['image:?ImageSource', 'text:?Vendor.Shared:Text', 'link:?Link'],
                 'vfs://DistributionPackages/Vendor.Site/',
+                false,
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
@@ -206,6 +217,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['image:?ImageSource', 'text:?Vendor.Shared:Custom.Type.Text', 'link:?Link'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
@@ -219,6 +231,7 @@ final class ComponentGeneratorTest extends UnitTestCase
                 ['image:?ImageSource', 'text:array<Vendor.Shared:Text>', 'link:?Link'],
                 'vfs://DistributionPackages/Vendor.Site/',
                 false,
+                false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
@@ -226,7 +239,21 @@ final class ComponentGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
                 ]
-            ]
+            ],
+            'colocatedText' => [
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'ColocatedText'),
+                ['content:string'],
+                'vfs://DistributionPackages/Vendor.Site/',
+                true,
+                false,
+                [
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedText.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedTextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedTextFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedText.fusion'
+                ]
+            ],
         ];
     }
 
@@ -241,7 +268,7 @@ final class ComponentGeneratorTest extends UnitTestCase
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generatesComponents(ComponentName $componentName, array $serializedProps, string $packagePath, bool $listable, array $expectedFileNames): void
+    public function generatesComponents(ComponentName $componentName, array $serializedProps, string $packagePath, bool $colocate, bool $listable, array $expectedFileNames): void
     {
         $this->componentGenerator->generateComponent($componentName, $serializedProps, $packagePath, $listable);
 

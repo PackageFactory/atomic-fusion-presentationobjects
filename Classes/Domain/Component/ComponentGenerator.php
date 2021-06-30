@@ -28,6 +28,7 @@ final class ComponentGenerator
      * @param ComponentName $componentName
      * @param array|string[] $serializedProps
      * @param string $packagePath
+     * @param bool $colocate
      * @param bool $listable
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
@@ -36,18 +37,19 @@ final class ComponentGenerator
         ComponentName $componentName,
         array $serializedProps,
         string $packagePath,
+        bool $colocate,
         bool $listable = false
     ): void {
         $props = Props::fromInputArray($componentName, $serializedProps);
         $component = new Component($componentName, $props, $listable);
 
-        $this->fileWriter->writeFile($componentName->getInterfacePath($packagePath), $component->getInterfaceContent());
-        $this->fileWriter->writeFile($componentName->getClassPath($packagePath), $component->getClassContent());
-        $this->fileWriter->writeFile($componentName->getFactoryPath($packagePath), $component->getFactoryContent());
+        $this->fileWriter->writeFile($componentName->getInterfacePath($packagePath, $colocate), $component->getInterfaceContent());
+        $this->fileWriter->writeFile($componentName->getClassPath($packagePath, $colocate), $component->getClassContent());
+        $this->fileWriter->writeFile($componentName->getFactoryPath($packagePath, $colocate), $component->getFactoryContent());
         $this->fileWriter->writeFile($componentName->getFusionComponentPath($packagePath), $component->getFusionContent());
 
         if ($listable) {
-            $this->fileWriter->writeFile($componentName->getComponentArrayPath($packagePath), $component->getComponentArrayContent());
+            $this->fileWriter->writeFile($componentName->getComponentArrayPath($packagePath, $colocate), $component->getComponentArrayContent());
         }
         $this->registerFactory($packagePath, $componentName);
     }

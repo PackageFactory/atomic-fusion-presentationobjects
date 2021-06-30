@@ -102,6 +102,7 @@ PresentationObjects require you to write more code than plain AtomicFusion. To r
 Currently, there's also a lot of concepts involved that spread information over the Codebase (`Classes/Presentation/`, `Resources/Private/Fusion/`, `Configuration/`), thus breaking the principle of co-location.
 
 In theory, co-location could be achieved by leveraging the `autoload.psr-4` configuration in the composer manifest (see: https://getcomposer.org/doc/04-schema.md#psr-4). However, the viability of this idea has not been proven yet.
+See also the [Kickstarter section](./Documentation/05_Kickstarter.md) on how to achieve co-location.
 
 ### Fusion Interoperation
 

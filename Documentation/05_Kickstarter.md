@@ -384,6 +384,42 @@ Neos:
       Site.Headline: Vendor\Site\Presentation\Headline\HeadlineFactory
 ```
 
+
+### Component file co-location
+
+One great feature of Fusion components is that all files constituting this component are located in the same folder.
+This does not work by default, since Flow packages' classes reside in `Classes`, while presentational components reside in `Resources/Private/Fusion/Presentation`.
+
+To still achieve co-location, two parameters have to be adjusted:
+
+#### composer.json
+
+Composer's PSR-4 autoload section allows for multiple entries. We can use this as follows:
+
+```json
+  "autoload": {
+    "psr-4": {
+      "Vendor\\Site\\": "Classes/",
+      "Vendor\\Site\\Presentation\\": "Resources/Private/Fusion/Presentation/"
+    }
+  }
+```
+This way, presentation objects, interfaces and factories placed in their component's Fusion folder are autoloaded as if they were located in the usual folders under `Classes`.
+
+#### Settings
+
+The component kickstarter can be configured to place the generated PHP files in the respective Fusion folders as follows:
+
+```yaml
+PackageFactory:
+  AtomicFusion:
+    PresentationObjects:
+      componentGeneration:
+        co-locate: true
+```
+
+> **Hint:** It is highly recommended to decide on co-location once at the start of a project.
+
 ---
 
 <div align="center">

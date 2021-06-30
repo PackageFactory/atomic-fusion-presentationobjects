@@ -50,8 +50,8 @@ final class EnumGenerator
         );
         $enum = new Enum($enumName, $enumType, $enumType->processValueArray($values));
 
-        $this->fileWriter->writeFile($enumName->getClassPath($packagePath), $enum->getClassContent());
-        $this->fileWriter->writeFile($enumName->getExceptionPath($packagePath), $enum->getExceptionContent($this->now));
+        $this->fileWriter->writeFile($enumName->getClassPath($packagePath, $colocate), $enum->getClassContent());
+        $this->fileWriter->writeFile($enumName->getExceptionPath($packagePath, $colocate), $enum->getExceptionContent($this->now));
         $this->fileWriter->writeFile($enumName->getProviderPath($packagePath), $enum->getProviderContent());
     }
 }

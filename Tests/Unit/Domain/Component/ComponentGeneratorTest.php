@@ -270,7 +270,7 @@ final class ComponentGeneratorTest extends UnitTestCase
      */
     public function generatesComponents(ComponentName $componentName, array $serializedProps, string $packagePath, bool $colocate, bool $listable, array $expectedFileNames): void
     {
-        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packagePath, $listable);
+        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packagePath, $colocate, $listable);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

@@ -12,7 +12,7 @@
 
 Due to the elaborate nature of PresentationObjects `PackageFactory.AtomicFusion.PresentationObjects` ships with a scaffolding tool that eases the creation of all required code patterns. This tool comes in the form of a set of Neos.Flow commands and enables you to generate code from the command line.
 
-## `component:kickstartvalue` command
+## `component:kickstartenum` command
 
 This command generates a new pseudo-enum value object. A pseudo-enum is an attempt to enable enumeration types in PHP, since it doesn't have a native language construct for this (although this might change in the future: https://wiki.php.net/rfc/enum).
 
@@ -20,12 +20,12 @@ Enumerations (or: enums) can be used to represent discrete values. Think of the 
 
 For more information on this pattern, have a look at this excellent article: https://stitcher.io/blog/php-enums
 
-> **Hint:** For a full parameter list use the built-in command documentation of Neos.Flow: `./flow help component:kickstartvalue`
+> **Hint:** For a full parameter list use the built-in command documentation of Neos.Flow: `./flow help component:kickstartenum`
 
 ### Example
 
 ```sh
-./flow component:kickstartvalue --package-key=Vendor.Site \
+./flow component:kickstartenum --package-key=Vendor.Site \
     Headline \
     HeadlineLook string \
         --values=REGULAR,HERO
@@ -239,7 +239,7 @@ For type names, the following rules apply:
 > **Hint:** It is recommended to create all required values and sub-components beforehand, so the kickstarter can find and create proper `use`-statements for them.
 
 ```sh
-./flow component:kickstart --package-key=Vendor.Site --namespace=Component
+./flow component:kickstart --package-key=Vendor.Site --namespace=Component \
     Headline \
         type:HeadlineType \
         look:HeadlineLook \
@@ -383,6 +383,42 @@ Neos:
     defaultContext:
       Site.Headline: Vendor\Site\Presentation\Headline\HeadlineFactory
 ```
+
+
+### Component file colocation
+
+One great feature of Fusion components is that all files constituting this component are located in the same folder.
+This does not work by default, since Flow packages' classes reside in `Classes`, while presentational components reside in `Resources/Private/Fusion/Presentation`.
+
+To still achieve colocation, two parameters have to be adjusted:
+
+#### composer.json
+
+Composer's PSR-4 autoload section allows for multiple entries. We can use this as follows:
+
+```json
+  "autoload": {
+    "psr-4": {
+      "Vendor\\Site\\": "Classes/",
+      "Vendor\\Site\\Presentation\\": "Resources/Private/Fusion/Presentation/"
+    }
+  }
+```
+This way, presentation objects, interfaces and factories placed in their component's Fusion folder are autoloaded as if they were located in the usual folders under `Classes`.
+
+#### Settings
+
+The component kickstarter can be configured to place the generated PHP files in the respective Fusion folders as follows:
+
+```yaml
+PackageFactory:
+  AtomicFusion:
+    PresentationObjects:
+      componentGeneration:
+        colocate: true
+```
+
+> **Hint:** It is highly recommended to decide on colocation once at the start of a project.
 
 ---
 

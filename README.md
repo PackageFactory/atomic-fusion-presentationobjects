@@ -99,9 +99,10 @@ So when using `PackageFactory.AtomicFusion.PresentationObjects`, you need to pay
 
 PresentationObjects require you to write more code than plain AtomicFusion. To remedy that, this package comes with a [scaffolding tool](./Documentation/05_Kickstarter.md) to ease the creation of initial code structures.
 
-Currently, there's also a lot of concepts involved that spread information over the Codebase (`Classes/Presentation/`, `Resources/Private/Fusion/`, `Configuration/`), thus breaking the principle of co-location.
+Currently, there's also a lot of concepts involved that spread information over the Codebase (`Classes/Presentation/`, `Resources/Private/Fusion/`, `Configuration/`), thus breaking the principle of colocation.
 
-In theory, co-location could be achieved by leveraging the `autoload.psr-4` configuration in the composer manifest (see: https://getcomposer.org/doc/04-schema.md#psr-4). However, the viability of this idea has not been proven yet.
+In theory, colocation could be achieved by leveraging the `autoload.psr-4` configuration in the composer manifest (see: https://getcomposer.org/doc/04-schema.md#psr-4). However, the viability of this idea has not been proven yet.
+See also the [Kickstarter section](./Documentation/05_Kickstarter.md) on how to achieve colocation.
 
 ### Fusion Interoperation
 

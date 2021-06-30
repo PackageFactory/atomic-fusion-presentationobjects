@@ -26,6 +26,12 @@ class ComponentCommandController extends CommandController
     protected $packageResolver;
 
     /**
+     * @Flow\InjectConfiguration(path="componentGeneration.colocate")
+     * @var bool
+     */
+    protected $colocate;
+
+    /**
      * Create a new PresentationObject component and factory
      *
      * This command will create an <b>interface</b>, a <b>value object</b> and a
@@ -65,6 +71,7 @@ class ComponentCommandController extends CommandController
             ComponentName::fromInput($name, PackageKey::fromPackage($package)),
             $this->request->getExceedingArguments(),
             $package->getPackagePath(),
+            $this->colocate,
             $listable
         );
     }
@@ -100,7 +107,8 @@ class ComponentCommandController extends CommandController
             $name,
             $type,
             $values,
-            $package->getPackagePath()
+            $package->getPackagePath(),
+            $this->colocate
         );
     }
 }

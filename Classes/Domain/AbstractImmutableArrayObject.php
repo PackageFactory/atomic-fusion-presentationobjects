@@ -7,7 +7,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain;
 
 /**
  * The abstract class for immutable array objects
- * @template K
+ * @template K of int|string
  * @template V
  * @extends \ArrayObject<K,V>
  */

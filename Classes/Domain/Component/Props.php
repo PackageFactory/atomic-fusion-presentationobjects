@@ -13,7 +13,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Pr
 
 /**
  * @Flow\Proxy(false)
- * @extends IteratorAggregate<string,PropTypeInterface>
+ * @implements \IteratorAggregate<string,PropTypeInterface>
  */
 final class Props implements \IteratorAggregate
 {

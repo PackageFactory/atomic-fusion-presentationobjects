@@ -162,13 +162,15 @@ namespace Vendor\Site\Application;
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Vendor\Site\Presentation\Component\MyComponent\MyComponentType;
 
-class MyComponentTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+class MyComponentTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -184,18 +186,34 @@ class MyComponentTypeProvider extends AbstractDataSource implements ProtectedCon
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $myComponentTypes = [];
-        foreach (MyComponentType::getValues() as $value) {
-            $myComponentTypes[$value][\'label\'] = $this->translator->translateById(
-                \'myComponentType.\' . $value,
-                [],
-                null,
-                null,
-                \'MyComponent\',
-                \'Vendor.Site\'
-            ) ?: $value;
+        foreach ($this->getValues() as $value) {
+            $myComponentTypes[$value][\'label\'] = $this->getLabel($value);
         }
 
         return $myComponentTypes;
+    }
+
+    public function process(NodeType $nodeType, array &$configuration, array $options)
+    {
+        foreach ($options[\'propertyNames\'] as $propertyName) {
+            foreach ($this->getValues() as $value) {
+                $configuration[\'properties\'][$propertyName][\'ui\'][\'inspector\'][\'editorOptions\'][\'values\'][$value] = [
+                    \'label\' => $this->getLabel($value)
+                ];
+            }
+        }
+    }
+
+    private function getLabel(string $value): string
+    {
+        return $this->translator->translateById(
+            \'myComponentType.\' . $value,
+            [],
+            null,
+            null,
+            \'MyComponent\',
+            \'Vendor.Site\'
+        ) ?: $value;
     }
 
     /**

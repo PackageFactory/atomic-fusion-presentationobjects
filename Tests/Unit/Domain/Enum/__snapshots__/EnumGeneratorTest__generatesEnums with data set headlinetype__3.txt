@@ -6,13 +6,15 @@ namespace Vendor\Site\Application;
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Vendor\Site\Presentation\Component\Headline\HeadlineType;
 
-class HeadlineTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+class HeadlineTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -28,18 +30,34 @@ class HeadlineTypeProvider extends AbstractDataSource implements ProtectedContex
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $headlineTypes = [];
-        foreach (HeadlineType::getValues() as $value) {
-            $headlineTypes[$value]['label'] = $this->translator->translateById(
-                'headlineType.' . $value,
-                [],
-                null,
-                null,
-                'Headline',
-                'Vendor.Site'
-            ) ?: $value;
+        foreach ($this->getValues() as $value) {
+            $headlineTypes[$value]['label'] = $this->getLabel($value);
         }
 
         return $headlineTypes;
+    }
+
+    public function process(NodeType $nodeType, array &$configuration, array $options)
+    {
+        foreach ($options['propertyNames'] as $propertyName) {
+            foreach ($this->getValues() as $value) {
+                $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
+                    'label' => $this->getLabel($value)
+                ];
+            }
+        }
+    }
+
+    private function getLabel(string $value): string
+    {
+        return $this->translator->translateById(
+            'headlineType.' . $value,
+            [],
+            null,
+            null,
+            'Headline',
+            'Vendor.Site'
+        ) ?: $value;
     }
 
     /**

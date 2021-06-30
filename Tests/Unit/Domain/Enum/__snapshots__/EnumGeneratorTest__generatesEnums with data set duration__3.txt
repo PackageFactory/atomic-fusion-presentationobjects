@@ -6,13 +6,15 @@ namespace Vendor\Default\Application;
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Vendor\Default\Presentation\Custom\Type\Crossing\Duration;
 
-class DurationProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+class DurationProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -28,18 +30,34 @@ class DurationProvider extends AbstractDataSource implements ProtectedContextAwa
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $durations = [];
-        foreach (Duration::getValues() as $value) {
-            $durations[$value]['label'] = $this->translator->translateById(
-                'duration.' . $value,
-                [],
-                null,
-                null,
-                'Crossing',
-                'Vendor.Default'
-            ) ?: $value;
+        foreach ($this->getValues() as $value) {
+            $durations[$value]['label'] = $this->getLabel((string)$value);
         }
 
         return $durations;
+    }
+
+    public function process(NodeType $nodeType, array &$configuration, array $options)
+    {
+        foreach ($options['propertyNames'] as $propertyName) {
+            foreach ($this->getValues() as $value) {
+                $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
+                    'label' => $this->getLabel((string)$value)
+                ];
+            }
+        }
+    }
+
+    private function getLabel(string $value): string
+    {
+        return $this->translator->translateById(
+            'duration.' . $value,
+            [],
+            null,
+            null,
+            'Crossing',
+            'Vendor.Default'
+        ) ?: $value;
     }
 
     /**

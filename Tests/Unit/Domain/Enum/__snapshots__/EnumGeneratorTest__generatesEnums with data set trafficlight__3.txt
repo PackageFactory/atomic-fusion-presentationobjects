@@ -6,13 +6,15 @@ namespace Vendor\Default\Application;
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Vendor\Default\Presentation\Component\Crossing\TrafficLight;
 
-class TrafficLightProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+class TrafficLightProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -28,18 +30,34 @@ class TrafficLightProvider extends AbstractDataSource implements ProtectedContex
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $trafficLights = [];
-        foreach (TrafficLight::getValues() as $value) {
-            $trafficLights[$value]['label'] = $this->translator->translateById(
-                'trafficLight.' . $value,
-                [],
-                null,
-                null,
-                'Crossing',
-                'Vendor.Default'
-            ) ?: $value;
+        foreach ($this->getValues() as $value) {
+            $trafficLights[$value]['label'] = $this->getLabel((string)$value);
         }
 
         return $trafficLights;
+    }
+
+    public function process(NodeType $nodeType, array &$configuration, array $options)
+    {
+        foreach ($options['propertyNames'] as $propertyName) {
+            foreach ($this->getValues() as $value) {
+                $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
+                    'label' => $this->getLabel((string)$value)
+                ];
+            }
+        }
+    }
+
+    private function getLabel(string $value): string
+    {
+        return $this->translator->translateById(
+            'trafficLight.' . $value,
+            [],
+            null,
+            null,
+            'Crossing',
+            'Vendor.Default'
+        ) ?: $value;
     }
 
     /**

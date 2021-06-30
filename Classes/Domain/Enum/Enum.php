@@ -148,13 +148,15 @@ namespace ' . $this->name->getProviderNamespace() . ';
  */
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use ' . $this->name->getFullyQualifiedName() . ';
 
-class ' . $this->name->getProviderName() . ' extends AbstractDataSource implements ProtectedContextAwareInterface
+class ' . $this->name->getProviderName() . ' extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -170,18 +172,34 @@ class ' . $this->name->getProviderName() . ' extends AbstractDataSource implemen
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         $' . $arrayName . ' = [];
-        foreach (' . $this->name->getName() . '::getValues() as $value) {
-            $' . $arrayName . '[$value][\'label\'] = $this->translator->translateById(
-                \'' . lcfirst($this->name->getName()) . '.\' . $value,
-                [],
-                null,
-                null,
-                \'' . $this->name->getComponentName()->getName() . '\',
-                \'' . $this->name->getPackageKey() . '\'
-            ) ?: $value;
+        foreach ($this->getValues() as $value) {
+            $' . $arrayName . '[$value][\'label\'] = $this->getLabel(' . ($this->type->isString() ? '' : '(string)') . '$value);
         }
 
         return $' . $arrayName . ';
+    }
+
+    public function process(NodeType $nodeType, array &$configuration, array $options)
+    {
+        foreach ($options[\'propertyNames\'] as $propertyName) {
+            foreach ($this->getValues() as $value) {
+                $configuration[\'properties\'][$propertyName][\'ui\'][\'inspector\'][\'editorOptions\'][\'values\'][$value] = [
+                    \'label\' => $this->getLabel(' . ($this->type->isString() ? '' : '(string)') . '$value)
+                ];
+            }
+        }
+    }
+
+    private function getLabel(string $value): string
+    {
+        return $this->translator->translateById(
+            \'' . lcfirst($this->name->getName()) . '.\' . $value,
+            [],
+            null,
+            null,
+            \'' . $this->name->getComponentName()->getName() . '\',
+            \'' . $this->name->getPackageKey() . '\'
+        ) ?: $value;
     }
 
     /**

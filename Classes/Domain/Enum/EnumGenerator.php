@@ -32,6 +32,7 @@ final class EnumGenerator
      * @param string $type
      * @param array|string[] $values
      * @param string $packagePath
+     * @param bool $colocate
      * @return void
      */
     public function generateEnum(
@@ -39,7 +40,8 @@ final class EnumGenerator
         string $name,
         string $type,
         array $values,
-        string $packagePath
+        string $packagePath,
+        bool $colocate
     ): void {
         $enumType = EnumType::fromInput($type);
         $enumName = new EnumName(

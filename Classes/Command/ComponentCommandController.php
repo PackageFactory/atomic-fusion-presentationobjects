@@ -107,7 +107,8 @@ class ComponentCommandController extends CommandController
             $name,
             $type,
             $values,
-            $package->getPackagePath()
+            $package->getPackagePath(),
+            $this->colocate
         );
     }
 }

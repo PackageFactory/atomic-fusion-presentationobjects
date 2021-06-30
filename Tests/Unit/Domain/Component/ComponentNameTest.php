@@ -247,15 +247,15 @@ final class ComponentNameTest extends UnitTestCase
         return [
             [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'),
-                'Site.MyComponent'
+                'Site.Component.MyComponent'
             ],
             [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'),
-                'Site.MyComponent'
+                'Site.CustomType.MyComponent'
             ],
             [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'),
-                'Site.MyComponent'
+                'Site.Custom.Type.MyComponent'
             ]
         ];
     }

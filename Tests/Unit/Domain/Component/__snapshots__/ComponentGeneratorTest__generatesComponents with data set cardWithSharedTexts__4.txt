@@ -1,4 +1,4 @@
 Neos:
   Fusion:
     defaultContext:
-      Site.Card: Vendor\Site\Presentation\Component\Card\CardFactory
+      Site.Component.Card: Vendor\Site\Presentation\Component\Card\CardFactory

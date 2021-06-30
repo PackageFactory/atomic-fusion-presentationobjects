@@ -2,4 +2,4 @@ Neos:
   Fusion:
     defaultContext:
       Existing.Helper: Some\OtherPackage\Existing\HelperFactory
-      Default.NewText: Vendor\Default\Presentation\Component\NewText\NewTextFactory
+      Default.Component.NewText: Vendor\Default\Presentation\Component\NewText\NewTextFactory

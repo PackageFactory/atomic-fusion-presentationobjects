@@ -204,7 +204,7 @@ final class ComponentName
 
     public function getHelperName(): string
     {
-        return $this->packageKey->getSimpleName() . '.' . $this->name;
+        return $this->packageKey->getSimpleName() . '.' . $this->fusionNamespace . '.' . $this->name;
     }
 
     public function getPhpFilePath(string $packagePath, bool $colocate): string

@@ -338,13 +338,13 @@ final class MyNewComponentFactory extends AbstractComponentPresentationObjectFac
                 }
             }
             componentArray {
-                {
+                0 {
                     text = \'Text\'
                     other {
                         number = 4711
                     }
-                },
-                {
+                }
+                1 {
                     text = \'Text\'
                     other {
                         number = 4711

@@ -265,7 +265,7 @@ This provider can be used as a data source in your `NodeTypes.*.yaml` configurat
   postprocessors:
     headline-looks:
       postprocessor: Vendor\Site\Application\HeadlineLookProvider
-      options:
+      postprocessorOptions:
         propertyNames:
           - headlineLook
 ```

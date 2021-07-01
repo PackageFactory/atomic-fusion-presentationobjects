@@ -25,11 +25,14 @@ For more information on this pattern, have a look at this excellent article: htt
 ### Example
 
 ```sh
-./flow component:kickstartenum --package-key=Vendor.Site \
-    Headline \
+./flow component:kickstartenum \
+    Vendor.Site:Headline \
     HeadlineLook string \
         --values=REGULAR,HERO
 ```
+
+> **Hint:** Components are namespaced, defaulting to "Component". The component name "Vendor.Site:Headline" thus will be evaluated as "Vendor.Site:Component.Headline".
+> Arbitrary other namespaces, including nested, are supported, like "Vendor.Site:MyNamespace.Headline" or "Vendor.Site:My.Namespace.Headline".
 
 ### What files are being created?
 
@@ -46,7 +49,7 @@ This is the central pseudo-enum class. It consists of:
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -127,7 +130,7 @@ The exception in this file will be thrown, when the pseudo-enum is initialized w
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -164,7 +167,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
-use Vendor\Site\Presentation\Headline\HeadlineLook;
+use Vendor\Site\Presentation\Component\Headline\HeadlineLook;
 
 class HeadlineLookProvider extends AbstractDataSource implements ProtectedContextAwareInterface
 {
@@ -239,12 +242,14 @@ For type names, the following rules apply:
 > **Hint:** It is recommended to create all required values and sub-components beforehand, so the kickstarter can find and create proper `use`-statements for them.
 
 ```sh
-./flow component:kickstart --package-key=Vendor.Site --namespace=Component \
-    Headline \
+./flow component:kickstart Vendor.Site:Headline \
         type:HeadlineType \
         look:HeadlineLook \
         content:string
 ```
+
+> **Hint:** Components are namespaced, defaulting to "Component". The component name "Vendor.Site:Headline" thus will be evaluated as "Vendor.Site:Component.Headline".
+> Arbitrary other namespaces, including nested, are supported, like "Vendor.Site:MyNamespace.Headline" or "Vendor.Site:My.Namespace.Headline".
 
 ### What files are being created?
 
@@ -283,7 +288,7 @@ This is the PHP interface of the PresentationObject. It consists of a getter for
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -307,7 +312,7 @@ This is the PresentationObject itself. It is a full implementation of the interf
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -360,7 +365,7 @@ This is an empty factory for the PresentationObject that is supposed to be used 
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Headline;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.

@@ -1,18 +1,18 @@
 <?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Headline;
+namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
- * This file is part of the Vendor.Site package
+ * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
- * HeadlineLook enum for test purposes
+ * Dummy string enum for test purposes
  * @Flow\Proxy(false)
  */
-final class HeadlineLook implements PseudoEnumInterface
+final class MyStringPseudoEnum implements PseudoEnumInterface
 {
     private string $value;
 
@@ -21,10 +21,13 @@ final class HeadlineLook implements PseudoEnumInterface
         $this->value = $value;
     }
 
+    /**
+     * @return array<MyStringPseudoEnum>
+     */
     public static function cases(): array
     {
         return [
-            new self('large')
+            new self('myValue')
         ];
     }
 

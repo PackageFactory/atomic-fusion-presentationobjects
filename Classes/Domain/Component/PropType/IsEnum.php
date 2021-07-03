@@ -6,7 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * The specification for enum classes
@@ -17,6 +17,6 @@ final class IsEnum
     public static function isSatisfiedByClassName(string $className): bool
     {
         return class_exists($className)
-            && is_subclass_of($className, EnumInterface::class);
+            && is_subclass_of($className, PseudoEnumInterface::class);
     }
 }

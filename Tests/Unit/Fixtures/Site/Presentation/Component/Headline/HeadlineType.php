@@ -6,20 +6,30 @@ namespace Vendor\Site\Presentation\Component\Headline;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * HeadlineType enum for test purposes
  * @Flow\Proxy(false)
  */
-final class HeadlineType implements EnumInterface
+final class HeadlineType implements PseudoEnumInterface
 {
     private string $value;
 
-    public static function getValues(): array
+    private function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function cases(): array
     {
         return [
-            'h1'
+            new self('h1')
         ];
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

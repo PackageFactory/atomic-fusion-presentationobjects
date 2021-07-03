@@ -90,7 +90,7 @@ final class ComponentNameTest extends UnitTestCase
                 new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent')
             ],
             [
-                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum',
+                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum',
                 new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyStringEnum')
             ],
             [

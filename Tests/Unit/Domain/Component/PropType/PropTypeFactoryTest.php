@@ -124,12 +124,12 @@ final class PropTypeFactoryTest extends UnitTestCase
             [
                 $componentName,
                 'MyStringEnum',
-                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', false)
+                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringPseudoEnum', false)
             ],
             [
                 $componentName,
                 '?MyStringEnum',
-                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', true)
+                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringPseudoEnum', true)
             ],
             [
                 $componentName,
@@ -298,13 +298,13 @@ final class PropTypeFactoryTest extends UnitTestCase
                 case 'enumProp':
                     $reflectionPropertyCases[] = [
                         $reflectionProperty,
-                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum', false)
+                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum', false)
                     ];
                     break;
                 case 'nullableEnumProp':
                     $reflectionPropertyCases[] = [
                         $reflectionProperty,
-                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum', true)
+                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum', true)
                     ];
                     break;
                 case 'componentProp':

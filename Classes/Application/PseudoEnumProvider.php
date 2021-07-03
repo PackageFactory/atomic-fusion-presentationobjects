@@ -12,9 +12,10 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumLabel;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
-class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
+final class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject
@@ -32,10 +33,11 @@ class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextA
         if (!isset($arguments['enumName'])) {
             throw new \InvalidArgumentException('Argument "enumName" must be provided.', 1625297174);
         }
-        $this->validateEnumName($arguments['enumName']);
+        $values = $this->getValues($arguments['enumName']);
+        $enumLabel = EnumLabel::fromEnumName($arguments['enumName']);
         $options = [];
-        foreach ($this->getCases($arguments['enumName']) as $value) {
-            $options[$value]['label'] = $this->getLabel($arguments['enumName'], $value);
+        foreach ($values as $value) {
+            $options[$value]['label'] = $this->getLabel($enumLabel, (string)$value);
         }
 
         return $options;
@@ -46,31 +48,26 @@ class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextA
         if (!isset($options['enumName'])) {
             throw new \InvalidArgumentException('Option "enumName" must be provided.', 1625298032);
         }
-        $this->validateEnumName($options['enumName']);
-        $cases = $this->getCases($options['enumName']);
+        $values = $this->getValues($options['enumName']);
+        $enumLabel = EnumLabel::fromEnumName($options['enumName']);
         foreach ($options['propertyNames'] as $propertyName) {
-            foreach ($cases as $case) {
-                $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$case] = [
-                    'label' => $this->getLabel($options['enumName'], (string)$case)
+            foreach ($values as $value) {
+                $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
+                    'label' => $this->getLabel($enumLabel, (string)$value)
                 ];
             }
         }
     }
 
-    private function getLabel(string $enumName, string $value): string
+    private function getLabel(EnumLabel $enumLabel, string $value): string
     {
-        list($packageKey, $componentName) = explode('/Presentation/', $enumName);
-        $pivot = \mb_strrpos($componentName, '/');
-        $componentNamespace = \mb_substr($packageKey, 0 , $pivot);
-        $enumShort = lcfirst(\mb_substr($packageKey, $pivot+1));
-
         return $this->translator->translateById(
-            $enumShort . '.' . $value,
+            $enumLabel->getLabelIdPrefix() . $value,
             [],
             null,
             null,
-            \str_replace('/', '.', $componentNamespace),
-            \str_replace('/', '.', $packageKey)
+            $enumLabel->getSourceName(),
+            $enumLabel->getPackageKey()
         ) ?: $value;
     }
 
@@ -78,11 +75,22 @@ class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextA
      * @param class-string<mixed> $enumName
      * @return array|string[]|int[]
      */
-    public function getCases(string $enumName): array
+    public function getValues(string $enumName): array
     {
         return array_map(function (PseudoEnumInterface $case) {
             return $case->getValue();
-        }, $enumName::cases());
+        }, $this->getCases($enumName));
+    }
+
+    /**
+     * @param class-string<mixed> $enumName
+     * @return array|PseudoEnumInterface[]
+     */
+    public function getCases(string $enumName): array
+    {
+        $this->validateEnumName($enumName);
+
+        return $enumName::cases();
     }
 
     private function validateEnumName(string $enumName): void

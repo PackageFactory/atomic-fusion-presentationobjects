@@ -36,6 +36,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
         $context = $this->runtime->getCurrentContext();
         $renderContext = $this->prepare($context);
         $result = $this->render($renderContext);
+
         return $result;
     }
 
@@ -61,6 +62,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
         }
 
         $context['props'] = $this->getProps();
+
         return $context;
     }
 
@@ -98,6 +100,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
         $this->runtime->pushContextArray($context);
         $result = $this->runtime->render($this->path . '/renderer');
         $this->runtime->popContext();
+
         return $result;
     }
 
@@ -130,49 +133,18 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
 
         $presentationObjectInterface = $this->fusionValue(self::INTERFACE_DECLARATION_NAME);
         if (is_null($presentationObjectInterface)) {
-            throw new ComponentPresentationObjectInterfaceIsUndeclared('The component\'s presentation object interface is undeclared, set it via @presentationObjectInterface = \'...\'.');
+            throw ComponentPresentationObjectInterfaceIsUndeclared::butWasSupposedTo();
         }
         if (!interface_exists($presentationObjectInterface) && !class_exists($presentationObjectInterface)) {
-            throw new ComponentPresentationObjectInterfaceIsMissing('Declared presentation object interface "' . $presentationObjectInterface . '" is missing, please add it to your codebase.');
+            throw ComponentPresentationObjectInterfaceIsMissing::butWasNotSupposedTo($presentationObjectInterface);
         }
         if (!$presentationObject instanceof $presentationObjectInterface) {
-            throw new ComponentPresentationObjectDoesNotImplementRequiredInterface('Presentation object does not implement required ' . $presentationObjectInterface . '.');
+            throw ComponentPresentationObjectDoesNotImplementRequiredInterface::butWasSupposedTo($presentationObjectInterface);
         }
         if (!$presentationObject instanceof ComponentPresentationObjectInterface) {
-            throw new ComponentPresentationObjectDoesNotImplementRequiredInterface('Presentation object does not implement required ' . ComponentPresentationObjectInterface::class . '.');
+            throw ComponentPresentationObjectDoesNotImplementRequiredInterface::butWasSupposedTo(ComponentPresentationObjectInterface::class);
         }
 
         return $presentationObject;
-    }
-
-    /**
-     * Returns the Fusion path to the to-be-wrapped Content Element, if applicable
-     * (Borrowed from \Neos\Neos\Fusion\ContentElementWrappingImplementation)
-     *
-     * @TODO: We need to have a look at this one, it doesn't seem to be used anywhere (@WBE)
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function getContentElementFusionPath(): string
-    {
-        $fusionPathSegments = explode('/', $this->path);
-        $numberOfFusionPathSegments = count($fusionPathSegments);
-        if (isset($fusionPathSegments[$numberOfFusionPathSegments - 3])
-            && $fusionPathSegments[$numberOfFusionPathSegments - 3] === '__meta'
-            && isset($fusionPathSegments[$numberOfFusionPathSegments - 2])
-            && $fusionPathSegments[$numberOfFusionPathSegments - 2] === 'process') {
-            // cut off the SHORT processing syntax "__meta/process/contentElementWrapping<Neos.Neos:ContentElementWrapping>"
-            return implode('/', array_slice($fusionPathSegments, 0, -3));
-        }
-
-        if (isset($fusionPathSegments[$numberOfFusionPathSegments - 4])
-            && $fusionPathSegments[$numberOfFusionPathSegments - 4] === '__meta'
-            && isset($fusionPathSegments[$numberOfFusionPathSegments - 3])
-            && $fusionPathSegments[$numberOfFusionPathSegments - 3] === 'process') {
-            // cut off the LONG processing syntax "__meta/process/contentElementWrapping/expression<Neos.Neos:ContentElementWrapping>"
-            return implode('/', array_slice($fusionPathSegments, 0, -4));
-        }
-        return $this->path;
     }
 }

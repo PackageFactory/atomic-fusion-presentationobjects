@@ -1,0 +1,57 @@
+<?php declare(strict_types=1);
+namespace Vendor\Default\Application;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\I18n\Translator;
+use Neos\Neos\Service\DataSource\AbstractDataSource;
+use Neos\Eel\ProtectedContextAwareInterface;
+use Vendor\Default\Presentation\Custom\Type\Crossing\Duration;
+
+class DurationProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+{
+    /**
+     * @Flow\Inject
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
+     * @var string
+     */
+    protected static $identifier = 'vendor-default-durations';
+
+    public function getData(NodeInterface $node = null, array $arguments = []): array
+    {
+        $durations = [];
+        foreach (Duration::getValues() as $value) {
+            $durations[$value]['label'] = $this->translator->translateById(
+                'duration.' . $value,
+                [],
+                null,
+                null,
+                'Crossing',
+                'Vendor.Default'
+            ) ?: $value;
+        }
+
+        return $durations;
+    }
+
+    /**
+     * @return array|float[]
+     */
+    public function getValues(): array
+    {
+        return Duration::getValues();
+    }
+
+    public function allowsCallOfMethod($methodName): bool
+    {
+        return true;
+    }
+}

@@ -7,9 +7,10 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Comp
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\Component;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeClass;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeIdentifier;
-use PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Helper\DummyPropTypeRepository;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\Props;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -26,51 +27,54 @@ class ComponentTest extends UnitTestCase
     {
         parent::setUp();
 
-        $propTypeRepository = new DummyPropTypeRepository();
-        $propTypeRepository->propTypeIdentifiers['Acme.Site']['MySubComponent'] = [
-            'MySubComponent' => new PropTypeIdentifier('MySubComponent', 'MySubComponentInterface', 'Acme\Site\Presentation\MySubComponent\MySubComponentInterface', false, PropTypeClass::leaf()),
-            '?MySubComponent' => new PropTypeIdentifier('MySubComponent', 'MySubComponentInterface', 'Acme\Site\Presentation\MySubComponent\MySubComponentInterface', true, PropTypeClass::leaf())
-        ];
-
-        $this->subject = Component::fromInput(
-            'Acme.Site',
-            'MyComponent',
-            [
-                'bool:bool',
-                'nullableBool:?bool',
-                'float:float',
-                'nullableFloat:?float',
-                'int:int',
-                'nullableInt:?int',
-                'string:string',
-                'nullableString:?string',
-                'uri:Uri',
-                'nullableUri:?Uri',
-                'image:ImageSource',
-                'nullableImage:?ImageSource',
-                'subComponent:MySubComponent',
-                'nullableSubComponent:?MySubComponent'
-            ],
-            $propTypeRepository
+        $componentName = new ComponentName(
+            new PackageKey('Vendor.Site'),
+            FusionNamespace::default(),
+            'MyNewComponent',
+        );
+        $this->subject = new Component(
+            $componentName,
+            Props::fromInputArray(
+                $componentName,
+                [
+                    'bool:bool',
+                    'nullableBool:?bool',
+                    'float:float',
+                    'nullableFloat:?float',
+                    'int:int',
+                    'nullableInt:?int',
+                    'string:string',
+                    'nullableString:?string',
+                    'uri:Uri',
+                    'nullableUri:?Uri',
+                    'image:ImageSource',
+                    'nullableImage:?ImageSource',
+                    'subComponent:MyComponent',
+                    'nullableSubComponent:?MyComponent',
+                    'componentArray:array<MyComponent>'
+                ]
+            ),
+            true
         );
     }
 
     public function testGetInterfaceContent(): void
     {
         Assert::assertSame(
-            '<?php
-namespace Acme\Site\Presentation\MyComponent;
+            '<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
- * This file is part of the Acme.Site package.
+ * This file is part of the Vendor.Site package.
  */
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
-use Acme\Site\Presentation\MySubComponent\MySubComponentInterface;
+use Vendor\Site\Presentation\Component\MyComponent\MyComponentInterface;
+use Vendor\Site\Presentation\Component\MyComponent\MyComponents;
 
-interface MyComponentInterface extends ComponentPresentationObjectInterface
+interface MyNewComponentInterface extends ComponentPresentationObjectInterface
 {
     public function getBool(): bool;
 
@@ -96,9 +100,11 @@ interface MyComponentInterface extends ComponentPresentationObjectInterface
 
     public function getNullableImage(): ?ImageSourceHelperInterface;
 
-    public function getSubComponent(): MySubComponentInterface;
+    public function getSubComponent(): MyComponentInterface;
 
-    public function getNullableSubComponent(): ?MySubComponentInterface;
+    public function getNullableSubComponent(): ?MyComponentInterface;
+
+    public function getComponentArray(): MyComponents;
 }
 ',
             $this->subject->getInterfaceContent()
@@ -108,93 +114,54 @@ interface MyComponentInterface extends ComponentPresentationObjectInterface
     public function testGetClassContent(): void
     {
         Assert::assertSame(
-            '<?php
-namespace Acme\Site\Presentation\MyComponent;
+            '<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
- * This file is part of the Acme.Site package.
+ * This file is part of the Vendor.Site package.
  */
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
-use Acme\Site\Presentation\MySubComponent\MySubComponentInterface;
+use Vendor\Site\Presentation\Component\MyComponent\MyComponentInterface;
+use Vendor\Site\Presentation\Component\MyComponent\MyComponents;
 
 /**
  * @Flow\Proxy(false)
  */
-final class MyComponent extends AbstractComponentPresentationObject implements MyComponentInterface
+final class MyNewComponent extends AbstractComponentPresentationObject implements MyNewComponentInterface
 {
-    /**
-     * @var bool
-     */
-    private $bool;
+    private bool $bool;
 
-    /**
-     * @var bool|null
-     */
-    private $nullableBool;
+    private ?bool $nullableBool;
 
-    /**
-     * @var float
-     */
-    private $float;
+    private float $float;
 
-    /**
-     * @var float|null
-     */
-    private $nullableFloat;
+    private ?float $nullableFloat;
 
-    /**
-     * @var int
-     */
-    private $int;
+    private int $int;
 
-    /**
-     * @var int|null
-     */
-    private $nullableInt;
+    private ?int $nullableInt;
 
-    /**
-     * @var string
-     */
-    private $string;
+    private string $string;
 
-    /**
-     * @var string|null
-     */
-    private $nullableString;
+    private ?string $nullableString;
 
-    /**
-     * @var UriInterface
-     */
-    private $uri;
+    private UriInterface $uri;
 
-    /**
-     * @var UriInterface|null
-     */
-    private $nullableUri;
+    private ?UriInterface $nullableUri;
 
-    /**
-     * @var ImageSourceHelperInterface
-     */
-    private $image;
+    private ImageSourceHelperInterface $image;
 
-    /**
-     * @var ImageSourceHelperInterface|null
-     */
-    private $nullableImage;
+    private ?ImageSourceHelperInterface $nullableImage;
 
-    /**
-     * @var MySubComponentInterface
-     */
-    private $subComponent;
+    private MyComponentInterface $subComponent;
 
-    /**
-     * @var MySubComponentInterface|null
-     */
-    private $nullableSubComponent;
+    private ?MyComponentInterface $nullableSubComponent;
+
+    private MyComponents $componentArray;
 
     public function __construct(
         bool $bool,
@@ -209,8 +176,9 @@ final class MyComponent extends AbstractComponentPresentationObject implements M
         ?UriInterface $nullableUri,
         ImageSourceHelperInterface $image,
         ?ImageSourceHelperInterface $nullableImage,
-        MySubComponentInterface $subComponent,
-        ?MySubComponentInterface $nullableSubComponent
+        MyComponentInterface $subComponent,
+        ?MyComponentInterface $nullableSubComponent,
+        MyComponents $componentArray
     ) {
         $this->bool = $bool;
         $this->nullableBool = $nullableBool;
@@ -226,6 +194,7 @@ final class MyComponent extends AbstractComponentPresentationObject implements M
         $this->nullableImage = $nullableImage;
         $this->subComponent = $subComponent;
         $this->nullableSubComponent = $nullableSubComponent;
+        $this->componentArray = $componentArray;
     }
 
     public function getBool(): bool
@@ -288,14 +257,19 @@ final class MyComponent extends AbstractComponentPresentationObject implements M
         return $this->nullableImage;
     }
 
-    public function getSubComponent(): MySubComponentInterface
+    public function getSubComponent(): MyComponentInterface
     {
         return $this->subComponent;
     }
 
-    public function getNullableSubComponent(): ?MySubComponentInterface
+    public function getNullableSubComponent(): ?MyComponentInterface
     {
         return $this->nullableSubComponent;
+    }
+
+    public function getComponentArray(): MyComponents
+    {
+        return $this->componentArray;
     }
 }
 ',
@@ -306,16 +280,16 @@ final class MyComponent extends AbstractComponentPresentationObject implements M
     public function testGetFactoryContent(): void
     {
         Assert::assertSame(
-            '<?php
-namespace Acme\Site\Presentation\MyComponent;
+            '<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\MyNewComponent;
 
 /*
- * This file is part of the Acme.Site package.
+ * This file is part of the Vendor.Site package.
  */
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
 
-final class MyComponentFactory extends AbstractComponentPresentationObjectFactory
+final class MyNewComponentFactory extends AbstractComponentPresentationObjectFactory
 {
 }
 ',
@@ -326,11 +300,11 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
     public function testGetFusionContent(): void
     {
         Assert::assertSame(
-            'prototype(Acme.Site:Composite.MyComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = \'Acme\\\\Site\\\\Presentation\\\\MyComponent\\\\MyComponentInterface\'
+            'prototype(Vendor.Site:Component.MyNewComponent) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = \'Vendor\\\\Site\\\\Presentation\\\\Component\\\\MyNewComponent\\\\MyNewComponentInterface\'
 
     @styleguide {
-        title = \'MyComponent\'
+        title = \'MyNewComponent\'
 
         props {
             bool = true
@@ -341,8 +315,8 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
             nullableInt = 4711
             string = \'Text\'
             nullableString = \'Text\'
-            uri = \'https://neos.io\'
-            nullableUri = \'https://neos.io\'
+            uri = \'https://www.neos.io\'
+            nullableUri = \'https://www.neos.io\'
             image = Sitegeist.Kaleidoscope:DummyImageSource {
                 height = 1920
                 width = 1080
@@ -352,8 +326,30 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
                 width = 1080
             }
             subComponent {
+                text = \'Text\'
+                other {
+                    number = 4711
+                }
             }
             nullableSubComponent {
+                text = \'Text\'
+                other {
+                    number = 4711
+                }
+            }
+            componentArray {
+                0 {
+                    text = \'Text\'
+                    other {
+                        number = 4711
+                    }
+                }
+                1 {
+                    text = \'Text\'
+                    other {
+                        number = 4711
+                    }
+                }
             }
         }
     }
@@ -380,17 +376,89 @@ final class MyComponentFactory extends AbstractComponentPresentationObjectFactor
         <dt>nullableUri:</dt>
         <dd>{presentationObject.nullableUri}</dd>
         <dt>image:</dt>
-        <dd><Sitegeist.Lazybones:Image imageSource={presentationObject.image} /></dd>
+        <dd>
+            <Sitegeist.Lazybones:Image imageSource={presentationObject.image} />
+        </dd>
         <dt>nullableImage:</dt>
-        <dd><Sitegeist.Lazybones:Image imageSource={presentationObject.nullableImage} @if.isToBeRendered={presentationObject.nullableImage} /></dd>
+        <dd>
+            <Sitegeist.Lazybones:Image imageSource={presentationObject.nullableImage} @if.isToBeRendered={presentationObject.nullableImage} />
+        </dd>
         <dt>subComponent:</dt>
-        <dd><Acme.Site:Leaf.MySubComponent presentationObject={presentationObject.subComponent} /></dd>
+        <dd>
+            <Vendor.Site:Component.MyComponent presentationObject={presentationObject.subComponent} />
+        </dd>
         <dt>nullableSubComponent:</dt>
-        <dd><Acme.Site:Leaf.MySubComponent presentationObject={presentationObject.nullableSubComponent} @if.isToBeRendered={presentationObject.nullableSubComponent} /></dd>
+        <dd>
+            <Vendor.Site:Component.MyComponent presentationObject={presentationObject.nullableSubComponent} @if.isToBeRendered={presentationObject.nullableSubComponent} />
+        </dd>
+        <dt>componentArray:</dt>
+        <dd>
+            <Neos.Fusion:Loop items={presentationObject.componentArray}>
+                <Vendor.Site:Component.MyComponent presentationObject={item} />
+            </Neos.Fusion:Loop>
+        </dd>
     </dl>`
 }
 ',
             $this->subject->getFusionContent()
+        );
+    }
+
+    public function testGetComponentArrayContent(): void
+    {
+        Assert::assertSame(
+            '<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\MyNewComponent;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class MyNewComponents extends AbstractComponentArray
+{
+    public function __construct($array)
+    {
+        foreach ($array as $element) {
+            if (!$element instanceof MyNewComponentInterface) {
+                throw new \InvalidArgumentException(self::class . \' can only consist of \' . MyNewComponentInterface::class);
+            }
+        }
+        parent::__construct($array);
+    }
+
+    /**
+     * @param mixed $key
+     * @return MyNewComponentInterface|false
+     */
+    public function offsetGet($key)
+    {
+        return parent::offsetGet($key);
+    }
+
+    /**
+     * @return array|MyNewComponentInterface[]
+     */
+    public function getArrayCopy(): array
+    {
+        return parent::getArrayCopy();
+    }
+
+    /**
+     * @return \ArrayIterator|MyNewComponentInterface[]
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return parent::getIterator();
+    }
+}
+',
+            $this->subject->getComponentArrayContent()
         );
     }
 }

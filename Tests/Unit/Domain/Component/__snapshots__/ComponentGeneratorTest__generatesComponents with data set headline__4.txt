@@ -1,4 +1,4 @@
 Neos:
   Fusion:
     defaultContext:
-      Site.Headline: Vendor\Site\Presentation\Headline\HeadlineFactory
+      Site.Headline: Vendor\Site\Presentation\Component\Headline\HeadlineFactory

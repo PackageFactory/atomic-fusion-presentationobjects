@@ -10,4 +10,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  */
 class ComponentPresentationObjectInterfaceIsMissing extends \DomainException
 {
+    public static function butWasNotSupposedTo(string $interfaceName): self
+    {
+        return new self('Declared presentation object interface "' . $interfaceName . '" is missing, please add it to your codebase.', 1616077140);
+    }
 }

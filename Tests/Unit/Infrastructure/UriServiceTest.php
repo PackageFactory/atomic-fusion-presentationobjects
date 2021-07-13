@@ -5,6 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Infrastruct
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
@@ -109,7 +110,7 @@ final class UriServiceTest extends UnitTestCase
         $documentNode = $this->prophet
             ->prophesize(TraversableNodeInterface::class)
             ->willImplement(NodeInterface::class);
-        
+
         $controllerContext = $this->uriService->getControllerContext();
 
         $this->linkingService
@@ -119,8 +120,8 @@ final class UriServiceTest extends UnitTestCase
             ->createNodeUri($controllerContext, $documentNode, null, null, true)
             ->willReturn('https://vendor.site/path/to/document');
 
-        $this->assertEquals('/path/to/document', $this->uriService->getNodeUri($documentNode->reveal(), false));
-        $this->assertEquals('https://vendor.site/path/to/document', $this->uriService->getNodeUri($documentNode->reveal(), true));
+        $this->assertEquals(new Uri('/path/to/document'), $this->uriService->getNodeUri($documentNode->reveal(), false));
+        $this->assertEquals(new Uri('https://vendor.site/path/to/document'), $this->uriService->getNodeUri($documentNode->reveal(), true));
     }
 
     /**
@@ -134,7 +135,7 @@ final class UriServiceTest extends UnitTestCase
             ->willReturn('/_Resources/Static/Vendor.Site/Public/Images/logo.png');
 
         $this->assertEquals(
-            '/_Resources/Static/Vendor.Site/Public/Images/logo.png',
+            new Uri('/_Resources/Static/Vendor.Site/Public/Images/logo.png'),
             $this->uriService->getResourceUri('Vendor.Site', 'Images/logo.png')
         );
     }
@@ -154,7 +155,7 @@ final class UriServiceTest extends UnitTestCase
             ->willReturn('/_Resources/Persistent/path/to/resource');
 
         $this->assertEquals(
-            '/_Resources/Persistent/path/to/resource',
+            new Uri('/_Resources/Persistent/path/to/resource'),
             $this->uriService->getAssetUri($asset->reveal())
         );
     }
@@ -174,7 +175,7 @@ final class UriServiceTest extends UnitTestCase
             )
             ->willReturn('/path/to/dummy-image');
 
-        $this->assertEquals('/path/to/dummy-image', $this->uriService->getDummyImageBaseUri());
+        $this->assertEquals(new Uri('/path/to/dummy-image'), $this->uriService->getDummyImageBaseUri());
     }
 
     /**
@@ -198,7 +199,7 @@ final class UriServiceTest extends UnitTestCase
         $documentNode = $this->prophet
             ->prophesize(TraversableNodeInterface::class)
             ->willImplement(NodeInterface::class);
-        
+
         $controllerContext = $this->uriService->getControllerContext();
 
         $this->linkingService
@@ -209,7 +210,7 @@ final class UriServiceTest extends UnitTestCase
         $subgraph->getNodeByIdentifier('7f2939f6-db07-476c-afac-7cac59466242')->willReturn($documentNode);
 
         $this->assertEquals(
-            '/blog/2020/10/10/coronavirus-sucks.html',
+            new Uri('/blog/2020/10/10/coronavirus-sucks.html'),
             $this->uriService->resolveLinkUri('node://7f2939f6-db07-476c-afac-7cac59466242', $subgraph->reveal())
         );
     }
@@ -223,7 +224,7 @@ final class UriServiceTest extends UnitTestCase
         $subgraph = $this->prophet->prophesize(ContentContext::class);
 
         $this->assertEquals(
-            '#',
+            new Uri('#'),
             $this->uriService->resolveLinkUri('node://a520cadb-eedf-42a5-b03d-796821b35e73', $subgraph->reveal())
         );
     }
@@ -249,7 +250,7 @@ final class UriServiceTest extends UnitTestCase
         $subgraph = $this->prophet->prophesize(ContentContext::class);
 
         $this->assertEquals(
-            '/_Resources/Persistent/path/to/49638323-a25d-43a3-a0b3-66693239439a',
+            new Uri('/_Resources/Persistent/path/to/49638323-a25d-43a3-a0b3-66693239439a'),
             $this->uriService->resolveLinkUri('asset://49638323-a25d-43a3-a0b3-66693239439a', $subgraph->reveal())
         );
     }
@@ -263,7 +264,7 @@ final class UriServiceTest extends UnitTestCase
         $subgraph = $this->prophet->prophesize(ContentContext::class);
 
         $this->assertEquals(
-            '#',
+            new Uri('#'),
             $this->uriService->resolveLinkUri('asset://49638323-a25d-43a3-a0b3-66693239439a', $subgraph->reveal())
         );
     }
@@ -277,7 +278,7 @@ final class UriServiceTest extends UnitTestCase
         $subgraph = $this->prophet->prophesize(ContentContext::class);
 
         $this->assertEquals(
-            'http://some.domain/some/path',
+            new Uri('http://some.domain/some/path'),
             $this->uriService->resolveLinkUri('http://some.domain/some/path', $subgraph->reveal())
         );
     }
@@ -291,7 +292,7 @@ final class UriServiceTest extends UnitTestCase
         $subgraph = $this->prophet->prophesize(ContentContext::class);
 
         $this->assertEquals(
-            'https://some.domain/some/path',
+            new Uri('https://some.domain/some/path'),
             $this->uriService->resolveLinkUri('https://some.domain/some/path', $subgraph->reveal())
         );
     }
@@ -304,8 +305,8 @@ final class UriServiceTest extends UnitTestCase
     {
         $subgraph = $this->prophet->prophesize(ContentContext::class);
 
-        $this->assertEquals('#', $this->uriService->resolveLinkUri('ftp://some.domain/some/path', $subgraph->reveal()));
-        $this->assertEquals('#', $this->uriService->resolveLinkUri('#top', $subgraph->reveal()));
-        $this->assertEquals('#', $this->uriService->resolveLinkUri('something-cmopletely-different', $subgraph->reveal()));
+        $this->assertEquals(new Uri('#'), $this->uriService->resolveLinkUri('ftp://some.domain/some/path', $subgraph->reveal()));
+        $this->assertEquals(new Uri('#'), $this->uriService->resolveLinkUri('#top', $subgraph->reveal()));
+        $this->assertEquals(new Uri('#'), $this->uriService->resolveLinkUri('something-cmopletely-different', $subgraph->reveal()));
     }
 }

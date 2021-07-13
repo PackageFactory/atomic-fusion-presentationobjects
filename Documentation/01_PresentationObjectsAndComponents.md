@@ -8,7 +8,7 @@
 
 # 1. PresentationObjects and Components
 
-> **Hint:** This section describes the manual creation of PresentationObjects and PresentationObject components. Both patterns can also be scaffolded by the [Kickstarter](./04_Kickstarter.md).
+> **Hint:** This section describes the manual creation of PresentationObjects and PresentationObject components. Both patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
 
 In this tutorial, we're going to write a PresentationObject for an image component. Our image consists of a `src`, an `alt` and an optional `title` property.
 
@@ -26,19 +26,10 @@ namespace Vendor\Site\Presentation\Image;
 
 interface ImageInterface
 {
-    /**
-     * @return string
-     */
     public function getSrc(): string;
 
-    /**
-     * @return string
-     */
     public function getAlt(): string;
 
-    /**
-     * @return null|string
-     */
     public function getTitle(): ?string;
 }
 ```
@@ -60,26 +51,12 @@ namespace Vendor\Site\Presentation\Image;
  */
 final class Image implements ImageInterface
 {
-    /**
-     * @var string
-     */
-    private $src;
+    private string $src;
 
-    /**
-     * @var string
-     */
-    private $alt;
+    private string $alt;
 
-    /**
-     * @var null|string
-     */
-    private $title;
+    private ?string $title;
 
-    /**
-     * @param string $src,
-     * @param string $alt,
-     * @param null|string $title
-     */
     public function __construct(
         string $src,
         string $alt,
@@ -90,17 +67,11 @@ final class Image implements ImageInterface
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getSrc(): string
     {
         return $this->src;
     }
 
-    /**
-     * @return string
-     */
     public function getAlt(): string
     {
         return $this->alt;
@@ -121,9 +92,6 @@ final class Image implements ImageInterface
         return new self($this->src, $alt, $this->title);
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
@@ -139,10 +107,10 @@ The first difference to `Neos.Fusion:Component` is the mandatory `@presentationO
 
 The second difference is, that besides the usual `props`-Context, your renderer can now also access the special `presentationObject`-Context, which holds our verified data.
 
-<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Leaf/Image/Image.fusion`*<small>
+<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Component/Image/Image.fusion`*<small>
 
 ```fusion
-prototype(Vendor.Site:Leaf.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+prototype(Vendor.Site:Component.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Image\\ImageInterface'
 
     renderer = afx`
@@ -155,16 +123,16 @@ prototype(Vendor.Site:Leaf.Image) < prototype(PackageFactory.AtomicFusion.Presen
 }
 ```
 
-That's it! Our `Vendor.Site:Leaf.Image` can now be used like this (AFX):
+That's it! Our `Vendor.Site:Component.Image` can now be used like this (AFX):
 
 ```afx
-myImage = afx`<Vendor.Site:Leaf.Image presentationObject={someObject}/>`
+myImage = afx`<Vendor.Site:Component.Image presentationObject={someObject}/>`
 ```
 
 Or like this (Plain Fusion):
 
 ```fusion
-myImage = Vendor.Site:Leaf.Image {
+myImage = Vendor.Site:Component.Image {
     presentationObject = ${someObject}
 }
 ```

@@ -8,24 +8,28 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Command;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Value\ValueGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
+use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\DefensiveConfirmationFileWriter;
 
 /**
- * The command controller for kickstarting PresentationObject components
+ * The command controller for kick-starting PresentationObject components
  */
 class ComponentCommandController extends CommandController
 {
     /**
      * @Flow\Inject
-     * @var ComponentGenerator
+     * @var PackageResolver
      */
-    protected $componentGenerator;
+    protected $packageResolver;
 
     /**
-     * @Flow\Inject
-     * @var ValueGenerator
+     * @Flow\InjectConfiguration(path="componentGeneration.colocate")
+     * @var bool
      */
-    protected $valueGenerator;
+    protected $colocate;
 
     /**
      * Create a new PresentationObject component and factory
@@ -41,20 +45,35 @@ class ComponentCommandController extends CommandController
      * The following values are allowed for types:
      *
      * * string, int, float, bool
+     * * slot
      * * Value class names created with <u>component:kickstartvalue</u> in the same
      *   component namespace
      * * Component class names created with <u>component:kickstart</u> in the same
      *   package
      * * ImageSource
      * * Uri
+     * * array<...> with any of the above as an argument
      *
      * @param string $name The name of the new component
-     * @param null|string $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
+     * @param bool $listable If set, an additional list type will be generated
+     * @param bool $yes If set, no confirmation is going to be required for overwriting files
      * @return void
+     * @throws \Neos\Utility\Exception\FilesException
      */
-    public function kickStartCommand(string $name, ?string $packageKey = null): void
+    public function kickStartCommand(string $name, bool $listable = false, bool $yes = false): void
     {
-        $this->componentGenerator->generateComponent($name, $this->request->getExceedingArguments(), $packageKey);
+        $componentGenerator = new ComponentGenerator(
+            new DefensiveConfirmationFileWriter($this->output, $yes)
+        );
+        $package = $this->packageResolver->resolvePackage();
+
+        $componentGenerator->generateComponent(
+            ComponentName::fromInput($name, PackageKey::fromPackage($package)),
+            $this->request->getExceedingArguments(),
+            $package->getPackagePath(),
+            $this->colocate,
+            $listable
+        );
     }
 
     /**
@@ -71,12 +90,25 @@ class ComponentCommandController extends CommandController
      * @param string $componentName The name of the component the new pseudo-enum belongs to
      * @param string $name The name of the new pseudo-enum
      * @param string $type The type of the new pseudo-enum (must be one of: "string", "int")
-     * @param array|string[] $values A comma-separated list of values for the new pseudo-enum
-     * @param null|string $packageKey Package key of an optional target package, if not set the configured default package or the first available site package will be used
+     * @param array|string[] $values A comma-separated colon list of names:values for the new pseudo-enum, e.g. a,b,c , a:1,b:2,c:3 or a:1.2,b:2.4,c:3.6
+     * @param bool $yes If set, no confirmation is going to be required for overwriting files
      * @return void
      */
-    public function kickStartValueCommand(string $componentName, string $name, string $type, array $values = [], ?string $packageKey = null): void
+    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], bool $yes = false): void
     {
-        $this->valueGenerator->generateValue($componentName, $name, $type, $values, $packageKey);
+        $enumGenerator = new EnumGenerator(
+            new \DateTimeImmutable(),
+            new DefensiveConfirmationFileWriter($this->output, $yes)
+        );
+        $package = $this->packageResolver->resolvePackage();
+
+        $enumGenerator->generateEnum(
+            ComponentName::fromInput($componentName, PackageKey::fromPackage($package)),
+            $name,
+            $type,
+            $values,
+            $package->getPackagePath(),
+            $this->colocate
+        );
     }
 }

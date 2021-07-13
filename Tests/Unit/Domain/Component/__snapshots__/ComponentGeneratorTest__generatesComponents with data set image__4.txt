@@ -1,4 +1,4 @@
 Neos:
   Fusion:
     defaultContext:
-      Site.Image: Vendor\Site\Presentation\Image\ImageFactory
+      Site.Image: Vendor\Site\Presentation\Component\Image\ImageFactory

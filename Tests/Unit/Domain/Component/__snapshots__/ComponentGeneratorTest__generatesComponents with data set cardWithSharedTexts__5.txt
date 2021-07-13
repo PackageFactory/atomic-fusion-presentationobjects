@@ -1,0 +1,43 @@
+prototype(Vendor.Site:Component.Card) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\Card\\CardInterface'
+
+    @styleguide {
+        title = 'Card'
+
+        props {
+            image = Sitegeist.Kaleidoscope:DummyImageSource {
+                height = 1920
+                width = 1080
+            }
+            text {
+                0 {
+                    text = 'Text'
+                }
+                1 {
+                    text = 'Text'
+                }
+            }
+            link {
+                uri = 'https://www.neos.io'
+                title = 'Text'
+            }
+        }
+    }
+
+    renderer = afx`<dl>
+        <dt>image:</dt>
+        <dd>
+            <Sitegeist.Lazybones:Image imageSource={presentationObject.image} @if.isToBeRendered={presentationObject.image} />
+        </dd>
+        <dt>text:</dt>
+        <dd>
+            <Neos.Fusion:Loop items={presentationObject.text}>
+                <Vendor.Shared:Component.Text presentationObject={item} />
+            </Neos.Fusion:Loop>
+        </dd>
+        <dt>link:</dt>
+        <dd>
+            <Vendor.Site:Component.Link presentationObject={presentationObject.link} @if.isToBeRendered={presentationObject.link} />
+        </dd>
+    </dl>`
+}

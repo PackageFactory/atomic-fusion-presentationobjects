@@ -1,5 +1,5 @@
-<?php
-namespace Vendor\Site\Presentation\Image;
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\Image;
 
 /*
  * This file is part of the Vendor.Site package.

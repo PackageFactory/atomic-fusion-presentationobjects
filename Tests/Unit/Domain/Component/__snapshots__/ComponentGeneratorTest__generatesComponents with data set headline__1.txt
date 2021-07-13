@@ -1,5 +1,5 @@
-<?php
-namespace Vendor\Site\Presentation\Headline;
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,28 +7,19 @@ namespace Vendor\Site\Presentation\Headline;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use HeadlineType;
-use HeadlineLook;
+use Vendor\Site\Presentation\Component\Headline\HeadlineType;
+use Vendor\Site\Presentation\Component\Headline\HeadlineLook;
 
 /**
  * @Flow\Proxy(false)
  */
 final class Headline extends AbstractComponentPresentationObject implements HeadlineInterface
 {
-    /**
-     * @var HeadlineType
-     */
-    private $type;
+    private HeadlineType $type;
 
-    /**
-     * @var HeadlineLook
-     */
-    private $look;
+    private HeadlineLook $look;
 
-    /**
-     * @var string
-     */
-    private $content;
+    private string $content;
 
     public function __construct(
         HeadlineType $type,

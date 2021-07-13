@@ -1,0 +1,49 @@
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\Card;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use Vendor\Shared\Presentation\Component\Text\TextInterface;
+use Vendor\Site\Presentation\Component\Link\LinkInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Card extends AbstractComponentPresentationObject implements CardInterface
+{
+    private ?ImageSourceHelperInterface $image;
+
+    private ?TextInterface $text;
+
+    private ?LinkInterface $link;
+
+    public function __construct(
+        ?ImageSourceHelperInterface $image,
+        ?TextInterface $text,
+        ?LinkInterface $link
+    ) {
+        $this->image = $image;
+        $this->text = $text;
+        $this->link = $link;
+    }
+
+    public function getImage(): ?ImageSourceHelperInterface
+    {
+        return $this->image;
+    }
+
+    public function getText(): ?TextInterface
+    {
+        return $this->text;
+    }
+
+    public function getLink(): ?LinkInterface
+    {
+        return $this->link;
+    }
+}

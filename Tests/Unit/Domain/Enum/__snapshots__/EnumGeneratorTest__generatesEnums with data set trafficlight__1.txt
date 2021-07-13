@@ -1,0 +1,82 @@
+<?php declare(strict_types=1);
+namespace Vendor\Default\Presentation\Component\Crossing;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class TrafficLight implements EnumInterface
+{
+    const LIGHT_RED = 1;
+    const LIGHT_YELLOW = 2;
+    const LIGHT_GREEN = 3;
+
+    private int $value;
+
+    private function __construct(int $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function fromInt(int $int): self
+    {
+        if (!in_array($int, self::getValues())) {
+            throw TrafficLightIsInvalid::becauseItMustBeOneOfTheDefinedConstants($int);
+        }
+
+        return new self($int);
+    }
+
+    public static function red(): self
+    {
+        return new self(self::LIGHT_RED);
+    }
+
+    public static function yellow(): self
+    {
+        return new self(self::LIGHT_YELLOW);
+    }
+
+    public static function green(): self
+    {
+        return new self(self::LIGHT_GREEN);
+    }
+
+    public function getIsRed(): bool
+    {
+        return $this->value === self::LIGHT_RED;
+    }
+
+    public function getIsYellow(): bool
+    {
+        return $this->value === self::LIGHT_YELLOW;
+    }
+
+    public function getIsGreen(): bool
+    {
+        return $this->value === self::LIGHT_GREEN;
+    }
+
+    /**
+     * @return array|int[]
+     */
+    public static function getValues(): array
+    {
+        return [
+            self::LIGHT_RED,
+            self::LIGHT_YELLOW,
+            self::LIGHT_GREEN
+        ];
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
+    }
+}

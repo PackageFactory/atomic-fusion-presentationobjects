@@ -1,0 +1,57 @@
+<?php declare(strict_types=1);
+namespace Vendor\Default\Application;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\I18n\Translator;
+use Neos\Neos\Service\DataSource\AbstractDataSource;
+use Neos\Eel\ProtectedContextAwareInterface;
+use Vendor\Default\Presentation\Component\Crossing\TrafficLight;
+
+class TrafficLightProvider extends AbstractDataSource implements ProtectedContextAwareInterface
+{
+    /**
+     * @Flow\Inject
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
+     * @var string
+     */
+    protected static $identifier = 'vendor-default-traffic-lights';
+
+    public function getData(NodeInterface $node = null, array $arguments = []): array
+    {
+        $trafficLights = [];
+        foreach (TrafficLight::getValues() as $value) {
+            $trafficLights[$value]['label'] = $this->translator->translateById(
+                'trafficLight.' . $value,
+                [],
+                null,
+                null,
+                'Crossing',
+                'Vendor.Default'
+            ) ?: $value;
+        }
+
+        return $trafficLights;
+    }
+
+    /**
+     * @return array|int[]
+     */
+    public function getValues(): array
+    {
+        return TrafficLight::getValues();
+    }
+
+    public function allowsCallOfMethod($methodName): bool
+    {
+        return true;
+    }
+}

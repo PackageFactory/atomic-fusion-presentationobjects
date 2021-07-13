@@ -1,0 +1,82 @@
+<?php declare(strict_types=1);
+namespace Vendor\Default\Presentation\Custom\Type\Crossing;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class Duration implements EnumInterface
+{
+    const VALUE_SHORT = 1.2;
+    const VALUE_MEDIUM = 2.4;
+    const VALUE_LONG = 3.6;
+
+    private float $value;
+
+    private function __construct(float $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function fromFloat(float $float): self
+    {
+        if (!in_array($float, self::getValues())) {
+            throw DurationIsInvalid::becauseItMustBeOneOfTheDefinedConstants($float);
+        }
+
+        return new self($float);
+    }
+
+    public static function short(): self
+    {
+        return new self(self::VALUE_SHORT);
+    }
+
+    public static function medium(): self
+    {
+        return new self(self::VALUE_MEDIUM);
+    }
+
+    public static function long(): self
+    {
+        return new self(self::VALUE_LONG);
+    }
+
+    public function getIsShort(): bool
+    {
+        return $this->value === self::VALUE_SHORT;
+    }
+
+    public function getIsMedium(): bool
+    {
+        return $this->value === self::VALUE_MEDIUM;
+    }
+
+    public function getIsLong(): bool
+    {
+        return $this->value === self::VALUE_LONG;
+    }
+
+    /**
+     * @return array|float[]
+     */
+    public static function getValues(): array
+    {
+        return [
+            self::VALUE_SHORT,
+            self::VALUE_MEDIUM,
+            self::VALUE_LONG
+        ];
+    }
+
+    public function getValue(): float
+    {
+        return $this->value;
+    }
+}

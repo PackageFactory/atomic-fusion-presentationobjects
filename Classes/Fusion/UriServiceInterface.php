@@ -5,6 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
 
+use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Mvc\Controller\ControllerContext;
@@ -16,27 +17,27 @@ interface UriServiceInterface
      * @param TraversableNodeInterface $documentNode
      * @param boolean $absolute
      * @param string|null $format
-     * @return string
+     * @return Uri
      */
-    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): string;
+    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): Uri;
 
     /**
      * @param string $packageKey
      * @param string $resourcePath
-     * @return string
+     * @return Uri
      */
-    public function getResourceUri(string $packageKey, string $resourcePath): string;
+    public function getResourceUri(string $packageKey, string $resourcePath): Uri;
 
     /**
      * @param AssetInterface $asset
-     * @return string
+     * @return Uri
      */
-    public function getAssetUri(AssetInterface $asset): string;
+    public function getAssetUri(AssetInterface $asset): Uri;
 
     /**
-     * @return string
+     * @return Uri
      */
-    public function getDummyImageBaseUri(): string;
+    public function getDummyImageBaseUri(): Uri;
 
     /**
      * @return ControllerContext
@@ -46,7 +47,7 @@ interface UriServiceInterface
     /**
      * @param string $rawLinkUri
      * @param ContentContext $subgraph
-     * @return string
+     * @return Uri
      */
-    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): string;
+    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): Uri;
 }

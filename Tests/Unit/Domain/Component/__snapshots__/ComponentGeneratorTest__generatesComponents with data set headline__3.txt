@@ -1,5 +1,5 @@
-<?php
-namespace Vendor\Site\Presentation\Headline;
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.

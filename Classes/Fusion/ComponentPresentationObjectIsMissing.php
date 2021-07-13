@@ -10,4 +10,8 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  */
 class ComponentPresentationObjectIsMissing extends \DomainException
 {
+    public static function butMustNotBe(): self
+    {
+        return new self('Component presentation object is missing, set it via presentationObject = ... .', 1616077282);
+    }
 }

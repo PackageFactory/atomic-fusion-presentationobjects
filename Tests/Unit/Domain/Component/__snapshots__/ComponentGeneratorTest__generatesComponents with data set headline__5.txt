@@ -1,12 +1,12 @@
-prototype(Vendor.Site:Leaf.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Headline\\HeadlineInterface'
+prototype(Vendor.Site:Component.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\Headline\\HeadlineInterface'
 
     @styleguide {
         title = 'Headline'
 
         props {
-            type = ''
-            look = ''
+            type = 'h1'
+            look = 'large'
             content = 'Text'
         }
     }

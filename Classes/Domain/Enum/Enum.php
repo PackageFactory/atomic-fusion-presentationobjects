@@ -6,7 +6,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PluralName;
 
 /**
  * @Flow\Proxy(false)
@@ -129,72 +128,6 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     public static function becauseItMustBeOneOfTheDefinedConstants(' . $this->type . ' $attemptedValue): self
     {
         return new self(\'The given value "\' . $attemptedValue . \'" is no valid ' . $this->name->getName() . ', must be one of the defined constants. \', ' . $now->getTimestamp() . ');
-    }
-}
-';
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderContent(): string
-    {
-        $arrayName = lcfirst(PluralName::forName($this->name->getName()));
-        return '<?php declare(strict_types=1);
-namespace ' . $this->name->getProviderNamespace() . ';
-
-/*
- * This file is part of the ' . $this->name->getPackageKey() . ' package.
- */
-
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\Flow\Annotations as Flow;
-use Neos\Flow\I18n\Translator;
-use Neos\Neos\Service\DataSource\AbstractDataSource;
-use Neos\Eel\ProtectedContextAwareInterface;
-use ' . $this->name->getFullyQualifiedName() . ';
-
-class ' . $this->name->getProviderName() . ' extends AbstractDataSource implements ProtectedContextAwareInterface
-{
-    /**
-     * @Flow\Inject
-     * @var Translator
-     */
-    protected $translator;
-
-    /**
-     * @var string
-     */
-    protected static $identifier = \'' . $this->name->getDataSourceIdentifier() . '\';
-
-    public function getData(NodeInterface $node = null, array $arguments = []): array
-    {
-        $' . $arrayName . ' = [];
-        foreach (' . $this->name->getName() . '::getValues() as $value) {
-            $' . $arrayName . '[$value][\'label\'] = $this->translator->translateById(
-                \'' . lcfirst($this->name->getName()) . '.\' . $value,
-                [],
-                null,
-                null,
-                \'' . $this->name->getComponentName()->getName() . '\',
-                \'' . $this->name->getPackageKey() . '\'
-            ) ?: $value;
-        }
-
-        return $' . $arrayName . ';
-    }
-
-    /**
-     * @return array|' . $this->type . '[]
-     */
-    public function getValues(): array
-    {
-        return ' . $this->name->getName() . '::getValues();
-    }
-
-    public function allowsCallOfMethod($methodName): bool
-    {
-        return true;
     }
 }
 ';

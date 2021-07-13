@@ -28,13 +28,20 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
      */
     protected static $identifier = 'packagefactory-atomicfusion-presentationobjects-enumcases';
 
+    /**
+     * @param NodeInterface|null $node
+     * @param array<string|int,string> $arguments
+     * @return array<string|int|float,array<string,string>>
+     */
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
         if (!isset($arguments['enumName'])) {
             throw new \InvalidArgumentException('Argument "enumName" must be provided.', 1625297174);
         }
-        $values = $this->getValues($arguments['enumName']);
-        $enumLabel = EnumLabel::fromEnumName($arguments['enumName']);
+        /** @var class-string<mixed> $enumName */
+        $enumName = $arguments['enumName'];
+        $values = $this->getValues($enumName);
+        $enumLabel = EnumLabel::fromEnumName($enumName);
         $options = [];
         foreach ($values as $value) {
             $options[$value]['label'] = $this->getLabel($enumLabel, (string)$value);
@@ -43,6 +50,11 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         return $options;
     }
 
+    /**
+     * @param NodeType $nodeType
+     * @param array<mixed> $configuration
+     * @param array<mixed> $options
+     */
     public function process(NodeType $nodeType, array &$configuration, array $options)
     {
         if (!isset($options['enumName'])) {
@@ -98,7 +110,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         if (!class_exists($enumName)) {
             throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not exist.', 1625297031);
         }
-        if (!in_array(PseudoEnumInterface::class, class_implements($enumName))) {
+        if (!in_array(PseudoEnumInterface::class, class_implements($enumName) ?: [])) {
             throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not implement the required ' . PseudoEnumInterface::class, 1625297122);
         }
     }

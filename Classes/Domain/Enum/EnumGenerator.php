@@ -52,6 +52,5 @@ final class EnumGenerator
 
         $this->fileWriter->writeFile($enumName->getClassPath($packagePath, $colocate), $enum->getClassContent());
         $this->fileWriter->writeFile($enumName->getExceptionPath($packagePath, $colocate), $enum->getExceptionContent($this->now));
-        $this->fileWriter->writeFile($enumName->getProviderPath($packagePath), $enum->getProviderContent());
     }
 }

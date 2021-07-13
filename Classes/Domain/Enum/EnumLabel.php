@@ -31,8 +31,8 @@ final class EnumLabel
     public static function fromEnumName(string $enumName): self
     {
         list($packageKey, $componentName) = explode('/Presentation/', $enumName);
-        $pivot = \mb_strrpos($componentName, '/');
-        $componentNamespace = \mb_substr($packageKey, 0 , $pivot);
+        $pivot = \mb_strrpos($componentName, '/') ?: null;
+        $componentNamespace = \mb_substr($packageKey, 0, $pivot);
         $enumShort = lcfirst(\mb_substr($packageKey, $pivot+1));
 
         return new self(

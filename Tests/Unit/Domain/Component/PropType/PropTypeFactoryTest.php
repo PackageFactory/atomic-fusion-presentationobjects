@@ -123,12 +123,12 @@ final class PropTypeFactoryTest extends UnitTestCase
             ],
             [
                 $componentName,
-                'MyStringEnum',
+                'MyStringPseudoEnum',
                 new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringPseudoEnum', false)
             ],
             [
                 $componentName,
-                '?MyStringEnum',
+                '?MyStringPseudoEnum',
                 new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringPseudoEnum', true)
             ],
             [

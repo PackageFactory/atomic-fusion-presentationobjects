@@ -6,6 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
  */
 
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
@@ -60,14 +61,15 @@ final class EnumPropType implements PropTypeInterface
             return '= \'\'';
         }
 
-        $values = $this->className::getValues();
+        $values = $this->className::cases();
+        /** @var PseudoEnumInterface $value */
         $value = reset($values);
         switch ((string) $type) {
             case 'string':
-                return '= \'' . $value . '\'';
+                return '= \'' . $value->getValue() . '\'';
             case 'int':
             case 'float':
-                return '= ' . $value;
+                return '= ' . $value->getValue();
             default:
         }
 

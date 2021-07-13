@@ -34,11 +34,11 @@ final class EnumPropTypeTest extends UnitTestCase
         return [
             [
                 new EnumPropType(MyStringPseudoEnum::class, false),
-                'MyStringEnum'
+                'MyStringPseudoEnum'
             ],
             [
                 new EnumPropType(MyStringPseudoEnum::class, true),
-                'MyStringEnum'
+                'MyStringPseudoEnum'
             ]
         ];
     }
@@ -62,12 +62,12 @@ final class EnumPropTypeTest extends UnitTestCase
         return [
             [
                 new EnumPropType(MyStringPseudoEnum::class, false),
-                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
+                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum;
 '
             ],
             [
                 new EnumPropType(MyStringPseudoEnum::class, true),
-                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
+                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum;
 '
             ]
         ];
@@ -92,11 +92,11 @@ final class EnumPropTypeTest extends UnitTestCase
         return [
             [
                 new EnumPropType(MyStringPseudoEnum::class, false),
-                'MyStringEnum'
+                'MyStringPseudoEnum'
             ],
             [
                 new EnumPropType(MyStringPseudoEnum::class, true),
-                '?MyStringEnum'
+                '?MyStringPseudoEnum'
             ]
         ];
     }

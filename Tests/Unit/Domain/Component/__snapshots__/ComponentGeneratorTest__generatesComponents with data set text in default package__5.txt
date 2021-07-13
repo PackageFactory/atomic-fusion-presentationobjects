@@ -1,8 +1,8 @@
-prototype(Vendor.Default:Component.NewText) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Default\\Presentation\\Component\\NewText\\NewTextInterface'
+prototype(Vendor.Default:Leaf.Text) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Default\\Presentation\\Text\\TextInterface'
 
     @styleguide {
-        title = 'NewText'
+        title = 'Text'
 
         props {
             content = 'Text'

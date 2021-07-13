@@ -3,4 +3,3 @@ PackageFactory:
     PresentationObjects:
       componentGeneration:
         defaultPackageKey: ''
-        colocate: false

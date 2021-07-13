@@ -3,7 +3,7 @@
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./03_Slots.md">3. Slots &gt;</a>
+    <a href="./03_IntegrationRecipes.md">3. Integration Recipes &gt;</a>
 </div>
 
 ---
@@ -68,13 +68,13 @@ Neos:
 
 Neos uses the `Neos.Neos:ContentCase` to map nodes to rendering prototypes. For our `Vendor.Site:Content.Image` node, the entry point is going to be a Fusion prototype of the same name.
 
-From here, we just need to extend `Neos.Neos:ContentComponent` and provide our PresentationObject component `Vendor.Site:Component.Image` as the renderer. As the `presentationObject` we pass the result of the `forImageNode`-method of our newly registered `ImageFactory`.
+From here, we just need to extend `Neos.Neos:ContentComponent` and provide our PresentationObject component `Vendor.Site:Leaf.Image` as the renderer. As the `presentationObject` we pass the result of the `forImageNode`-method of our newly registered `ImageFactory`.
 
 <small>*`EXAMPLE: Resources/Private/Fusion/Integration/Content/Image.fusion`*<small>
 
 ```fusion
 prototype(Vendor.Site:Content.Image) < prototype(Neos.Neos:ContentComponent) {
-    renderer = Vendor.Site:Component.Image {
+    renderer = Vendor.Site:Leaf.Image {
         presentationObject = ${Vendor.Site.Image.forImageNode(node)}
     }
 }
@@ -89,5 +89,5 @@ That's it! Our image component is now fully integrated and can be edited in the 
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="./03_Slots.md">3. Slots &gt;</a>
+    <a href="./03_IntegrationRecipes.md">3. Integration Recipes &gt;</a>
 </div>

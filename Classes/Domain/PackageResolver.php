@@ -17,20 +17,16 @@ use Neos\Flow\Package\PackageManager;
 final class PackageResolver implements PackageResolverInterface
 {
     /**
+     * @Flow\Inject
      * @var PackageManager
      */
-    protected PackageManager $packageManager;
+    protected $packageManager;
 
     /**
      * @Flow\InjectConfiguration(path="componentGeneration.defaultPackageKey")
      * @var string
      */
-    protected string $defaultPackageKey = '';
-
-    public function __construct(PackageManager $packageManager)
-    {
-        $this->packageManager = $packageManager;
-    }
+    protected $defaultPackageKey;
 
     public function resolvePackage(?string $packageKey = null): FlowPackageInterface
     {
@@ -60,6 +56,7 @@ final class PackageResolver implements PackageResolverInterface
             }
         }
 
-        throw NoPackageCouldBeResolved::becauseNoneIsConfiguredAndNoSitePackageIsAvailable();
+        throw NoPackageCouldBeResolved::
+            becauseNoneIsConfiguredAndNoSitePackageIsAvailable();
     }
 }

@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Image;
+<?php
+namespace Vendor\Site\Presentation\Image;
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use ImageSourceHelperInterface;
 
 interface ImageInterface extends ComponentPresentationObjectInterface
 {

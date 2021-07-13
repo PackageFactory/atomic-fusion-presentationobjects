@@ -1,5 +1,5 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewText;
+<?php
+namespace Vendor\Site\Presentation\Text;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,6 +7,6 @@ namespace Vendor\Site\Presentation\Component\NewText;
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
 
-final class NewTextFactory extends AbstractComponentPresentationObjectFactory
+final class TextFactory extends AbstractComponentPresentationObjectFactory
 {
 }

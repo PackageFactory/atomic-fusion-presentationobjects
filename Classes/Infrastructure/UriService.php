@@ -6,7 +6,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Infrastructure;
  */
 
 use GuzzleHttp\Psr7\ServerRequest;
-use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Annotations as Flow;
@@ -57,8 +56,8 @@ final class UriService implements UriServiceInterface
     /**
      * @param TraversableNodeInterface $documentNode
      * @param bool $absolute
-     * @param string|null $format
-     * @return Uri
+     * @param string $format
+     * @return string
      * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
@@ -66,45 +65,44 @@ final class UriService implements UriServiceInterface
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception
      */
-    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): Uri
+    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): string
     {
-        return new Uri($this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, $format, $absolute));
+        return $this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, $format, $absolute);
     }
 
     /**
      * @param string $packageKey
      * @param string $resourcePath
-     * @return Uri
+     * @return string
      */
-    public function getResourceUri(string $packageKey, string $resourcePath): Uri
+    public function getResourceUri(string $packageKey, string $resourcePath): string
     {
-        return new Uri($this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath));
+        return $this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath);
     }
 
     /**
      * @param AssetInterface $asset
-     * @return Uri
+     * @return string
      */
-    public function getAssetUri(AssetInterface $asset): Uri
+    public function getAssetUri(AssetInterface $asset): string
     {
         $uri = $this->resourceManager->getPublicPersistentResourceUri($asset->getResource());
-
-        return new Uri(is_string($uri) ? $uri : '#');
+        return is_string($uri) ? $uri : '#';
     }
 
     /**
-     * @return Uri
+     * @return string
      */
-    public function getDummyImageBaseUri(): Uri
+    public function getDummyImageBaseUri(): string
     {
         $uriBuilder = $this->getControllerContext()->getUriBuilder();
 
-        return new Uri($uriBuilder->uriFor(
+        return $uriBuilder->uriFor(
             'image',
             [],
             'dummyImage',
             'Sitegeist.Kaleidoscope'
-        ));
+        );
     }
 
     /**
@@ -136,7 +134,7 @@ final class UriService implements UriServiceInterface
     /**
      * @param string $rawLinkUri
      * @param ContentContext $subgraph
-     * @return Uri
+     * @return string
      * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
@@ -144,22 +142,22 @@ final class UriService implements UriServiceInterface
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception
      */
-    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): Uri
+    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): string
     {
         if (\mb_substr($rawLinkUri, 0, 7) === 'node://') {
             $nodeIdentifier = \mb_substr($rawLinkUri, 7);
             /** @var null|TraversableNodeInterface $node */
             $node = $subgraph->getNodeByIdentifier($nodeIdentifier);
-            $linkUri = $node ? $this->getNodeUri($node) : new Uri('#');
+            $linkUri = $node ? $this->getNodeUri($node) : '#';
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'asset://') {
             $assetIdentifier = \mb_substr($rawLinkUri, 8);
             /** @var null|AssetInterface $asset */
             $asset = $this->assetRepository->findByIdentifier($assetIdentifier);
-            $linkUri = $asset ? $this->getAssetUri($asset) : new Uri('#');
+            $linkUri = $asset ? $this->getAssetUri($asset) : '#';
         } elseif (\mb_substr($rawLinkUri, 0, 8) === 'https://' || \mb_substr($rawLinkUri, 0, 7) === 'http://') {
-            $linkUri = new Uri($rawLinkUri);
+            $linkUri = $rawLinkUri;
         } else {
-            $linkUri = new Uri('#');
+            $linkUri = '#';
         }
 
         return $linkUri;

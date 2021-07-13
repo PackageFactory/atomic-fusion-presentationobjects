@@ -5,13 +5,10 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
-
 /**
  * The generic abstract component presentation object implementation
  */
-abstract class AbstractComponentPresentationObject implements ComponentPresentationObjectInterface, SlotInterface
+abstract class AbstractComponentPresentationObject implements ComponentPresentationObjectInterface
 {
     /**
      * Catches all internal EEL magic calls
@@ -21,17 +18,8 @@ abstract class AbstractComponentPresentationObject implements ComponentPresentat
      * @param array $arguments
      * @return void
      */
-    final public function __call(string $name, array $arguments)
+    final public function __call($name, $arguments)
     {
         throw new \BadMethodCallException('"' . $name . '" is not part of the component API for ' . __CLASS__ . '. Please check your Fusion presentation component for typos.', 1578905708);
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrototypeName(): string
-    {
-        $componentName = ComponentName::fromClassName(static::class);
-        return $componentName->getFullyQualifiedFusionName();
     }
 }

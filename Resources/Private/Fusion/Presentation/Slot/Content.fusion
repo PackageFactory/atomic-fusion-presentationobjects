@@ -1,8 +1,0 @@
-prototype(PackageFactory.AtomicFusion.PresentationObjects:Content) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\ContentInterface'
-
-    renderer = Neos.Fusion:Renderer {
-        @context.node = ${presentationObject.contentNode}
-        type = ${presentationObject.contentPrototypeName}
-    }
-}

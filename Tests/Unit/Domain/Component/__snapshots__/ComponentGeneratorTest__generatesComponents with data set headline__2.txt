@@ -1,13 +1,13 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Headline;
+<?php
+namespace Vendor\Site\Presentation\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Vendor\Site\Presentation\Component\Headline\HeadlineType;
-use Vendor\Site\Presentation\Component\Headline\HeadlineLook;
+use HeadlineType;
+use HeadlineLook;
 
 interface HeadlineInterface extends ComponentPresentationObjectInterface
 {

@@ -1,5 +1,5 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewText;
+<?php
+namespace Vendor\Site\Presentation\Text;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -11,9 +11,12 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
 /**
  * @Flow\Proxy(false)
  */
-final class NewText extends AbstractComponentPresentationObject implements NewTextInterface
+final class Text extends AbstractComponentPresentationObject implements TextInterface
 {
-    private string $content;
+    /**
+     * @var string
+     */
+    private $content;
 
     public function __construct(
         string $content

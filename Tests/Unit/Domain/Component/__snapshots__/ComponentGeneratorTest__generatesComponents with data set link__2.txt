@@ -1,14 +1,14 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewLink;
+<?php
+namespace Vendor\Site\Presentation\Link;
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Psr\Http\Message\UriInterface;
+use UriInterface;
 
-interface NewLinkInterface extends ComponentPresentationObjectInterface
+interface LinkInterface extends ComponentPresentationObjectInterface
 {
     public function getHref(): UriInterface;
 

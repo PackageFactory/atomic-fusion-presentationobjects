@@ -1,5 +1,5 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewLink;
+<?php
+namespace Vendor\Site\Presentation\Link;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,16 +7,22 @@ namespace Vendor\Site\Presentation\Component\NewLink;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use Psr\Http\Message\UriInterface;
+use UriInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class NewLink extends AbstractComponentPresentationObject implements NewLinkInterface
+final class Link extends AbstractComponentPresentationObject implements LinkInterface
 {
-    private UriInterface $href;
+    /**
+     * @var UriInterface
+     */
+    private $href;
 
-    private ?string $title;
+    /**
+     * @var string|null
+     */
+    private $title;
 
     public function __construct(
         UriInterface $href,

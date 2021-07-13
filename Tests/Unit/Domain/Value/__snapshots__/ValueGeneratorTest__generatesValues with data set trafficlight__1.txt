@@ -1,0 +1,84 @@
+<?php
+namespace Vendor\Default\Presentation\Crossing;
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class TrafficLight
+{
+    const LIGHT_RED = 'RED';
+    const LIGHT_YELLOW = 'YELLOW';
+    const LIGHT_GREEN = 'GREEN';
+
+    /**
+     * @var int
+     */
+    private $value;
+
+    private function __construct(int $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function fromInt(int $int): self
+    {
+        if (!in_array($int, self::getValues())) {
+            throw TrafficLightIsInvalid::becauseItMustBeOneOfTheDefinedConstants($int);
+        }
+
+        return new self($int);
+    }
+
+    public static function RED(): self
+    {
+        return new self(self::LIGHT_RED);
+    }
+
+    public static function YELLOW(): self
+    {
+        return new self(self::LIGHT_YELLOW);
+    }
+
+    public static function GREEN(): self
+    {
+        return new self(self::LIGHT_GREEN);
+    }
+
+    public function getIsRED(): bool
+    {
+        return $this->value === self::LIGHT_RED;
+    }
+
+    public function getIsYELLOW(): bool
+    {
+        return $this->value === self::LIGHT_YELLOW;
+    }
+
+    public function getIsGREEN(): bool
+    {
+        return $this->value === self::LIGHT_GREEN;
+    }
+
+    /**
+     * @return array|int[]
+     */
+    public static function getValues(): array
+    {
+        return [
+            self::LIGHT_RED,
+            self::LIGHT_YELLOW,
+            self::LIGHT_GREEN
+        ];
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
+    }
+}

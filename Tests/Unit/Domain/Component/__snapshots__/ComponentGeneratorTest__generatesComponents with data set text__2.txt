@@ -1,5 +1,5 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewText;
+<?php
+namespace Vendor\Site\Presentation\Text;
 
 /*
  * This file is part of the Vendor.Site package.
@@ -7,7 +7,7 @@ namespace Vendor\Site\Presentation\Component\NewText;
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
 
-interface NewTextInterface extends ComponentPresentationObjectInterface
+interface TextInterface extends ComponentPresentationObjectInterface
 {
     public function getContent(): string;
 }

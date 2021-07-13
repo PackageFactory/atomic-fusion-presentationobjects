@@ -1,4 +1,0 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.NewText: Vendor\Site\Presentation\Even\FancierComponent\NewText\NewTextFactory

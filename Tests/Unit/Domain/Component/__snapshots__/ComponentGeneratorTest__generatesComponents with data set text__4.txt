@@ -1,4 +1,4 @@
 Neos:
   Fusion:
     defaultContext:
-      Site.NewText: Vendor\Site\Presentation\Component\NewText\NewTextFactory
+      Site.Text: Vendor\Site\Presentation\Text\TextFactory

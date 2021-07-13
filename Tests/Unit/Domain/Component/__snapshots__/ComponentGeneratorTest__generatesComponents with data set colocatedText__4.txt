@@ -1,4 +1,0 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.ColocatedText: Vendor\Site\Presentation\Component\ColocatedText\ColocatedTextFactory

@@ -54,7 +54,6 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
      * @param TraversableNodeInterface $node
      * @param PresentationObjectComponentImplementation $fusionObject
      * @return callable
-     * @deprecated since 3.0 Use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Content for content integration pusposes instead
      */
     final protected function createWrapper(TraversableNodeInterface $node, PresentationObjectComponentImplementation $fusionObject): callable
     {
@@ -71,7 +70,6 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
      * @param string $propertyName
      * @param boolean $block
      * @return string
-     * @deprecated since 3.0 Use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Editable for editable property integration pusposes instead
      */
     final protected function getEditableProperty(TraversableNodeInterface $node, string $propertyName, bool $block = false): string
     {

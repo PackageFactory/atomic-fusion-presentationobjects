@@ -1,4 +1,0 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.WithTextArray: Vendor\Site\Presentation\Component\WithTextArray\WithTextArrayFactory

@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   coding-standard:
@@ -51,11 +51,16 @@ jobs:
         run: |
           composer install
 
-      - name: Run phpstan
+      - name: Run phpstan on Tests/
         run: |
           bin/phpstan analyse \
+            --autoload-file Build/BuildEssentials/PhpUnit/UnitTestBootstrap.php \
             --level 8 \
-            Tests/Unit Classes
+            Tests/Unit
+
+      - name: Run phpstan on Classes/
+        run: |
+          bin/phpstan analyse --level 8 Classes
 
   unit-tests:
     runs-on: ubuntu-20.04

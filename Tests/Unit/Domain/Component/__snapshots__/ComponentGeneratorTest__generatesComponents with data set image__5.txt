@@ -1,5 +1,5 @@
-prototype(Vendor.Site:Component.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\Image\\ImageInterface'
+prototype(Vendor.Site:Leaf.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Image\\ImageInterface'
 
     @styleguide {
         title = 'Image'
@@ -16,9 +16,7 @@ prototype(Vendor.Site:Component.Image) < prototype(PackageFactory.AtomicFusion.P
 
     renderer = afx`<dl>
         <dt>src:</dt>
-        <dd>
-            <Sitegeist.Lazybones:Image imageSource={presentationObject.src} />
-        </dd>
+        <dd>{presentationObject.src}</dd>
         <dt>alt:</dt>
         <dd>{presentationObject.alt}</dd>
         <dt>title:</dt>

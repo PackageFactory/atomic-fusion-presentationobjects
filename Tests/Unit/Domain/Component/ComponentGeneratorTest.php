@@ -5,13 +5,17 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Comp
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use Neos\Flow\Package\FlowPackageInterface;
 use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
-use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\SimpleFileWriter;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeClass;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropTypeRepositoryInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolverInterface;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\Prophet;
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
@@ -20,6 +24,31 @@ use Spatie\Snapshots\MatchesSnapshots;
 final class ComponentGeneratorTest extends UnitTestCase
 {
     use MatchesSnapshots;
+
+    /**
+     * @var Prophet
+     */
+    private $prophet;
+
+    /**
+     * @var ObjectProphecy<PropTypeRepositoryInterface>
+     */
+    protected $propTypeRepository;
+
+    /**
+     * @var ObjectProphecy<FlowPackageInterface>
+     */
+    protected $sitePackage;
+
+    /**
+     * @var ObjectProphecy<FlowPackageInterface>
+     */
+    protected $defaultPackage;
+
+    /**
+     * @var ObjectProphecy<PackageResolverInterface>
+     */
+    protected $packageResolver;
 
     /**
      * @var ComponentGenerator
@@ -46,231 +75,145 @@ final class ComponentGeneratorTest extends UnitTestCase
             ],
         ]);
 
-        $this->componentGenerator = new ComponentGenerator(
-            new SimpleFileWriter()
-        );
+        $this->prophet = new Prophet();
+
+        $this->propTypeRepository = $this->prophet->prophesize(PropTypeRepositoryInterface::class);
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), 'string')
+            ->willReturn(new PropType('string', 'string', 'string', false, PropTypeClass::primitive()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), '?string')
+            ->willReturn(new PropType('string', 'string', 'string', true, PropTypeClass::primitive()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), 'HeadlineType')
+            ->willReturn(new PropType('HeadlineType', 'HeadlineType', 'HeadlineType', false, PropTypeClass::value()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), 'HeadlineLook')
+            ->willReturn(new PropType('HeadlineLook', 'HeadlineLook', 'HeadlineLook', false, PropTypeClass::value()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), 'ImageSourceHelperInterface')
+            ->willReturn(new PropType('ImageSourceHelperInterface', 'ImageSourceHelperInterface', 'ImageSourceHelperInterface', false, PropTypeClass::globalValue()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), 'UriInterface')
+            ->willReturn(new PropType('UriInterface', 'UriInterface', 'UriInterface', false, PropTypeClass::globalValue()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), '?Image')
+            ->willReturn(new PropType('Image', 'Image', 'Image', true, PropTypeClass::leaf()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), '?Text')
+            ->willReturn(new PropType('Text', 'Text', 'Text', true, PropTypeClass::leaf()));
+        $this->propTypeRepository
+            ->findByType(Argument::any(), Argument::any(), '?Link')
+            ->willReturn(new PropType('Link', 'Link', 'Link', true, PropTypeClass::leaf()));
+
+        $this->sitePackage = $this->prophet->prophesize(FlowPackageInterface::class);
+        $this->sitePackage
+            ->getPackageKey()
+            ->willReturn('Vendor.Site');
+        $this->sitePackage
+            ->getPackagePath()
+            ->willReturn('vfs://DistributionPackages/Vendor.Site/');
+
+        $this->defaultPackage = $this->prophet->prophesize(FlowPackageInterface::class);
+        $this->defaultPackage
+            ->getPackageKey()
+            ->willReturn('Vendor.Default');
+        $this->defaultPackage
+            ->getPackagePath()
+            ->willReturn('vfs://DistributionPackages/Vendor.Default/');
+
+        $this->packageResolver = $this->prophet->prophesize(PackageResolverInterface::class);
+        $this->packageResolver
+            ->resolvePackage('Vendor.Site')
+            ->willReturn($this->sitePackage);
+        $this->packageResolver
+            ->resolvePackage(null)
+            ->willReturn($this->defaultPackage);
+
+        $this->componentGenerator = new ComponentGenerator();
+
+        $this->inject($this->componentGenerator, 'propTypeRepository', $this->propTypeRepository->reveal());
+        $this->inject($this->componentGenerator, 'packageResolver', $this->packageResolver->reveal());
     }
 
     /**
-     * @return array<string,array{ComponentName,string[],string,bool,bool,string[]}>
+     * @after
+     * @return void
+     */
+    public function tearDownComponentGeneratorTest(): void
+    {
+        $this->prophet->checkPredictions();
+    }
+
+    /**
+     * @return array<string,array{string,string[],null|string}>
      */
     public function exampleProvider(): array
     {
         return [
-            'text' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'NewText'),
-                ['content:string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextFactory.php',
+            'text' =>
+                ['Text', ['content:string'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/Text.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Text/TextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/NewText/NewText.fusion'
-                ]
-            ],
-            'text in default package' => [
-                new ComponentName(new PackageKey('Vendor.Default'), FusionNamespace::default(), 'NewText'),
-                ['content:string'],
-                'vfs://DistributionPackages/Vendor.Default/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewTextInterface.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewTextFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Text/Text.fusion'
+                ]],
+            'text in default package' =>
+                ['Text', ['content:string'], null, [
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Text/Text.php',
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Text/TextInterface.php',
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Text/TextFactory.php',
                     'vfs://DistributionPackages/Vendor.Default/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Default/Resources/Private/Fusion/Presentation/Component/NewText/NewText.fusion'
-                ]
-            ],
-            'headline' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Headline'),
-                ['type:HeadlineType', 'look:HeadlineLook', 'content:string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/Headline.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineFactory.php',
+                    'vfs://DistributionPackages/Vendor.Default/Resources/Private/Fusion/Presentation/Leaf/Text/Text.fusion'
+                ]],
+            'headline' =>
+                ['Headline', ['type:HeadlineType', 'look:HeadlineLook', 'content:string'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/Headline.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/HeadlineInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Headline/HeadlineFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/Headline.fusion'
-                ]
-            ],
-            'image' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Image'),
-                ['src:ImageSource', 'alt:string', 'title:?string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/Image.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/ImageInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/ImageFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Headline/Headline.fusion'
+                ]],
+            'image' =>
+                ['Image', ['src:ImageSourceHelperInterface', 'alt:string', 'title:?string'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Image/Image.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Image/ImageInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Image/ImageFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Image/Image.fusion'
-                ]
-            ],
-            'link' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'NewLink'),
-                ['href:Uri', 'title:?string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLink.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLinkInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLinkFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Image/Image.fusion'
+                ]],
+            'link' =>
+                ['Link', ['href:UriInterface', 'title:?string'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Link/Link.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Link/LinkInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Link/LinkFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/NewLink/NewLink.fusion'
-                ]
-            ],
-            'card' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
-                ['image:?ImageSource', 'text:?Text', 'link:?Link'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Leaf/Link/Link.fusion'
+                ]],
+            'card' =>
+                ['Card', ['image:?Image', 'text:?Text', 'link:?Link'], 'Vendor.Site', [
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Card/Card.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Card/CardInterface.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Card/CardFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
-                ]
-            ],
-            'fancyText' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('FancyComponent'), 'NewText'),
-                ['text:?string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewTextInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewTextFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/FancyComponent/NewText/NewText.fusion'
-                ]
-            ],
-            'evenFancierText' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Even.FancierComponent'), 'NewText'),
-                ['text:?string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewTextInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewTextFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Even/FancierComponent/NewText/NewText.fusion'
-                ],
-            ],
-            'textWithArray' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'NewText'),
-                ['content:string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                true,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTexts.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/NewText/NewText.fusion'
-                ]
-            ],
-            'withTextArray' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'WithTextArray'),
-                ['texts:array<Text>'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArray.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArrayInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArrayFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/WithTextArray/WithTextArray.fusion'
-                ]
-            ],
-            'cardWithSharedText' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
-                ['image:?ImageSource', 'text:?Vendor.Shared:Text', 'link:?Link'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
-                ]
-            ],
-            'cardWithSharedCustomNamespacedText' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
-                ['image:?ImageSource', 'text:?Vendor.Shared:Custom.Type.Text', 'link:?Link'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
-                ]
-            ],
-            'cardWithSharedTexts' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Card'),
-                ['image:?ImageSource', 'text:array<Vendor.Shared:Text>', 'link:?Link'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                false,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
-                ]
-            ],
-            'colocatedText' => [
-                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'ColocatedText'),
-                ['content:string'],
-                'vfs://DistributionPackages/Vendor.Site/',
-                true,
-                false,
-                [
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedTextInterface.php',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedTextFactory.php',
-                    'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedText.fusion'
-                ]
-            ],
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Composite/Card/Card.fusion'
+                ]],
         ];
     }
 
     /**
      * @test
      * @dataProvider exampleProvider
-     * @param ComponentName $componentName
+     * @param string $componentName
      * @param string[] $serializedProps
-     * @param string $packagePath
-     * @param bool $listable
+     * @param null|string $packageKey
      * @param string[] $expectedFileNames
      * @return void
-     * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generatesComponents(ComponentName $componentName, array $serializedProps, string $packagePath, bool $colocate, bool $listable, array $expectedFileNames): void
+    public function generatesComponents(string $componentName, array $serializedProps, ?string $packageKey, array $expectedFileNames): void
     {
-        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packagePath, $colocate, $listable);
+        $this->componentGenerator->generateComponent($componentName, $serializedProps, $packageKey);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

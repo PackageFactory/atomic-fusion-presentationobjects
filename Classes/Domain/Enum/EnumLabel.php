@@ -18,7 +18,7 @@ final class EnumLabel
 
     private string $packageKey;
 
-    private function __construct(
+    public function __construct(
         string $labelIdPrefix,
         string $sourceName,
         string $packageKey
@@ -30,15 +30,15 @@ final class EnumLabel
 
     public static function fromEnumName(string $enumName): self
     {
-        list($packageKey, $componentName) = explode('/Presentation/', $enumName);
-        $pivot = \mb_strrpos($componentName, '/') ?: null;
-        $componentNamespace = \mb_substr($packageKey, 0, $pivot);
-        $enumShort = lcfirst(\mb_substr($packageKey, $pivot+1));
+        list($packageNamespace, $componentName) = explode('\Presentation\\', $enumName);
+        $pivot = \mb_strrpos($componentName, '\\') ?: null;
+        $componentNamespace = \mb_substr($componentName, 0, $pivot);
+        $enumShort = lcfirst(\mb_substr($componentName, $pivot+1));
 
         return new self(
             $enumShort . '.',
-            \str_replace('/', '.', $componentNamespace),
-            \str_replace('/', '.', $packageKey)
+            \str_replace('\\', '.', $componentNamespace),
+            \str_replace('\\', '.', $packageNamespace)
         );
     }
 

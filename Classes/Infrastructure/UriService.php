@@ -56,7 +56,7 @@ final class UriService implements UriServiceInterface
     /**
      * @param TraversableNodeInterface $documentNode
      * @param bool $absolute
-     * @param string $format
+     * @param string|null $format
      * @return string
      * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException

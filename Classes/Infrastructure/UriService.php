@@ -57,6 +57,7 @@ final class UriService implements UriServiceInterface
     /**
      * @param TraversableNodeInterface $documentNode
      * @param bool $absolute
+     * @param string|null $format
      * @return Uri
      * @throws Http\Exception
      * @throws Mvc\Routing\Exception\MissingActionNameException
@@ -65,9 +66,9 @@ final class UriService implements UriServiceInterface
      * @throws \Neos\Flow\Security\Exception
      * @throws \Neos\Neos\Exception
      */
-    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false): Uri
+    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): Uri
     {
-        return new Uri($this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, null, $absolute));
+        return new Uri($this->linkingService->createNodeUri($this->getControllerContext(), $documentNode, null, $format, $absolute));
     }
 
     /**

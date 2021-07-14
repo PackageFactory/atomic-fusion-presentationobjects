@@ -66,10 +66,13 @@ class ComponentCommandController extends CommandController
     public function kickStartCommand(string $name, bool $listable = false): void
     {
         $package = $this->packageResolver->resolvePackage();
+        $component = ComponentName::fromInput($name, PackageKey::fromPackage($package));
+        $componentPackage = $this->packageResolver->resolvePackage((string)$component->getPackageKey());
+
         $this->componentGenerator->generateComponent(
-            ComponentName::fromInput($name, PackageKey::fromPackage($package)),
+            $component,
             $this->request->getExceedingArguments(),
-            $package->getPackagePath(),
+            $componentPackage->getPackagePath(),
             $listable
         );
     }
@@ -94,12 +97,15 @@ class ComponentCommandController extends CommandController
     public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = []): void
     {
         $package = $this->packageResolver->resolvePackage();
+        $component = ComponentName::fromInput($componentName, PackageKey::fromPackage($package));
+        $componentPackage = $this->packageResolver->resolvePackage((string)$component->getPackageKey());
+
         $this->valueGenerator->generateEnum(
-            ComponentName::fromInput($componentName, PackageKey::fromPackage($package)),
+            $component,
             $name,
             $type,
             $values,
-            $package->getPackagePath()
+            $componentPackage->getPackagePath()
         );
     }
 }

@@ -6,7 +6,7 @@ namespace Vendor\Default\Presentation\Component\Crossing;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
 
 /**
  * @Flow\Proxy(false)

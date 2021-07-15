@@ -12,6 +12,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentNa
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
+use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\DefensiveConfirmationFileWriter;
 
 /**
  * The command controller for kick-starting PresentationObject components
@@ -25,16 +26,10 @@ class ComponentCommandController extends CommandController
     protected $packageResolver;
 
     /**
-     * @Flow\Inject
-     * @var ComponentGenerator
+     * @Flow\InjectConfiguration(path="componentGeneration.colocate")
+     * @var bool
      */
-    protected $componentGenerator;
-
-    /**
-     * @Flow\Inject
-     * @var EnumGenerator
-     */
-    protected $valueGenerator;
+    protected $colocate;
 
     /**
      * Create a new PresentationObject component and factory
@@ -50,6 +45,7 @@ class ComponentCommandController extends CommandController
      * The following values are allowed for types:
      *
      * * string, int, float, bool
+     * * slot
      * * Value class names created with <u>component:kickstartvalue</u> in the same
      *   component namespace
      * * Component class names created with <u>component:kickstart</u> in the same
@@ -60,19 +56,24 @@ class ComponentCommandController extends CommandController
      *
      * @param string $name The name of the new component
      * @param bool $listable If set, an additional list type will be generated
+     * @param bool $yes If set, no confirmation is going to be required for overwriting files
      * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function kickStartCommand(string $name, bool $listable = false): void
+    public function kickStartCommand(string $name, bool $listable = false, bool $yes = false): void
     {
+        $componentGenerator = new ComponentGenerator(
+            new DefensiveConfirmationFileWriter($this->output, $yes)
+        );
         $package = $this->packageResolver->resolvePackage();
-        $component = ComponentName::fromInput($name, PackageKey::fromPackage($package));
-        $componentPackage = $this->packageResolver->resolvePackage((string)$component->getPackageKey());
+        $componentName = ComponentName::fromInput($name, PackageKey::fromPackage($package));
+        $componentPackage = $this->packageResolver->resolvePackage((string)$componentName->getPackageKey());
 
-        $this->componentGenerator->generateComponent(
-            $component,
+        $componentGenerator->generateComponent(
+            $componentName,
             $this->request->getExceedingArguments(),
             $componentPackage->getPackagePath(),
+            $this->colocate,
             $listable
         );
     }
@@ -92,20 +93,26 @@ class ComponentCommandController extends CommandController
      * @param string $name The name of the new pseudo-enum
      * @param string $type The type of the new pseudo-enum (must be one of: "string", "int")
      * @param array|string[] $values A comma-separated colon list of names:values for the new pseudo-enum, e.g. a,b,c , a:1,b:2,c:3 or a:1.2,b:2.4,c:3.6
+     * @param bool $yes If set, no confirmation is going to be required for overwriting files
      * @return void
      */
-    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = []): void
+    public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], bool $yes = false): void
     {
+        $enumGenerator = new EnumGenerator(
+            new \DateTimeImmutable(),
+            new DefensiveConfirmationFileWriter($this->output, $yes)
+        );
         $package = $this->packageResolver->resolvePackage();
-        $component = ComponentName::fromInput($componentName, PackageKey::fromPackage($package));
-        $componentPackage = $this->packageResolver->resolvePackage((string)$component->getPackageKey());
+        $componentNameObject = ComponentName::fromInput($componentName, PackageKey::fromPackage($package));
+        $componentPackage = $this->packageResolver->resolvePackage((string)$componentNameObject->getPackageKey());
 
-        $this->valueGenerator->generateEnum(
-            $component,
+        $enumGenerator->generateEnum(
+            $componentNameObject,
             $name,
             $type,
             $values,
-            $componentPackage->getPackagePath()
+            $componentPackage->getPackagePath(),
+            $this->colocate
         );
     }
 }

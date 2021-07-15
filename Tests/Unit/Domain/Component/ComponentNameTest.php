@@ -264,12 +264,13 @@ final class ComponentNameTest extends UnitTestCase
      * @dataProvider phpFilePathProvider
      * @param ComponentName $subject
      * @param string $packagePath
+     * @param bool $colocate
      * @param string $expectedValue
      * @return void
      */
-    public function testGetPhpFilePath(ComponentName $subject, string $packagePath, string $expectedValue)
+    public function testGetPhpFilePath(ComponentName $subject, string $packagePath, bool $colocate, string $expectedValue)
     {
-        Assert::assertSame($expectedValue, $subject->getPhpFilePath($packagePath));
+        Assert::assertSame($expectedValue, $subject->getPhpFilePath($packagePath, $colocate));
     }
 
     /**
@@ -281,16 +282,19 @@ final class ComponentNameTest extends UnitTestCase
             [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'),
                 'DistributionPackages/Vendor.Site',
+                false,
                 'DistributionPackages/Vendor.Site/Classes/Presentation/Component/MyComponent'
             ],
             [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'),
                 'DistributionPackages/Vendor.Site',
+                false,
                 'DistributionPackages/Vendor.Site/Classes/Presentation/CustomType/MyComponent'
             ],
             [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'),
                 'DistributionPackages/Vendor.Site',
+                false,
                 'DistributionPackages/Vendor.Site/Classes/Presentation/Custom/Type/MyComponent'
             ]
         ];

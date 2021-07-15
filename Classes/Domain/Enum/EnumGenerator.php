@@ -6,27 +6,24 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Utility\Files;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FileWriterInterface;
 
 /**
  * The enum generator domain service
  *
- * @Flow\Scope("singleton")
+ * @Flow\Proxy(false)
  */
 final class EnumGenerator
 {
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $now;
+    protected \DateTimeImmutable $now;
 
-    /**
-     * @param null|\DateTimeImmutable $now
-     */
-    public function __construct(?\DateTimeImmutable $now = null)
+    private FileWriterInterface $fileWriter;
+
+    public function __construct(?\DateTimeImmutable $now = null, FileWriterInterface $fileWriter)
     {
         $this->now = $now ?? new \DateTimeImmutable();
+        $this->fileWriter = $fileWriter;
     }
 
     /**
@@ -35,6 +32,7 @@ final class EnumGenerator
      * @param string $type
      * @param array|string[] $values
      * @param string $packagePath
+     * @param bool $colocate
      * @return void
      */
     public function generateEnum(
@@ -42,7 +40,8 @@ final class EnumGenerator
         string $name,
         string $type,
         array $values,
-        string $packagePath
+        string $packagePath,
+        bool $colocate
     ): void {
         $enumType = EnumType::fromInput($type);
         $enumName = new EnumName(
@@ -51,17 +50,8 @@ final class EnumGenerator
         );
         $enum = new Enum($enumName, $enumType, $enumType->processValueArray($values));
 
-        $classPath = $enumName->getPhpFilePath($packagePath);
-        if (!file_exists($classPath)) {
-            Files::createDirectoryRecursively($classPath);
-        }
-        file_put_contents($enumName->getClassPath($packagePath), $enum->getClassContent());
-        file_put_contents($enumName->getExceptionPath($packagePath), $enum->getExceptionContent($this->now));
-
-        $providerBasePath = $enumName->getProviderBasePath($packagePath);
-        if (!is_dir($providerBasePath)) {
-            Files::createDirectoryRecursively($providerBasePath);
-        }
-        file_put_contents($enumName->getProviderPath($packagePath), $enum->getProviderContent());
+        $this->fileWriter->writeFile($enumName->getClassPath($packagePath, $colocate), $enum->getClassContent());
+        $this->fileWriter->writeFile($enumName->getExceptionPath($packagePath, $colocate), $enum->getExceptionContent($this->now));
+        $this->fileWriter->writeFile($enumName->getProviderPath($packagePath), $enum->getProviderContent());
     }
 }

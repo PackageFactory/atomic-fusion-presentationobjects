@@ -53,7 +53,7 @@ final class Component
      */
     public function getInterfaceContent(): string
     {
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 ' . $this->name->renderClassComment() . '
@@ -72,7 +72,7 @@ interface ' . $this->name->getSimpleInterfaceName() . ' extends ComponentPresent
      */
     public function getClassContent(): string
     {
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 ' . $this->name->renderClassComment() . '
@@ -99,7 +99,7 @@ final class ' . $this->name->getSimpleClassName() . ' extends AbstractComponentP
      */
     public function getFactoryContent(): string
     {
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 ' . $this->name->renderClassComment() . '
@@ -117,7 +117,7 @@ final class ' . $this->name->getSimpleFactoryName() . ' extends AbstractComponen
      */
     public function getComponentArrayContent(): string
     {
-        return '<?php
+        return '<?php declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 ' . $this->name->renderClassComment() . '

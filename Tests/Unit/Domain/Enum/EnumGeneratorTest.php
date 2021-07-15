@@ -11,6 +11,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentNa
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
+use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\SimpleFileWriter;
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
@@ -36,11 +37,14 @@ final class EnumGeneratorTest extends UnitTestCase
             'Vendor.Default' => [],
         ]);
 
-        $this->enumGenerator = new EnumGenerator(new \DateTimeImmutable('@1602423895'));
+        $this->enumGenerator = new EnumGenerator(
+            new \DateTimeImmutable('@1602423895'),
+            new SimpleFileWriter()
+        );
     }
 
     /**
-     * @return array<string,array{ComponentName,string,string,string[],string,string[]}>
+     * @return array<string,array{ComponentName,string,string,string[],string,string[],bool}>
      */
     public function exampleProvider(): array
     {
@@ -55,7 +59,8 @@ final class EnumGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineType.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineTypeIsInvalid.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Application/HeadlineTypeProvider.php',
-                ]
+                ],
+                false
             ],
             'trafficlight' => [
                 new ComponentName(new PackageKey('Vendor.Default'), FusionNamespace::default(), 'Crossing'),
@@ -67,7 +72,8 @@ final class EnumGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLight.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLightIsInvalid.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Application/TrafficLightProvider.php',
-                ]
+                ],
+                false
             ],
             'duration' => [
                 new ComponentName(new PackageKey('Vendor.Default'), FusionNamespace::fromString('Custom.Type'), 'Crossing'),
@@ -79,8 +85,22 @@ final class EnumGeneratorTest extends UnitTestCase
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/Duration.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/DurationIsInvalid.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Application/DurationProvider.php',
-                ]
-            ]
+                ],
+                false
+            ],
+            'coLocatedHeadlineType' => [
+                new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Headline'),
+                'HeadlineType',
+                'string',
+                ['h1', 'h2', 'div'],
+                'vfs://DistributionPackages/Vendor.Site/',
+                [
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineType.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineTypeIsInvalid.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Application/HeadlineTypeProvider.php',
+                ],
+                true
+            ],
         ];
     }
 
@@ -94,11 +114,12 @@ final class EnumGeneratorTest extends UnitTestCase
      * @param string[] $values
      * @param string $packagePath
      * @param string[] $expectedFileNames
+     * @param bool $colocate
      * @return void
      */
-    public function generatesEnums(ComponentName $componentName, string $name, string $type, array $values, string $packagePath, array $expectedFileNames): void
+    public function generatesEnums(ComponentName $componentName, string $name, string $type, array $values, string $packagePath, array $expectedFileNames, bool $colocate): void
     {
-        $this->enumGenerator->generateEnum($componentName, $name, $type, $values, $packagePath);
+        $this->enumGenerator->generateEnum($componentName, $name, $type, $values, $packagePath, $colocate);
 
         foreach ($expectedFileNames as $fileName) {
             $this->assertFileExists($fileName);

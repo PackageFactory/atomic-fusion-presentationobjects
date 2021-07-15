@@ -1,12 +1,12 @@
 <div align="center">
-    <a href="./04_Kickstarter.md">&lt; 4. Kickstarter</a>
+    <a href="./05_Kickstarter.md">&lt; 4. Kickstarter</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
 </div>
 
 ---
 
-# Preview Mode
+# 6. Preview Mode
 
 The `PresentationObjectComponent` has a special flag to change its behavior when used with tools like Sitegeist.Monocle.
 
@@ -30,7 +30,7 @@ prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComp
 ---
 
 <div align="center">
-    <a href="./04_Kickstarter.md">&lt; 4. Kickstarter</a>
+    <a href="./05_Kickstarter.md">&lt; 4. Kickstarter</a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="./00_Index.md">Index</a>
 </div>

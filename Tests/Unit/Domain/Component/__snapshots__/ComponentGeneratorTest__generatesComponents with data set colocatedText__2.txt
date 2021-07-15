@@ -1,0 +1,13 @@
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\ColocatedText;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
+
+interface ColocatedTextInterface extends ComponentPresentationObjectInterface
+{
+    public function getContent(): string;
+}

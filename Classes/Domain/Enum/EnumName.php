@@ -68,19 +68,19 @@ final class EnumName
         return $this->name . 'Provider';
     }
 
-    public function getPhpFilePath(string $packagePath): string
+    public function getPhpFilePath(string $packagePath, bool $colocate): string
     {
-        return $this->componentName->getPhpFilePath($packagePath);
+        return $this->componentName->getPhpFilePath($packagePath, $colocate);
     }
 
-    public function getClassPath(string $packagePath): string
+    public function getClassPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath) . '/' . $this->name . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . '.php';
     }
 
-    public function getExceptionPath(string $packagePath): string
+    public function getExceptionPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath) . '/' . $this->getExceptionName() . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->getExceptionName() . '.php';
     }
 
     public function getProviderBasePath(string $packagePath): string

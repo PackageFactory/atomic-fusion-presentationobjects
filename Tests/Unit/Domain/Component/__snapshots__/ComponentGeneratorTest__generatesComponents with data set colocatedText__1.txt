@@ -1,0 +1,28 @@
+<?php declare(strict_types=1);
+namespace Vendor\Site\Presentation\Component\ColocatedText;
+
+/*
+ * This file is part of the Vendor.Site package.
+ */
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class ColocatedText extends AbstractComponentPresentationObject implements ColocatedTextInterface
+{
+    private string $content;
+
+    public function __construct(
+        string $content
+    ) {
+        $this->content = $content;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+}

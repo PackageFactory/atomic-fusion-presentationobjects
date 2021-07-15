@@ -21,8 +21,11 @@ final class ComponentName
 
     private string $name;
 
-    public function __construct(PackageKey $packageKey, FusionNamespace $fusionNamespace, string $name)
-    {
+    public function __construct(
+        PackageKey $packageKey,
+        FusionNamespace $fusionNamespace,
+        string $name
+    ) {
         $this->packageKey = $packageKey;
         $this->fusionNamespace = $fusionNamespace;
         $this->name = $name;
@@ -204,29 +207,31 @@ final class ComponentName
         return $this->packageKey->getSimpleName() . '.' . $this->name;
     }
 
-    public function getPhpFilePath(string $packagePath): string
+    public function getPhpFilePath(string $packagePath, bool $colocate): string
     {
-        return $packagePath . '/Classes/Presentation/' . $this->fusionNamespace->toFilePath() . '/' . $this->name;
+        return $colocate
+            ? $this->getFusionFilePath($packagePath)
+            : $packagePath . '/Classes/Presentation/' . $this->fusionNamespace->toFilePath() . '/' . $this->name;
     }
 
-    public function getInterfacePath(string $packagePath): string
+    public function getInterfacePath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath) . '/'. $this->name . 'Interface.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . 'Interface.php';
     }
 
-    public function getClassPath(string $packagePath): string
+    public function getClassPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath) . '/'. $this->name . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . '.php';
     }
 
-    public function getFactoryPath(string $packagePath): string
+    public function getFactoryPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath) . '/'. $this->name . 'Factory.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . 'Factory.php';
     }
 
-    public function getComponentArrayPath(string $packagePath): string
+    public function getComponentArrayPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath) . '/'. PluralName::forName($this->name) . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/'. PluralName::forName($this->name) . '.php';
     }
 
     public function getFusionFilePath(string $packagePath): string

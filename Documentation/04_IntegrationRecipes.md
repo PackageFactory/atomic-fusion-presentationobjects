@@ -80,6 +80,139 @@ Resolves URIs with the special `asset://` and `node://` protocols.
 | $rawLinkUri | string | The string containing the URI | |
 | $subgraph | [ContentContext](https://github.com/neos/neos-development-collection/blob/master/Neos.Neos/Classes/Domain/Service/ContentContext.php) | A reference content context required to resolve `node://` URIs | |
 
+## The EnumProvider
+
+All pseudo-enums implementing the PseudoEnumInterface can be provided to the inspector or the Fusion runtime using the PseudoEnumProvider.
+This makes the enum itself the single source of discrete values a node or presentation object property may have, obsoleting value adjustments in Fusion, configuration etc.
+
+As an example, we use the following pseudo-enum:
+
+```php
+<?php declare(strict_types=1);
+namespace Acme\Site\Presentation\Block\Headline;
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class HeadlineType implements PseudoEnumInterface
+{
+    const TYPE_H1 = 'h1';
+    const TYPE_H2 = 'h2';
+    const TYPE_H3 = 'h3';
+
+    private string $value;
+
+    private function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function h1(): self
+    {
+        return new self(self::TYPE_H1);
+    }
+
+    public static function h2(): self
+    {
+        return new self(self::TYPE_H2);
+    }
+
+    public static function h3(): self
+    {
+        return new self(self::TYPE_H3);
+    }
+
+    /**
+     * @return array|self[]
+     */
+    public static function cases(): array
+    {
+        return [
+            new self(self::TYPE_H1),
+            new self(self::TYPE_H2),
+            new self(self::TYPE_H3)
+        ];
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+}
+
+```
+
+### As a node type postprocessor
+
+Due to cacheability and thus improved performance, it is recommended to use the EnumProvider's node type postprocessor capabilities to make the enum's cases available in the Inspector.
+
+When we now declare our NodeType property, we do this as follows:
+
+```yaml
+  properties:
+    headline:
+      type: string
+      ui:
+        inspector:
+          editor: Neos.Neos/Inspector/Editors/SelectBoxEditor
+          editorOptions:
+            values: []
+  postprocessors:
+    headline-types:
+      postprocessor: PackageFactory\AtomicFusion\PresentationObjects\Application\PseudoEnumProvider
+      postprocessorOptions:
+        enumName: Acme\Site\Presentation\Block\Headline\HeadlineType
+        propertyNames:
+          - headline
+```
+
+The initial values are left empty and will be completely populated by the postprocessor. While the postprocessor is the same for all enums, there are two configuration options available:
+* enumName: The enum's fully qualified PHP class name
+* propertyNames: A list of property names to apply this enum's values to
+
+### As a data source
+
+If for some reason the postprocessor does not suffice, there is also the possibility to use the provider as a data source.
+Be aware that though more flexible, data sources are called on each load of the inspector, impacting performance.
+The provider can be used as a data source as follows:
+
+```yaml
+  properties:
+    headline:
+      type: string
+      ui:
+        inspector:
+          editor: Neos.Neos/Inspector/Editors/SelectBoxEditor
+          editorOptions:
+            dataSourceIdentifier: packagefactory-atomicfusion-presentationobjects-enumcases
+            dataSourceAdditionalData:
+              enumName: Acme\Site\Presentation\Block\Headline\HeadlineType
+```
+
+### As an EEL helper
+
+If you need the enum's values in Fusion, you can declare the provider as an EEL helper
+
+```yaml
+Neos:
+  Fusion:
+    defaultContext:
+      Enum: PackageFactory\AtomicFusion\PresentationObjects\Application\PseudoEnumProvider
+```
+and use it in Fusion to get the cases or values.
+```neosfusion
+cases = ${Enum.getCases('Acme\Site\Presentation\Block\Headline\HeadlineType')}
+values = ${Enum.getValues('Acme\Site\Presentation\Block\Headline\HeadlineType')}
+```
+
 ---
 
 <div align="center">

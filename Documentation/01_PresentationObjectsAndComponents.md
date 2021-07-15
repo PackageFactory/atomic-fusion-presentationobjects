@@ -8,7 +8,7 @@
 
 # 1. PresentationObjects and Components
 
-> **Hint:** This section describes the manual creation of PresentationObjects and PresentationObject components. Both patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
+> **Hint:** This section describes the manual creation of PresentationObjects, Pseudo-Enums and PresentationObject components. All these patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
 
 In this tutorial, we're going to write a PresentationObject for an image component. Our image consists of a `src`, an `alt` and an optional `title` property.
 
@@ -138,6 +138,106 @@ myImage = Vendor.Site:Component.Image {
 ```
 
 An exception will be thrown, if `someObject` does not implement `Vendor\Site\Presentation\Image\ImageInterface`.
+
+## (Pseudo) Enums
+
+It is recommended to model discrete values for presentation object properties as objects themselves.
+Since PHP does not support enums yet, this package provides an interface to be implemented by classes that behave similarly to enums.
+> **Hint:** For more information on enums in PHP, see https://stitcher.io/blog/php-enums
+
+<small>*`EXAMPLE: Pseudo-enum`*<small>
+
+Given we have a presentation object Headline with properties type and content.
+While content can be an arbitrary string, in our project by specification we only support h1-h3 as types for headlines.
+To prevent accidental use of h4 (or other tag names) for headlines, we model the headline type as a pseudo enum as follows:
+
+```php
+<?php declare(strict_types=1);
+namespace Acme\Site\Presentation\Block\Headline;
+
+use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
+
+/**
+ * @Flow\Proxy(false)
+ */
+final class HeadlineType implements PseudoEnumInterface
+{
+    const TYPE_H1 = 'h1';
+    const TYPE_H2 = 'h2';
+    const TYPE_H3 = 'h3';
+
+    private string $value;
+
+    private function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function fromString(string $string): self
+    {
+        if ($string !== self::TYPE_H1 && $string !== self::TYPE_H2 && $string !== self::TYPE_H3) {
+            throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+        }
+
+        return new self($string);
+    }
+
+    public static function h1(): self
+    {
+        return new self(self::TYPE_H1);
+    }
+
+    public static function h2(): self
+    {
+        return new self(self::TYPE_H2);
+    }
+
+    public static function h3(): self
+    {
+        return new self(self::TYPE_H3);
+    }
+
+    /**
+     * @return array|self[]
+     */
+    public static function cases(): array
+    {
+        return [
+            new self(self::TYPE_H1),
+            new self(self::TYPE_H2),
+            new self(self::TYPE_H3)
+        ];
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+}
+```
+
+Now instead of having a string typed property in our headline, we can model it as follows:
+
+```php
+<?php declare(strict_types=1);
+namespace Acme\Site\Presentation\Block\Headline;
+
+interface HeadlineInterface
+{
+    public function getType(): HeadlineType;
+
+    public function getContent(): string;
+}
+```
+
+> **Hint:** Pseudo-enums can also be used in Neos' inspector select box editor. Please refer to [Integration Recipes](./04_IntegrationRecipes.md) to learn how it is done.
+
 
 ---
 

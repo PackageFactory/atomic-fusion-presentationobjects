@@ -6,12 +6,12 @@ namespace Vendor\Site\Presentation\Component\Headline;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class HeadlineType implements EnumInterface
+final class HeadlineType implements PseudoEnumInterface
 {
     const TYPE_H1 = 'h1';
     const TYPE_H2 = 'h2';
@@ -26,7 +26,9 @@ final class HeadlineType implements EnumInterface
 
     public static function fromString(string $string): self
     {
-        if (!in_array($string, self::getValues())) {
+        if (!in_array($string, array_map(function(self $case) {
+            return $case->getValue();
+        }, self::cases()))) {
             throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
         }
 
@@ -64,14 +66,14 @@ final class HeadlineType implements EnumInterface
     }
 
     /**
-     * @return array|string[]
+     * @return array|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::TYPE_H1,
-            self::TYPE_H2,
-            self::TYPE_DIV
+            new self(self::TYPE_H1),
+            new self(self::TYPE_H2),
+            new self(self::TYPE_DIV)
         ];
     }
 

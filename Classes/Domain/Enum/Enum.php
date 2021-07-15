@@ -53,12 +53,12 @@ namespace ' . $this->name->getPhpNamespace() . ';
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class ' . $this->name->getName() . ' implements EnumInterface
+final class ' . $this->name->getName() . ' implements PseudoEnumInterface
 {
     ' . $this->renderConstants() . '
 
@@ -71,7 +71,9 @@ final class ' . $this->name->getName() . ' implements EnumInterface
 
     public static function from' . ucfirst((string)$this->type) . '(' . $this->type . ' ' . $variable . '): self
     {
-        if (!in_array(' . $variable . ', self::getValues())) {
+        if (!in_array(' . $variable . ', array_map(function(self $case) {
+            return $case->getValue();
+        }, self::cases()))) {
             throw ' . $this->name->getExceptionName() . '::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
         }
 
@@ -83,12 +85,12 @@ final class ' . $this->name->getName() . ' implements EnumInterface
     ' . $this->renderComparators() . '
 
     /**
-     * @return array|' . $this->type . '[]
+     * @return array|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            ' . $this->renderValues() .'
+            ' . $this->renderCases() .'
         ];
     }
 
@@ -190,17 +192,17 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     /**
      * @return string
      */
-    public function renderValues(): string
+    public function renderCases(): string
     {
-        $values = [];
+        $cases = [];
 
         if (is_array($this->values)) {
             foreach ($this->values as $name => $value) {
-                $values[] = 'self::' . $this->getConstantName($name) . ',';
+                $cases[] = 'new self(self::' . $this->getConstantName($name) . '),';
             }
         }
 
-        return trim(trim(implode("\n            ", $values)), ',');
+        return trim(trim(implode("\n            ", $cases)), ',');
     }
 
     /**

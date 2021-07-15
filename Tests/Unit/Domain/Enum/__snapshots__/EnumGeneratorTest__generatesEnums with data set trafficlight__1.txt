@@ -6,12 +6,12 @@ namespace Vendor\Default\Presentation\Component\Crossing;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class TrafficLight implements EnumInterface
+final class TrafficLight implements PseudoEnumInterface
 {
     const LIGHT_RED = 1;
     const LIGHT_YELLOW = 2;
@@ -26,7 +26,9 @@ final class TrafficLight implements EnumInterface
 
     public static function fromInt(int $int): self
     {
-        if (!in_array($int, self::getValues())) {
+        if (!in_array($int, array_map(function(self $case) {
+            return $case->getValue();
+        }, self::cases()))) {
             throw TrafficLightIsInvalid::becauseItMustBeOneOfTheDefinedConstants($int);
         }
 
@@ -64,14 +66,14 @@ final class TrafficLight implements EnumInterface
     }
 
     /**
-     * @return array|int[]
+     * @return array|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::LIGHT_RED,
-            self::LIGHT_YELLOW,
-            self::LIGHT_GREEN
+            new self(self::LIGHT_RED),
+            new self(self::LIGHT_YELLOW),
+            new self(self::LIGHT_GREEN)
         ];
     }
 

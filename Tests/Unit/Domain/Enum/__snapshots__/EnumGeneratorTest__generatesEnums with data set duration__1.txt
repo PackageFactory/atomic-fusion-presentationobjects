@@ -6,12 +6,12 @@ namespace Vendor\Default\Presentation\Custom\Type\Crossing;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class Duration implements EnumInterface
+final class Duration implements PseudoEnumInterface
 {
     const VALUE_SHORT = 1.2;
     const VALUE_MEDIUM = 2.4;
@@ -26,7 +26,9 @@ final class Duration implements EnumInterface
 
     public static function fromFloat(float $float): self
     {
-        if (!in_array($float, self::getValues())) {
+        if (!in_array($float, array_map(function(self $case) {
+            return $case->getValue();
+        }, self::cases()))) {
             throw DurationIsInvalid::becauseItMustBeOneOfTheDefinedConstants($float);
         }
 
@@ -64,14 +66,14 @@ final class Duration implements EnumInterface
     }
 
     /**
-     * @return array|float[]
+     * @return array|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::VALUE_SHORT,
-            self::VALUE_MEDIUM,
-            self::VALUE_LONG
+            new self(self::VALUE_SHORT),
+            new self(self::VALUE_MEDIUM),
+            new self(self::VALUE_LONG)
         ];
     }
 

@@ -52,12 +52,12 @@ namespace Vendor\Site\Presentation\Component\MyComponent;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class MyComponentType implements EnumInterface
+final class MyComponentType implements PseudoEnumInterface
 {
     const TYPE_PRIMARY = \'primary\';
     const TYPE_SECONDARY = \'secondary\';
@@ -71,7 +71,9 @@ final class MyComponentType implements EnumInterface
 
     public static function fromString(string $string): self
     {
-        if (!in_array($string, self::getValues())) {
+        if (!in_array($string, array_map(function(self $case) {
+            return $case->getValue();
+        }, self::cases()))) {
             throw MyComponentTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
         }
 
@@ -99,13 +101,13 @@ final class MyComponentType implements EnumInterface
     }
 
     /**
-     * @return array|string[]
+     * @return array|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::TYPE_PRIMARY,
-            self::TYPE_SECONDARY
+            new self(self::TYPE_PRIMARY),
+            new self(self::TYPE_SECONDARY)
         ];
     }
 

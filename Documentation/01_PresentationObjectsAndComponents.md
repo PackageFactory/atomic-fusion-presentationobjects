@@ -176,7 +176,9 @@ final class HeadlineType implements PseudoEnumInterface
 
     public static function fromString(string $string): self
     {
-        if ($string !== self::TYPE_H1 && $string !== self::TYPE_H2 && $string !== self::TYPE_H3) {
+        if (!in_array($string, array_map(function(self $case) {
+            return $case->getValue();
+        }, self::cases()))) {
             throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
         }
 
@@ -196,6 +198,21 @@ final class HeadlineType implements PseudoEnumInterface
     public static function h3(): self
     {
         return new self(self::TYPE_H3);
+    }
+
+    public function getIsH1(): bool
+    {
+        return $this->value === self::TYPE_H1;
+    }
+
+    public function getIsH2(): bool
+    {
+        return $this->value === self::TYPE_H2;
+    }
+
+    public function getIsH3(): bool
+    {
+        return $this->value === self::TYPE_H3;
     }
 
     /**

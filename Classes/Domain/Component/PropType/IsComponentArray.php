@@ -6,9 +6,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\AbstractImmutableArrayObject;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
 
 /**
  * The specification for component array classes
@@ -24,6 +21,6 @@ final class IsComponentArray
     public static function isSatisfiedByClassName(string $className): bool
     {
         return class_exists($className)
-            && is_subclass_of($className, AbstractComponentArray::class);
+            && is_subclass_of($className, \Traversable::class);
     }
 }

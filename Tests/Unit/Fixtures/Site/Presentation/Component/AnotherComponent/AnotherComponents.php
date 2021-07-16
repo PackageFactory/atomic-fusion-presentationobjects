@@ -6,21 +6,33 @@ namespace Vendor\Site\Presentation\Component\AnotherComponent;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
 
 /**
- * A dummy component array
+ * A list of anotherComponents
  * @Flow\Proxy(false)
  */
-final class AnotherComponents extends AbstractComponentArray
+final class AnotherComponents implements \IteratorAggregate
 {
+    /**
+     * @var array<int,AnotherComponentInterface>|AnotherComponentInterface[]
+     */
+    private array $anotherComponents;
+
     public function __construct($array)
     {
         foreach ($array as $element) {
-            if (!$element instanceof AnotherComponent) {
+            if (!$element instanceof AnotherComponentInterface) {
                 throw new \InvalidArgumentException(self::class . ' can only consist of ' . AnotherComponentInterface::class);
             }
         }
-        parent::__construct($array);
+        $this->anotherComponents = $array;
+    }
+
+    /**
+     * @return \ArrayIterator<int,AnotherComponentInterface>|AnotherComponentInterface[]
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return new \ArrayIterator($this->anotherComponents);
     }
 }

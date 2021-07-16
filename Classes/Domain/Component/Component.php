@@ -123,13 +123,17 @@ namespace ' . $this->name->getPhpNamespace() . ';
 ' . $this->name->renderClassComment() . '
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
 
 /**
  * @Flow\Proxy(false)
  */
-final class ' . $this->name->getSimpleComponentArrayName() . ' extends AbstractComponentArray
+final class ' . $this->name->getSimpleComponentArrayName() . ' implements \IteratorAggregate
 {
+    /**
+     * @var array<int,' . $this->name->getSimpleInterfaceName() . '>|' . $this->name->getSimpleInterfaceName() . '[]
+     */
+    private array $' . $this->name->getSimpleComponentArrayPropertyName() . ';
+
     public function __construct($array)
     {
         foreach ($array as $element) {
@@ -137,32 +141,15 @@ final class ' . $this->name->getSimpleComponentArrayName() . ' extends AbstractC
                 throw new \InvalidArgumentException(self::class . \' can only consist of \' . ' . $this->name->getSimpleInterfaceName() . '::class);
             }
         }
-        parent::__construct($array);
+        $this->' . $this->name->getSimpleComponentArrayPropertyName() . ' = $array;
     }
 
     /**
-     * @param mixed $key
-     * @return ' . $this->name->getSimpleInterfaceName() . '|false
-     */
-    public function offsetGet($key)
-    {
-        return parent::offsetGet($key);
-    }
-
-    /**
-     * @return array|'. $this->name->getSimpleInterfaceName() . '[]
-     */
-    public function getArrayCopy(): array
-    {
-        return parent::getArrayCopy();
-    }
-
-    /**
-     * @return \ArrayIterator|' . $this->name->getSimpleInterfaceName() . '[]
+     * @return \ArrayIterator<int,' . $this->name->getSimpleInterfaceName() . '>|' . $this->name->getSimpleInterfaceName() . '[]
      */
     public function getIterator(): \ArrayIterator
     {
-        return parent::getIterator();
+        return new \ArrayIterator($this->' . $this->name->getSimpleComponentArrayPropertyName() . ');
     }
 }
 ';

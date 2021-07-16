@@ -175,6 +175,11 @@ final class ComponentName
         return PluralName::forName($this->name);
     }
 
+    public function getSimpleComponentArrayPropertyName(): string
+    {
+        return lcfirst(PluralName::forName($this->name));
+    }
+
     /**
      * @return class-string<mixed>
      */

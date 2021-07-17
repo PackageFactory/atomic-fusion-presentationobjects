@@ -16,12 +16,12 @@ final class HeadlineLook implements PseudoEnumInterface
 {
     const LOOK_LARGE = 'large';
 
-    private string $value;
-
     /**
      * @var array<string,self>|self[]
      */
     private static array $instances = [];
+
+    private string $value;
 
     private function __construct(string $value)
     {

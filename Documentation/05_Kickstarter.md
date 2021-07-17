@@ -28,7 +28,7 @@ For more information on this pattern, have a look at this excellent article: htt
 ./flow component:kickstartenum \
     Vendor.Site:Headline \
     HeadlineLook string \
-        --values=REGULAR,HERO
+        --values=regular,hero
 ```
 
 > **Hint:** Components are namespaced, defaulting to "Component". The component name "Vendor.Site:Headline" thus will be evaluated as "Vendor.Site:Component.Headline".
@@ -40,10 +40,10 @@ For more information on this pattern, have a look at this excellent article: htt
 
 This is the central pseudo-enum class. It consists of:
 
-* A set of constants that represent the enum values
-* Static factory methods that are named like the enum values
+* A set of constants that represent the enum cases
+* Static factory methods that are named like the enum cases
 * `getIs*` methods to identify a value both in PHP and Neos.Eel
-* A static `getValues` method to retrieve a list of all possible enum values
+* A static `cases` method to retrieve a list of all possible enum cases
 * A `getValue` method that will return the value of the enum instance as your chosen type
 * A `__toString` method for string casting
 
@@ -62,8 +62,13 @@ use Neos\Flow\Annotations as Flow;
  */
 final class HeadlineLook
 {
-    const LOOK_REGULAR = 'REGULAR';
-    const LOOK_HERO = 'HERO';
+    const LOOK_REGULAR = 'regular';
+    const LOOK_HERO = 'hero';
+
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances = [];
 
     private string $value;
 
@@ -72,23 +77,27 @@ final class HeadlineLook
         $this->value = $value;
     }
 
-    public static function fromString(string $string): self
+    public static function from(string $string): self
     {
-        if (!in_array($string, self::getValues())) {
-            throw HeadlineLookIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::LOOK_REGULAR
+                && $string !== self::LOOK_HERO) {
+                throw HeadlineLookIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
         }
 
-        return new self($string);
+        return self::$instances[$string];
     }
 
     public static function regular(): self
     {
-        return new self(self::LOOK_REGULAR);
+        return self::from(self::LOOK_REGULAR);
     }
 
     public static function hero(): self
     {
-        return new self(self::LOOK_HERO);
+        return self::from(self::LOOK_HERO);
     }
 
     public function getIsRegular(): bool
@@ -102,13 +111,13 @@ final class HeadlineLook
     }
 
     /**
-     * @return array|string[]
+     * @return array<int,self>|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::LOOK_REGULAR,
-            self::LOOK_HERO
+            self::from(self::LOOK_REGULAR),
+            self::from(self::LOOK_HERO)
         ];
     }
 
@@ -126,7 +135,7 @@ final class HeadlineLook
 
 #### HeadlineLookIsInvalid.php
 
-The exception in this file will be thrown, when the pseudo-enum is initialized with an invalid value (which could happen, when `::fromString` is called).
+The exception in this file will be thrown, when the pseudo-enum is initialized with an invalid value (which could happen, when `::from` is called).
 
 ```php
 <?php
@@ -148,80 +157,6 @@ final class HeadlineLookIsInvalid extends \DomainException
         return new self('The given value "' . $attemptedValue . '" is no valid HeadlineLook, must be one of the defined constants. ', 1602423895);
     }
 }
-```
-
-#### HeadlineLookProvider.php
-
-This file contains a data provider to use the enum values for SelectBoxes in the Neos backend UI.
-
-```php
-<?php
-namespace Vendor\Site\Application;
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\Flow\Annotations as Flow;
-use Neos\Flow\I18n\Translator;
-use Neos\Neos\Service\DataSource\AbstractDataSource;
-use Neos\Eel\ProtectedContextAwareInterface;
-use Vendor\Site\Presentation\Component\Headline\HeadlineLook;
-
-class HeadlineLookProvider extends AbstractDataSource implements ProtectedContextAwareInterface
-{
-    /**
-     * @Flow\Inject
-     * @var Translator
-     */
-    protected $translator;
-
-    /**
-     * @var string
-     */
-    protected static $identifier = 'vendor-site-headline-looks';
-
-    public function getData(NodeInterface $node = null, array $arguments = []): array
-    {
-        $headlineLooks = [];
-        foreach (HeadlineLook::getValues() as $value) {
-            $headlineLooks[$value]['label'] = $this->translator->translateById('headlineLook.' . $value, [], null, null, 'Headline', 'Vendor.Site') ?: $value;
-        }
-
-        return $headlineLooks;
-    }
-
-    /**
-     * @return array|string[]
-     */
-    public function getValues(): array
-    {
-        return HeadlineLook::getValues();
-    }
-
-    public function allowsCallOfMethod($methodName): bool
-    {
-        return true;
-    }
-}
-```
-
-This data source can be used in your `NodeTypes.*.yaml` configuration like this:
-
-```yaml
-  properties:
-    headlineLook:
-      type: string
-      ui:
-        label: 'Headline look'
-        reloadIfChanged: true
-        inspector:
-          group: 'headline'
-          editor: Neos.Neos/Inspector/Editors/SelectBoxEditor
-          editorOptions:
-            placeholder: Choose a headline look...
-            dataSourceIdentifier: vendor-site-headline-looks
 ```
 
 ## `component:kickstart` command
@@ -265,8 +200,8 @@ prototype(Vendor.Site:Component.Headline) < prototype(PackageFactory.AtomicFusio
         title = 'Headline'
 
         props {
-            type = ''
-            look = ''
+            type = 'h1'
+            look = 'regular'
             content = 'Text'
         }
     }

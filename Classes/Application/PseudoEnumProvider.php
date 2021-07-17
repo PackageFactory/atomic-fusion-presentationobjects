@@ -57,7 +57,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
      */
     public function process(NodeType $nodeType, array &$configuration, array $options)
     {
-        if (!isset($options['enumName'])) {
+        if (!array_key_exists('enumName', $options) || !is_string($options['enumName'])) {
             throw new \InvalidArgumentException('Option "enumName" must be provided.', 1625298032);
         }
         $values = $this->getValues($options['enumName']);

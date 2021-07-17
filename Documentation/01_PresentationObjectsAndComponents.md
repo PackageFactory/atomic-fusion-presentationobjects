@@ -8,7 +8,7 @@
 
 # 1. PresentationObjects and Components
 
-> **Hint:** This section describes the manual creation of PresentationObjects, Pseudo-Enums and PresentationObject components. All these patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
+> **Hint:** This section describes the manual creation of PresentationObjects, Pseudo-Enums and PresentationObject components. All of these patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
 
 In this tutorial, we're going to write a PresentationObject for an image component. Our image consists of a `src`, an `alt` and an optional `title` property.
 

@@ -17,6 +17,11 @@ final class HeadlineType implements PseudoEnumInterface
     const TYPE_H2 = 'h2';
     const TYPE_DIV = 'div';
 
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances;
+
     private string $value;
 
     private function __construct(string $value)
@@ -24,30 +29,33 @@ final class HeadlineType implements PseudoEnumInterface
         $this->value = $value;
     }
 
-    public static function fromString(string $string): self
+    public static function from(string $string): self
     {
-        if (!in_array($string, array_map(function(self $case) {
-            return $case->getValue();
-        }, self::cases()))) {
-            throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::TYPE_H1
+                && $string !== self::TYPE_H2
+                && $string !== self::TYPE_DIV) {
+                throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
         }
 
-        return new self($string);
+        return self::$instances[$string];
     }
 
     public static function h1(): self
     {
-        return new self(self::TYPE_H1);
+        return self::from(self::TYPE_H1);
     }
 
     public static function h2(): self
     {
-        return new self(self::TYPE_H2);
+        return self::from(self::TYPE_H2);
     }
 
     public static function div(): self
     {
-        return new self(self::TYPE_DIV);
+        return self::from(self::TYPE_DIV);
     }
 
     public function getIsH1(): bool
@@ -66,14 +74,14 @@ final class HeadlineType implements PseudoEnumInterface
     }
 
     /**
-     * @return array|self[]
+     * @return array<int,self>|self[]
      */
     public static function cases(): array
     {
         return [
-            new self(self::TYPE_H1),
-            new self(self::TYPE_H2),
-            new self(self::TYPE_DIV)
+            self::from(self::TYPE_H1),
+            self::from(self::TYPE_H2),
+            self::from(self::TYPE_DIV)
         ];
     }
 

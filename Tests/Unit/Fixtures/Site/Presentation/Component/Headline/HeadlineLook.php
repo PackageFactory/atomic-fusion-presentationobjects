@@ -14,17 +14,41 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterf
  */
 final class HeadlineLook implements PseudoEnumInterface
 {
+    const LOOK_LARGE = 'large';
+
     private string $value;
+
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances = [];
 
     private function __construct(string $value)
     {
         $this->value = $value;
     }
 
+    public static function from(string $string): self
+    {
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::LOOK_LARGE) {
+                throw HeadlineLookIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
+        }
+
+        return self::$instances[$string];
+    }
+
+    public static function large(): self
+    {
+        return self::from(self::LOOK_LARGE);
+    }
+
     public static function cases(): array
     {
         return [
-            new self('large')
+            self::from(self::LOOK_LARGE)
         ];
     }
 

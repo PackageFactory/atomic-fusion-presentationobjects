@@ -41,11 +41,6 @@ class EnumTypeTest extends UnitTestCase
                 EnumType::int(),
                 ['a:1', 'b:2', 'c:3'],
                 ['a' => 1, 'b' => 2, 'c' => 3]
-            ],
-            [
-                EnumType::float(),
-                ['a:1.2', 'b:2.4', 'c:3.6'],
-                ['a' => 1.2, 'b' => 2.4, 'c' => 3.6]
             ]
         ];
     }

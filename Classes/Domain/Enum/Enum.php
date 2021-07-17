@@ -23,14 +23,14 @@ final class Enum
     private EnumType $type;
 
     /**
-     * @var null|string[]|int[]|float[]
+     * @var null|string[]|int[]
      */
     private ?array $values;
 
     /**
      * @param EnumName $name
      * @param EnumType $type
-     * @param null|string[]|int[]|float[] $values
+     * @param null|string[]|int[] $values
      */
     public function __construct(EnumName $name, EnumType $type, ?array $values)
     {

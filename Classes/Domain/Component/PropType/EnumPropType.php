@@ -68,7 +68,6 @@ final class EnumPropType implements PropTypeInterface
             case 'string':
                 return '= \'' . $value->getValue() . '\'';
             case 'int':
-            case 'float':
                 return '= ' . $value->getValue();
             default:
         }

@@ -31,7 +31,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
     /**
      * @param NodeInterface|null $node
      * @param array<string|int,string> $arguments
-     * @return array<string|int|float,array<string,string>>
+     * @return array<string|int,array<string,string>>
      */
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {

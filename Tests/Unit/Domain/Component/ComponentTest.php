@@ -415,13 +415,17 @@ namespace Vendor\Site\Presentation\Component\MyNewComponent;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
 
 /**
  * @Flow\Proxy(false)
  */
-final class MyNewComponents extends AbstractComponentArray
+final class MyNewComponents implements \IteratorAggregate
 {
+    /**
+     * @var array<int,MyNewComponentInterface>|MyNewComponentInterface[]
+     */
+    private array $myNewComponents;
+
     public function __construct($array)
     {
         foreach ($array as $element) {
@@ -429,32 +433,15 @@ final class MyNewComponents extends AbstractComponentArray
                 throw new \InvalidArgumentException(self::class . \' can only consist of \' . MyNewComponentInterface::class);
             }
         }
-        parent::__construct($array);
+        $this->myNewComponents = $array;
     }
 
     /**
-     * @param mixed $key
-     * @return MyNewComponentInterface|false
-     */
-    public function offsetGet($key)
-    {
-        return parent::offsetGet($key);
-    }
-
-    /**
-     * @return array|MyNewComponentInterface[]
-     */
-    public function getArrayCopy(): array
-    {
-        return parent::getArrayCopy();
-    }
-
-    /**
-     * @return \ArrayIterator|MyNewComponentInterface[]
+     * @return \ArrayIterator<int,MyNewComponentInterface>|MyNewComponentInterface[]
      */
     public function getIterator(): \ArrayIterator
     {
-        return parent::getIterator();
+        return new \ArrayIterator($this->myNewComponents);
     }
 }
 ',

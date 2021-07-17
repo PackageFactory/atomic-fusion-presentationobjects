@@ -6,13 +6,17 @@ namespace Vendor\Site\Presentation\Component\NewText;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\AbstractComponentArray;
 
 /**
  * @Flow\Proxy(false)
  */
-final class NewTexts extends AbstractComponentArray
+final class NewTexts implements \IteratorAggregate
 {
+    /**
+     * @var array<int,NewTextInterface>|NewTextInterface[]
+     */
+    private array $newTexts;
+
     public function __construct($array)
     {
         foreach ($array as $element) {
@@ -20,31 +24,14 @@ final class NewTexts extends AbstractComponentArray
                 throw new \InvalidArgumentException(self::class . ' can only consist of ' . NewTextInterface::class);
             }
         }
-        parent::__construct($array);
+        $this->newTexts = $array;
     }
 
     /**
-     * @param mixed $key
-     * @return NewTextInterface|false
-     */
-    public function offsetGet($key)
-    {
-        return parent::offsetGet($key);
-    }
-
-    /**
-     * @return array|NewTextInterface[]
-     */
-    public function getArrayCopy(): array
-    {
-        return parent::getArrayCopy();
-    }
-
-    /**
-     * @return \ArrayIterator|NewTextInterface[]
+     * @return \ArrayIterator<int,NewTextInterface>|NewTextInterface[]
      */
     public function getIterator(): \ArrayIterator
     {
-        return parent::getIterator();
+        return new \ArrayIterator($this->newTexts);
     }
 }

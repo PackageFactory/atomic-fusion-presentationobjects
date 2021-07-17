@@ -12,6 +12,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsEnum;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumLabel;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
@@ -40,6 +41,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         }
         /** @var class-string<mixed> $enumName */
         $enumName = $arguments['enumName'];
+
         $values = $this->getValues($enumName);
         $enumLabel = EnumLabel::fromEnumName($enumName);
         $options = [];
@@ -60,11 +62,13 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         if (!array_key_exists('enumName', $options) || !is_string($options['enumName'])) {
             throw new \InvalidArgumentException('Option "enumName" must be provided.', 1625298032);
         }
-        $values = $this->getValues($options['enumName']);
-        $enumLabel = EnumLabel::fromEnumName($options['enumName']);
         if (!array_key_exists('propertyNames', $options) || !is_array($options['propertyNames'])) {
             throw new \InvalidArgumentException('Option "propertyNames" must be provided.', 1626540931);
         }
+        /** @var class-string<mixed> $enumName */
+        $enumName = $options['enumName'];
+        $values = $this->getValues($enumName);
+        $enumLabel = EnumLabel::fromEnumName($enumName);
         foreach ($options['propertyNames'] as $propertyName) {
             foreach ($values as $value) {
                 $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
@@ -91,19 +95,11 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
      */
     public function getCases(string $enumName): array
     {
-        $this->validateEnumName($enumName);
+        if (!IsEnum::isSatisfiedByClassName($enumName)) {
+            throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not exist or does not implement the required ' . PseudoEnumInterface::class, 1625297031);
+        }
 
         return $enumName::cases();
-    }
-
-    private function validateEnumName(string $enumName): void
-    {
-        if (!class_exists($enumName)) {
-            throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not exist.', 1625297031);
-        }
-        if (!is_subclass_of($enumName, PseudoEnumInterface::class)) {
-            throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not implement the required ' . PseudoEnumInterface::class, 1625297122);
-        }
     }
 
     public function allowsCallOfMethod($methodName): bool

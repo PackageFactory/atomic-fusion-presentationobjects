@@ -110,7 +110,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         if (!class_exists($enumName)) {
             throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not exist.', 1625297031);
         }
-        if (!in_array(PseudoEnumInterface::class, class_implements($enumName) ?: [])) {
+        if (!is_subclass_of($enumName, PseudoEnumInterface::class)) {
             throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not implement the required ' . PseudoEnumInterface::class, 1625297122);
         }
     }

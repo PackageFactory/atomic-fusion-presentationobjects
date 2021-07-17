@@ -44,7 +44,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         $enumLabel = EnumLabel::fromEnumName($enumName);
         $options = [];
         foreach ($values as $value) {
-            $options[$value]['label'] = $this->getLabel($enumLabel, (string)$value);
+            $options[$value]['label'] = $enumLabel->translate((string)$value, $this->translator);
         }
 
         return $options;
@@ -65,22 +65,10 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         foreach ($options['propertyNames'] as $propertyName) {
             foreach ($values as $value) {
                 $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [
-                    'label' => $this->getLabel($enumLabel, (string)$value)
+                    'label' => $enumLabel->translate((string)$value, $this->translator)
                 ];
             }
         }
-    }
-
-    private function getLabel(EnumLabel $enumLabel, string $value): string
-    {
-        return $this->translator->translateById(
-            $enumLabel->getLabelIdPrefix() . $value,
-            [],
-            null,
-            null,
-            $enumLabel->getSourceName(),
-            $enumLabel->getPackageKey()
-        ) ?: $value;
     }
 
     /**

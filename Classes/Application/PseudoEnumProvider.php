@@ -62,6 +62,9 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
         }
         $values = $this->getValues($options['enumName']);
         $enumLabel = EnumLabel::fromEnumName($options['enumName']);
+        if (!array_key_exists('propertyNames', $options) || !is_array($options['propertyNames'])) {
+            throw new \InvalidArgumentException('Option "propertyNames" must be provided.', 1626540931);
+        }
         foreach ($options['propertyNames'] as $propertyName) {
             foreach ($values as $value) {
                 $configuration['properties'][$propertyName]['ui']['inspector']['editorOptions']['values'][$value] = [

@@ -57,8 +57,7 @@ final class EnumGeneratorTest extends UnitTestCase
                 'vfs://DistributionPackages/Vendor.Site/',
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineType.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineTypeIsInvalid.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Application/HeadlineTypeProvider.php',
+                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineTypeIsInvalid.php'
                 ],
                 false
             ],
@@ -70,21 +69,7 @@ final class EnumGeneratorTest extends UnitTestCase
                 'vfs://DistributionPackages/Vendor.Default/',
                 [
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLight.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLightIsInvalid.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Application/TrafficLightProvider.php',
-                ],
-                false
-            ],
-            'duration' => [
-                new ComponentName(new PackageKey('Vendor.Default'), FusionNamespace::fromString('Custom.Type'), 'Crossing'),
-                'Duration',
-                'float',
-                ['short:1.2', 'medium:2.4', 'long:3.6'],
-                'vfs://DistributionPackages/Vendor.Default/',
-                [
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/Duration.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/DurationIsInvalid.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Application/DurationProvider.php',
+                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLightIsInvalid.php'
                 ],
                 false
             ],
@@ -96,8 +81,7 @@ final class EnumGeneratorTest extends UnitTestCase
                 'vfs://DistributionPackages/Vendor.Site/',
                 [
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineType.php',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineTypeIsInvalid.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Application/HeadlineTypeProvider.php',
+                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineTypeIsInvalid.php'
                 ],
                 true
             ],

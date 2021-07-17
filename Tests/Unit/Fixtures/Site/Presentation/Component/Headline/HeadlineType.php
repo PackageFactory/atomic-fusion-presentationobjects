@@ -6,20 +6,54 @@ namespace Vendor\Site\Presentation\Component\Headline;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * HeadlineType enum for test purposes
  * @Flow\Proxy(false)
  */
-final class HeadlineType implements EnumInterface
+final class HeadlineType implements PseudoEnumInterface
 {
+    const TYPE_H1 = 'h1';
+
     private string $value;
 
-    public static function getValues(): array
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances = [];
+
+    private function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function from(string $string): self
+    {
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::TYPE_H1) {
+                throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
+        }
+
+        return self::$instances[$string];
+    }
+
+    public static function h1(): self
+    {
+        return self::from(self::TYPE_H1);
+    }
+
+    public static function cases(): array
     {
         return [
-            'h1'
+            self::from(self::TYPE_H1)
         ];
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

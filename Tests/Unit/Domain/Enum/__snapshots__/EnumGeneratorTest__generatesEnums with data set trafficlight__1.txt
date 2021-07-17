@@ -6,16 +6,21 @@ namespace Vendor\Default\Presentation\Component\Crossing;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class TrafficLight implements EnumInterface
+final class TrafficLight implements PseudoEnumInterface
 {
     const LIGHT_RED = 1;
     const LIGHT_YELLOW = 2;
     const LIGHT_GREEN = 3;
+
+    /**
+     * @var array<int,self>|self[]
+     */
+    private static array $instances;
 
     private int $value;
 
@@ -24,28 +29,33 @@ final class TrafficLight implements EnumInterface
         $this->value = $value;
     }
 
-    public static function fromInt(int $int): self
+    public static function from(int $int): self
     {
-        if (!in_array($int, self::getValues())) {
-            throw TrafficLightIsInvalid::becauseItMustBeOneOfTheDefinedConstants($int);
+        if (!isset(self::$instances[$int])) {
+            if ($int !== self::LIGHT_RED
+                && $int !== self::LIGHT_YELLOW
+                && $int !== self::LIGHT_GREEN) {
+                throw TrafficLightIsInvalid::becauseItMustBeOneOfTheDefinedConstants($int);
+            }
+            self::$instances[$int] = new self($int);
         }
 
-        return new self($int);
+        return self::$instances[$int];
     }
 
     public static function red(): self
     {
-        return new self(self::LIGHT_RED);
+        return self::from(self::LIGHT_RED);
     }
 
     public static function yellow(): self
     {
-        return new self(self::LIGHT_YELLOW);
+        return self::from(self::LIGHT_YELLOW);
     }
 
     public static function green(): self
     {
-        return new self(self::LIGHT_GREEN);
+        return self::from(self::LIGHT_GREEN);
     }
 
     public function getIsRed(): bool
@@ -64,14 +74,14 @@ final class TrafficLight implements EnumInterface
     }
 
     /**
-     * @return array|int[]
+     * @return array<int,self>|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::LIGHT_RED,
-            self::LIGHT_YELLOW,
-            self::LIGHT_GREEN
+            self::from(self::LIGHT_RED),
+            self::from(self::LIGHT_YELLOW),
+            self::from(self::LIGHT_GREEN)
         ];
     }
 

@@ -52,15 +52,20 @@ namespace Vendor\Site\Presentation\Component\MyComponent;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * @Flow\Proxy(false)
  */
-final class MyComponentType implements EnumInterface
+final class MyComponentType implements PseudoEnumInterface
 {
     const TYPE_PRIMARY = \'primary\';
     const TYPE_SECONDARY = \'secondary\';
+
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances;
 
     private string $value;
 
@@ -69,23 +74,27 @@ final class MyComponentType implements EnumInterface
         $this->value = $value;
     }
 
-    public static function fromString(string $string): self
+    public static function from(string $string): self
     {
-        if (!in_array($string, self::getValues())) {
-            throw MyComponentTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::TYPE_PRIMARY
+                && $string !== self::TYPE_SECONDARY) {
+                throw MyComponentTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
         }
 
-        return new self($string);
+        return self::$instances[$string];
     }
 
     public static function primary(): self
     {
-        return new self(self::TYPE_PRIMARY);
+        return self::from(self::TYPE_PRIMARY);
     }
 
     public static function secondary(): self
     {
-        return new self(self::TYPE_SECONDARY);
+        return self::from(self::TYPE_SECONDARY);
     }
 
     public function getIsPrimary(): bool
@@ -99,13 +108,13 @@ final class MyComponentType implements EnumInterface
     }
 
     /**
-     * @return array|string[]
+     * @return array<int,self>|self[]
      */
-    public static function getValues(): array
+    public static function cases(): array
     {
         return [
-            self::TYPE_PRIMARY,
-            self::TYPE_SECONDARY
+            self::from(self::TYPE_PRIMARY),
+            self::from(self::TYPE_SECONDARY)
         ];
     }
 
@@ -148,71 +157,6 @@ final class MyComponentTypeIsInvalid extends \DomainException
 }
 ',
             $this->subject->getExceptionContent(new \DateTimeImmutable('@1602424261'))
-        );
-    }
-
-    public function testGetProviderContent(): void
-    {
-        Assert::assertSame(
-            '<?php declare(strict_types=1);
-namespace Vendor\Site\Application;
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\Flow\Annotations as Flow;
-use Neos\Flow\I18n\Translator;
-use Neos\Neos\Service\DataSource\AbstractDataSource;
-use Neos\Eel\ProtectedContextAwareInterface;
-use Vendor\Site\Presentation\Component\MyComponent\MyComponentType;
-
-class MyComponentTypeProvider extends AbstractDataSource implements ProtectedContextAwareInterface
-{
-    /**
-     * @Flow\Inject
-     * @var Translator
-     */
-    protected $translator;
-
-    /**
-     * @var string
-     */
-    protected static $identifier = \'vendor-site-my-component-types\';
-
-    public function getData(NodeInterface $node = null, array $arguments = []): array
-    {
-        $myComponentTypes = [];
-        foreach (MyComponentType::getValues() as $value) {
-            $myComponentTypes[$value][\'label\'] = $this->translator->translateById(
-                \'myComponentType.\' . $value,
-                [],
-                null,
-                null,
-                \'MyComponent\',
-                \'Vendor.Site\'
-            ) ?: $value;
-        }
-
-        return $myComponentTypes;
-    }
-
-    /**
-     * @return array|string[]
-     */
-    public function getValues(): array
-    {
-        return MyComponentType::getValues();
-    }
-
-    public function allowsCallOfMethod($methodName): bool
-    {
-        return true;
-    }
-}
-',
-            $this->subject->getProviderContent()
         );
     }
 }

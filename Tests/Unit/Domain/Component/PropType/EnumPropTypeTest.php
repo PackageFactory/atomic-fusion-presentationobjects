@@ -5,7 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Comp
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
-use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
+use Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\EnumPropType;
 use PHPUnit\Framework\Assert;
@@ -33,12 +33,12 @@ final class EnumPropTypeTest extends UnitTestCase
     {
         return [
             [
-                new EnumPropType(MyStringEnum::class, false),
-                'MyStringEnum'
+                new EnumPropType(MyStringPseudoEnum::class, false),
+                'MyStringPseudoEnum'
             ],
             [
-                new EnumPropType(MyStringEnum::class, true),
-                'MyStringEnum'
+                new EnumPropType(MyStringPseudoEnum::class, true),
+                'MyStringPseudoEnum'
             ]
         ];
     }
@@ -61,13 +61,13 @@ final class EnumPropTypeTest extends UnitTestCase
     {
         return [
             [
-                new EnumPropType(MyStringEnum::class, false),
-                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
+                new EnumPropType(MyStringPseudoEnum::class, false),
+                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum;
 '
             ],
             [
-                new EnumPropType(MyStringEnum::class, true),
-                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
+                new EnumPropType(MyStringPseudoEnum::class, true),
+                'use Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum;
 '
             ]
         ];
@@ -91,12 +91,12 @@ final class EnumPropTypeTest extends UnitTestCase
     {
         return [
             [
-                new EnumPropType(MyStringEnum::class, false),
-                'MyStringEnum'
+                new EnumPropType(MyStringPseudoEnum::class, false),
+                'MyStringPseudoEnum'
             ],
             [
-                new EnumPropType(MyStringEnum::class, true),
-                '?MyStringEnum'
+                new EnumPropType(MyStringPseudoEnum::class, true),
+                '?MyStringPseudoEnum'
             ]
         ];
     }
@@ -119,11 +119,11 @@ final class EnumPropTypeTest extends UnitTestCase
     {
         return [
             [
-                new EnumPropType(MyStringEnum::class, false),
+                new EnumPropType(MyStringPseudoEnum::class, false),
                 '= \'myValue\''
             ],
             [
-                new EnumPropType(MyStringEnum::class, true),
+                new EnumPropType(MyStringPseudoEnum::class, true),
                 '= \'myValue\''
             ]
         ];

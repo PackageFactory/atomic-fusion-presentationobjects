@@ -14,6 +14,6 @@ final class EnumTypeIsInvalid extends \DomainException
 {
     public static function becauseItIsNoneOfTheSupportedTypes(string $attemptedType): self
     {
-        return new self('Only type string, int or float are supported at this point.', 1582502049);
+        return new self('Only type string or int are supported for enums.', 1582502049);
     }
 }

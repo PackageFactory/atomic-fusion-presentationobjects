@@ -7,7 +7,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PluralName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
@@ -53,11 +52,6 @@ final class EnumName
         return $this->componentName->getPhpNamespace();
     }
 
-    public function getFullyQualifiedName(): string
-    {
-        return $this->getPhpNamespace() . '\\' . $this->name;
-    }
-
     public function getExceptionName(): string
     {
         return $this->name . 'IsInvalid';
@@ -81,46 +75,5 @@ final class EnumName
     public function getExceptionPath(string $packagePath, bool $colocate): string
     {
         return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->getExceptionName() . '.php';
-    }
-
-    public function getProviderBasePath(string $packagePath): string
-    {
-        return $packagePath . '/Classes/Application';
-    }
-
-    public function getProviderPath(string $packagePath): string
-    {
-        return $this->getProviderBasePath($packagePath) . '/' . $this->name . 'Provider.php';
-    }
-
-    public function getProviderNamespace(): string
-    {
-        return $this->getPackageKey()->toPhpNamespace() . '\\Application';
-    }
-
-    public function getDataSourceIdentifier(): string
-    {
-        return strtolower(str_replace('.', '-', (string)$this->getPackageKey()) . '-' .  implode('-', $this->splitName()));
-    }
-
-    /**
-     * @return string[]
-     */
-    private function splitName(): array
-    {
-        $nameParts = [];
-        $parts = preg_split("/([A-Z])/", PluralName::forName($this->name), -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-
-        if (is_array($parts)) {
-            foreach ($parts as $i => $part) {
-                if ($i % 2 === 0) {
-                    $nameParts[$i / 2] = $part;
-                } else {
-                    $nameParts[($i - 1) / 2] .= $part;
-                }
-            }
-        }
-
-        return $nameParts;
     }
 }

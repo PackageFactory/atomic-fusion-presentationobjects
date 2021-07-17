@@ -5,7 +5,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Comp
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
-use Neos\Eel\Package;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
@@ -90,8 +89,8 @@ final class ComponentNameTest extends UnitTestCase
                 new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent')
             ],
             [
-                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum',
-                new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyStringEnum')
+                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum',
+                new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyStringPseudoEnum')
             ],
             [
                 'Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponents',

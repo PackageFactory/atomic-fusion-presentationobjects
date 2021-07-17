@@ -8,7 +8,7 @@ namespace Vendor\Site\Presentation\Component\MyReflectionComponent;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponentInterface;
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponents;
-use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
+use Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 use Neos\Flow\Annotations as Flow;
 use Psr\Http\Message\UriInterface;
@@ -43,9 +43,9 @@ final class MyReflectionComponent extends AbstractComponentPresentationObject
 
     private ?ImageSourceHelperInterface $nullableImageSourceProp;
 
-    private MyStringEnum $enumProp;
+    private MyStringPseudoEnum $enumProp;
 
-    private ?MyStringEnum $nullableEnumProp;
+    private ?MyStringPseudoEnum $nullableEnumProp;
 
     private AnotherComponentInterface $componentProp;
 

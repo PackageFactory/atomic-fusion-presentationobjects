@@ -6,20 +6,54 @@ namespace Vendor\Site\Presentation\Component\Headline;
  */
 
 use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
 /**
  * HeadlineLook enum for test purposes
  * @Flow\Proxy(false)
  */
-final class HeadlineLook implements EnumInterface
+final class HeadlineLook implements PseudoEnumInterface
 {
+    const LOOK_LARGE = 'large';
+
     private string $value;
 
-    public static function getValues(): array
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances = [];
+
+    private function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public static function from(string $string): self
+    {
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::LOOK_LARGE) {
+                throw HeadlineLookIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
+        }
+
+        return self::$instances[$string];
+    }
+
+    public static function large(): self
+    {
+        return self::from(self::LOOK_LARGE);
+    }
+
+    public static function cases(): array
     {
         return [
-            'large'
+            self::from(self::LOOK_LARGE)
         ];
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

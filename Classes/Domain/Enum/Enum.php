@@ -23,20 +23,23 @@ final class Enum
     private EnumType $type;
 
     /**
-     * @var null|string[]|int[]
+     * @var string[]|int[]
      */
-    private ?array $values;
+    private array $cases;
 
     /**
      * @param EnumName $name
      * @param EnumType $type
-     * @param null|string[]|int[] $values
+     * @param string[]|int[] $cases
      */
-    public function __construct(EnumName $name, EnumType $type, ?array $values)
+    public function __construct(EnumName $name, EnumType $type, array $cases)
     {
+        if (empty($cases)) {
+            throw new \InvalidArgumentException('Enums must have at least one case, none given.', 1626541482);
+        }
         $this->name = $name;
         $this->type = $type;
-        $this->values = $values;
+        $this->cases = $cases;
     }
 
     /**
@@ -145,13 +148,11 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     private function renderConstants(): string
     {
         $constants = [];
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $renderedValue = $this->type->isString()
-                    ? '\'' . $value . '\''
-                    : $value;
-                $constants[] = 'const ' . $this->getConstantName($name) . ' = ' . $renderedValue . ';';
-            }
+        foreach ($this->cases as $name => $case) {
+            $renderedValue = $this->type->isString()
+                ? '\'' . $case . '\''
+                : $case;
+            $constants[] = 'const ' . $this->getConstantName($name) . ' = ' . $renderedValue . ';';
         }
 
         return trim(implode("\n    ", $constants));
@@ -162,19 +163,15 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
      */
     private function renderValidation(): string
     {
-        if (is_array($this->values)) {
-            $variable = '$' . $this->type;
-            $caseChecks = [];
-            foreach ($this->values as $name => $value) {
-                $caseChecks[] = $variable . ' !== self::' . $this->getConstantName($name);
-            }
-
-            return 'if (' . implode("\n                && ", $caseChecks) . ') {
-                throw ' . $this->name->getExceptionName() . '::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
-            }';
+        $variable = '$' . $this->type;
+        $caseChecks = [];
+        foreach ($this->cases as $name => $value) {
+            $caseChecks[] = $variable . ' !== self::' . $this->getConstantName($name);
         }
 
-        return '';
+        return 'if (' . implode("\n                && ", $caseChecks) . ') {
+                throw ' . $this->name->getExceptionName() . '::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
+            }';
     }
 
     /**
@@ -183,13 +180,11 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     private function renderNamedConstructors(): string
     {
         $constructors = [];
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $constructors[]  = 'public static function ' . $name . '(): self
+        foreach ($this->cases as $name => $case) {
+            $constructors[]  = 'public static function ' . $name . '(): self
     {
         return self::from(self::' . $this->getConstantName($name) . ');
     }';
-            }
         }
 
         return trim(implode("\n\n    ", $constructors));
@@ -201,13 +196,11 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     private function renderComparators(): string
     {
         $comparators = [];
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $comparators[]  = 'public function getIs' . ucfirst($name) . '(): bool
+        foreach ($this->cases as $name => $case) {
+            $comparators[]  = 'public function getIs' . ucfirst($name) . '(): bool
     {
         return $this->value === self::' . $this->getConstantName($name) . ';
     }';
-            }
         }
 
         return trim(implode("\n\n    ", $comparators));
@@ -220,10 +213,8 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     {
         $cases = [];
 
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $cases[] = 'self::from(self::' . $this->getConstantName($name) . '),';
-            }
+        foreach ($this->cases as $name => $case) {
+            $cases[] = 'self::from(self::' . $this->getConstantName($name) . '),';
         }
 
         return trim(trim(implode("\n            ", $cases)), ',');

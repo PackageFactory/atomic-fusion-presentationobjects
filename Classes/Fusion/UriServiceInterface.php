@@ -16,9 +16,10 @@ interface UriServiceInterface
     /**
      * @param TraversableNodeInterface $documentNode
      * @param boolean $absolute
+     * @param string|null $format
      * @return Uri
      */
-    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false): Uri;
+    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): Uri;
 
     /**
      * @param string $packageKey

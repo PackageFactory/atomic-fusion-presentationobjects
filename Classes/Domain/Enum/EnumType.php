@@ -14,7 +14,6 @@ final class EnumType
 {
     const TYPE_STRING = 'string';
     const TYPE_INT = 'int';
-    const TYPE_FLOAT = 'float';
 
     private string $value;
 
@@ -25,7 +24,7 @@ final class EnumType
 
     public static function fromInput(string $input): self
     {
-        if ($input !== self::TYPE_STRING && $input !== self::TYPE_INT && $input !== self::TYPE_FLOAT) {
+        if ($input !== self::TYPE_STRING && $input !== self::TYPE_INT) {
             throw EnumTypeIsInvalid::becauseItIsNoneOfTheSupportedTypes($input);
         }
 
@@ -40,11 +39,6 @@ final class EnumType
     public static function int(): self
     {
         return new self(self::TYPE_INT);
-    }
-
-    public static function float(): self
-    {
-        return new self(self::TYPE_FLOAT);
     }
 
     public function isString(): bool
@@ -69,12 +63,6 @@ final class EnumType
                 foreach ($valueArray as $value) {
                     list($name, $intValue) = explode(':', $value);
                     $processedValueArray[$name] = (int)$intValue;
-                }
-                break;
-            case self::TYPE_FLOAT:
-                foreach ($valueArray as $value) {
-                    list($name, $floatValue) = explode(':', $value);
-                    $processedValueArray[$name] = (float)$floatValue;
                 }
                 break;
             case self::TYPE_STRING:

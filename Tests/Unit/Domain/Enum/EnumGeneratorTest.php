@@ -73,18 +73,6 @@ final class EnumGeneratorTest extends UnitTestCase
                 ],
                 false
             ],
-            'duration' => [
-                new ComponentName(new PackageKey('Vendor.Default'), FusionNamespace::fromString('Custom.Type'), 'Crossing'),
-                'Duration',
-                'float',
-                ['short:1.2', 'medium:2.4', 'long:3.6'],
-                'vfs://DistributionPackages/Vendor.Default/',
-                [
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/Duration.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Custom/Type/Crossing/DurationIsInvalid.php'
-                ],
-                false
-            ],
             'coLocatedHeadlineType' => [
                 new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'Headline'),
                 'HeadlineType',

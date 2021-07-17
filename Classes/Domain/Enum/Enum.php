@@ -23,20 +23,23 @@ final class Enum
     private EnumType $type;
 
     /**
-     * @var null|string[]|int[]|float[]
+     * @var string[]|int[]
      */
-    private ?array $values;
+    private array $cases;
 
     /**
      * @param EnumName $name
      * @param EnumType $type
-     * @param null|string[]|int[]|float[] $values
+     * @param string[]|int[] $cases
      */
-    public function __construct(EnumName $name, EnumType $type, ?array $values)
+    public function __construct(EnumName $name, EnumType $type, array $cases)
     {
+        if (empty($cases)) {
+            throw new \InvalidArgumentException('Enums must have at least one case, none given.', 1626541482);
+        }
         $this->name = $name;
         $this->type = $type;
-        $this->values = $values;
+        $this->cases = $cases;
     }
 
     /**
@@ -62,6 +65,11 @@ final class ' . $this->name->getName() . ' implements PseudoEnumInterface
 {
     ' . $this->renderConstants() . '
 
+    /**
+     * @var array<' . $this->type . ',self>|self[]
+     */
+    private static array $instances;
+
     private ' . $this->type . ' $value;
 
     private function __construct(' . $this->type . ' $value)
@@ -69,15 +77,14 @@ final class ' . $this->name->getName() . ' implements PseudoEnumInterface
         $this->value = $value;
     }
 
-    public static function from' . ucfirst((string)$this->type) . '(' . $this->type . ' ' . $variable . '): self
+    public static function from(' . $this->type . ' ' . $variable . '): self
     {
-        if (!in_array(' . $variable . ', array_map(function(self $case) {
-            return $case->getValue();
-        }, self::cases()))) {
-            throw ' . $this->name->getExceptionName() . '::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
+        if (!isset(self::$instances[' . $variable . '])) {
+            ' . $this->renderValidation() . '
+            self::$instances[' . $variable . '] = new self(' . $variable . ');
         }
 
-        return new self(' . $variable . ');
+        return self::$instances[' . $variable . '];
     }
 
     ' . $this->renderNamedConstructors() . '
@@ -85,7 +92,7 @@ final class ' . $this->name->getName() . ' implements PseudoEnumInterface
     ' . $this->renderComparators() . '
 
     /**
-     * @return array|self[]
+     * @return array<int,self>|self[]
      */
     public static function cases(): array
     {
@@ -141,13 +148,11 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     private function renderConstants(): string
     {
         $constants = [];
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $renderedValue = $this->type->isString()
-                    ? '\'' . $value . '\''
-                    : $value;
-                $constants[] = 'const ' . $this->getConstantName($name) . ' = ' . $renderedValue . ';';
-            }
+        foreach ($this->cases as $name => $case) {
+            $renderedValue = $this->type->isString()
+                ? '\'' . $case . '\''
+                : $case;
+            $constants[] = 'const ' . $this->getConstantName($name) . ' = ' . $renderedValue . ';';
         }
 
         return trim(implode("\n    ", $constants));
@@ -156,16 +161,30 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     /**
      * @return string
      */
+    private function renderValidation(): string
+    {
+        $variable = '$' . $this->type;
+        $caseChecks = [];
+        foreach ($this->cases as $name => $value) {
+            $caseChecks[] = $variable . ' !== self::' . $this->getConstantName($name);
+        }
+
+        return 'if (' . implode("\n                && ", $caseChecks) . ') {
+                throw ' . $this->name->getExceptionName() . '::becauseItMustBeOneOfTheDefinedConstants(' . $variable . ');
+            }';
+    }
+
+    /**
+     * @return string
+     */
     private function renderNamedConstructors(): string
     {
         $constructors = [];
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $constructors[]  = 'public static function ' . $name . '(): self
+        foreach ($this->cases as $name => $case) {
+            $constructors[]  = 'public static function ' . $name . '(): self
     {
-        return new self(self::' . $this->getConstantName($name) . ');
+        return self::from(self::' . $this->getConstantName($name) . ');
     }';
-            }
         }
 
         return trim(implode("\n\n    ", $constructors));
@@ -177,13 +196,11 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     private function renderComparators(): string
     {
         $comparators = [];
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $comparators[]  = 'public function getIs' . ucfirst($name) . '(): bool
+        foreach ($this->cases as $name => $case) {
+            $comparators[]  = 'public function getIs' . ucfirst($name) . '(): bool
     {
         return $this->value === self::' . $this->getConstantName($name) . ';
     }';
-            }
         }
 
         return trim(implode("\n\n    ", $comparators));
@@ -196,10 +213,8 @@ final class ' . $this->name->getExceptionName() . ' extends \DomainException
     {
         $cases = [];
 
-        if (is_array($this->values)) {
-            foreach ($this->values as $name => $value) {
-                $cases[] = 'new self(self::' . $this->getConstantName($name) . '),';
-            }
+        foreach ($this->cases as $name => $case) {
+            $cases[] = 'self::from(self::' . $this->getConstantName($name) . '),';
         }
 
         return trim(trim(implode("\n            ", $cases)), ',');

@@ -61,16 +61,17 @@ final class EnumPropType implements PropTypeInterface
             return '= \'\'';
         }
 
-        $values = $this->className::cases();
-        /** @var PseudoEnumInterface $value */
-        $value = reset($values);
-        switch ((string) $type) {
-            case 'string':
-                return '= \'' . $value->getValue() . '\'';
-            case 'int':
-            case 'float':
-                return '= ' . $value->getValue();
-            default:
+        $cases = $this->className::cases();
+        if (!empty($cases)) {
+            /** @var PseudoEnumInterface $defaultCase */
+            $defaultCase = reset($cases);
+            switch ((string) $type) {
+                case 'string':
+                    return '= \'' . $defaultCase->getValue() . '\'';
+                case 'int':
+                    return '= ' . $defaultCase->getValue();
+                default:
+            }
         }
 
         return '= \'\'';

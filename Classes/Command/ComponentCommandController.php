@@ -66,11 +66,13 @@ class ComponentCommandController extends CommandController
             new DefensiveConfirmationFileWriter($this->output, $yes)
         );
         $package = $this->packageResolver->resolvePackage();
+        $componentName = ComponentName::fromInput($name, PackageKey::fromPackage($package));
+        $componentPackage = $this->packageResolver->resolvePackage((string)$componentName->getPackageKey());
 
         $componentGenerator->generateComponent(
-            ComponentName::fromInput($name, PackageKey::fromPackage($package)),
+            $componentName,
             $this->request->getExceedingArguments(),
-            $package->getPackagePath(),
+            $componentPackage->getPackagePath(),
             $this->colocate,
             $listable
         );
@@ -101,13 +103,15 @@ class ComponentCommandController extends CommandController
             new DefensiveConfirmationFileWriter($this->output, $yes)
         );
         $package = $this->packageResolver->resolvePackage();
+        $componentNameObject = ComponentName::fromInput($componentName, PackageKey::fromPackage($package));
+        $componentPackage = $this->packageResolver->resolvePackage((string)$componentNameObject->getPackageKey());
 
         $enumGenerator->generateEnum(
-            ComponentName::fromInput($componentName, PackageKey::fromPackage($package)),
+            $componentNameObject,
             $name,
             $type,
             $values,
-            $package->getPackagePath(),
+            $componentPackage->getPackagePath(),
             $this->colocate
         );
     }

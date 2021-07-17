@@ -136,13 +136,13 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
             [
                 new ComponentArrayPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent')),
                 '{
-            {
+            0 {
                 text = \'Text\'
                 other {
                     number = 4711
                 }
-            },
-            {
+            }
+            1 {
                 text = \'Text\'
                 other {
                     number = 4711
@@ -153,13 +153,13 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
             [
                 new ComponentArrayPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent')),
                 '{
-            {
+            0 {
                 text = \'Text\'
                 other {
                     number = 4711
                 }
-            },
-            {
+            }
+            1 {
                 text = \'Text\'
                 other {
                     number = 4711
@@ -170,13 +170,13 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
             [
                 new ComponentArrayPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent')),
                 '{
-            {
+            0 {
                 text = \'Text\'
                 other {
                     number = 4711
                 }
-            },
-            {
+            }
+            1 {
                 text = \'Text\'
                 other {
                     number = 4711

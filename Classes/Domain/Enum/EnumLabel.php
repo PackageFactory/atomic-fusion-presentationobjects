@@ -6,6 +6,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\I18n\Translator;
 
 /**
  * @Flow\Proxy(false)
@@ -42,18 +43,15 @@ final class EnumLabel
         );
     }
 
-    public function getLabelIdPrefix(): string
+    public function translate(string $value, Translator $translator): string
     {
-        return $this->labelIdPrefix;
-    }
-
-    public function getSourceName(): string
-    {
-        return $this->sourceName;
-    }
-
-    public function getPackageKey(): string
-    {
-        return $this->packageKey;
+        return $translator->translateById(
+            $this->labelIdPrefix . $value,
+            [],
+            null,
+            null,
+            $this->sourceName,
+            $this->packageKey
+        ) ?: $value;
     }
 }

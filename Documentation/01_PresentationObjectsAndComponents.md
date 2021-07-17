@@ -8,7 +8,7 @@
 
 # 1. PresentationObjects and Components
 
-> **Hint:** This section describes the manual creation of PresentationObjects, Pseudo-Enums and PresentationObject components. All these patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
+> **Hint:** This section describes the manual creation of PresentationObjects, Pseudo-Enums and PresentationObject components. All of these patterns can also be scaffolded by the [Kickstarter](./05_Kickstarter.md).
 
 In this tutorial, we're going to write a PresentationObject for an image component. Our image consists of a `src`, an `alt` and an optional `title` property.
 
@@ -167,6 +167,11 @@ final class HeadlineType implements PseudoEnumInterface
     const TYPE_H2 = 'h2';
     const TYPE_H3 = 'h3';
 
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances = [];
+
     private string $value;
 
     private function __construct(string $value)
@@ -174,30 +179,33 @@ final class HeadlineType implements PseudoEnumInterface
         $this->value = $value;
     }
 
-    public static function fromString(string $string): self
+    public static function from(string $string): self
     {
-        if (!in_array($string, array_map(function(self $case) {
-            return $case->getValue();
-        }, self::cases()))) {
-            throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::TYPE_H1
+                && $string !== self::TYPE_H2
+                && $string !== self::TYPE_H3) {
+                throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
         }
 
-        return new self($string);
+        return self::$instances[$string];
     }
 
     public static function h1(): self
     {
-        return new self(self::TYPE_H1);
+        return self::from(self::TYPE_H1);
     }
 
     public static function h2(): self
     {
-        return new self(self::TYPE_H2);
+        return self::from(self::TYPE_H2);
     }
 
     public static function h3(): self
     {
-        return new self(self::TYPE_H3);
+        return self::from(self::TYPE_H3);
     }
 
     public function getIsH1(): bool
@@ -216,14 +224,14 @@ final class HeadlineType implements PseudoEnumInterface
     }
 
     /**
-     * @return array|self[]
+     * @return array<int,self>|self[]
      */
     public static function cases(): array
     {
         return [
-            new self(self::TYPE_H1),
-            new self(self::TYPE_H2),
-            new self(self::TYPE_H3)
+            self::from(self::TYPE_H1),
+            self::from(self::TYPE_H2),
+            self::from(self::TYPE_H3)
         ];
     }
 

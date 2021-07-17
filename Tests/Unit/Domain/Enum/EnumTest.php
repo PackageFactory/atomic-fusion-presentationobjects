@@ -62,6 +62,11 @@ final class MyComponentType implements PseudoEnumInterface
     const TYPE_PRIMARY = \'primary\';
     const TYPE_SECONDARY = \'secondary\';
 
+    /**
+     * @var array<string,self>|self[]
+     */
+    private static array $instances;
+
     private string $value;
 
     private function __construct(string $value)
@@ -69,25 +74,27 @@ final class MyComponentType implements PseudoEnumInterface
         $this->value = $value;
     }
 
-    public static function fromString(string $string): self
+    public static function from(string $string): self
     {
-        if (!in_array($string, array_map(function(self $case) {
-            return $case->getValue();
-        }, self::cases()))) {
-            throw MyComponentTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+        if (!isset(self::$instances[$string])) {
+            if ($string !== self::TYPE_PRIMARY
+                && $string !== self::TYPE_SECONDARY) {
+                throw MyComponentTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
+            }
+            self::$instances[$string] = new self($string);
         }
 
-        return new self($string);
+        return self::$instances[$string];
     }
 
     public static function primary(): self
     {
-        return new self(self::TYPE_PRIMARY);
+        return self::from(self::TYPE_PRIMARY);
     }
 
     public static function secondary(): self
     {
-        return new self(self::TYPE_SECONDARY);
+        return self::from(self::TYPE_SECONDARY);
     }
 
     public function getIsPrimary(): bool
@@ -101,13 +108,13 @@ final class MyComponentType implements PseudoEnumInterface
     }
 
     /**
-     * @return array|self[]
+     * @return array<int,self>|self[]
      */
     public static function cases(): array
     {
         return [
-            new self(self::TYPE_PRIMARY),
-            new self(self::TYPE_SECONDARY)
+            self::from(self::TYPE_PRIMARY),
+            self::from(self::TYPE_SECONDARY)
         ];
     }
 

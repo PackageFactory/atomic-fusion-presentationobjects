@@ -15,7 +15,7 @@ use Neos\Flow\Annotations as Flow;
 interface PseudoEnumInterface
 {
     /**
-     * @return array<PseudoEnumInterface>
+     * @return array<int,PseudoEnumInterface>|PseudoEnumInterface[]
      */
     public static function cases(): array;
 

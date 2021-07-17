@@ -35,7 +35,7 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
      */
     public function getData(NodeInterface $node = null, array $arguments = []): array
     {
-        if (!isset($arguments['enumName'])) {
+        if (!array_key_exists('enumName', $arguments) || !is_string($arguments['enumName'])) {
             throw new \InvalidArgumentException('Argument "enumName" must be provided.', 1625297174);
         }
         /** @var class-string<mixed> $enumName */

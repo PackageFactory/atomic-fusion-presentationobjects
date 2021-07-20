@@ -11,7 +11,7 @@ use Neos\Flow\Annotations as Flow;
  * A list of anotherComponents
  * @Flow\Proxy(false)
  */
-final class AnotherComponents implements \IteratorAggregate
+final class AnotherComponents implements \IteratorAggregate, \Countable
 {
     /**
      * @var array<int,AnotherComponentInterface>|AnotherComponentInterface[]
@@ -34,5 +34,10 @@ final class AnotherComponents implements \IteratorAggregate
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->anotherComponents);
+    }
+
+    public function count(): int
+    {
+        return count($this->anotherComponents);
     }
 }

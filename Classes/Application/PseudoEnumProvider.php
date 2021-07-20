@@ -19,7 +19,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterf
 final class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
-     * @Flow\Inject
+     * @Flow\Inject(lazy=false)
      * @var Translator
      */
     protected $translator;

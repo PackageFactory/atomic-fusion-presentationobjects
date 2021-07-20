@@ -419,7 +419,7 @@ use Neos\Flow\Annotations as Flow;
 /**
  * @Flow\Proxy(false)
  */
-final class MyNewComponents implements \IteratorAggregate
+final class MyNewComponents implements \IteratorAggregate, \Countable
 {
     /**
      * @var array<int,MyNewComponentInterface>|MyNewComponentInterface[]
@@ -442,6 +442,11 @@ final class MyNewComponents implements \IteratorAggregate
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->myNewComponents);
+    }
+
+    public function count(): int
+    {
+        return count($this->myNewComponents);
     }
 }
 ',

@@ -10,7 +10,7 @@ use Neos\Flow\Annotations as Flow;
 /**
  * @Flow\Proxy(false)
  */
-final class NewTexts implements \IteratorAggregate
+final class NewTexts implements \IteratorAggregate, \Countable
 {
     /**
      * @var array<int,NewTextInterface>|NewTextInterface[]
@@ -33,5 +33,10 @@ final class NewTexts implements \IteratorAggregate
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->newTexts);
+    }
+
+    public function count(): int
+    {
+        return count($this->newTexts);
     }
 }

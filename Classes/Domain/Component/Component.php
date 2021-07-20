@@ -127,7 +127,7 @@ use Neos\Flow\Annotations as Flow;
 /**
  * @Flow\Proxy(false)
  */
-final class ' . $this->name->getSimpleComponentArrayName() . ' implements \IteratorAggregate
+final class ' . $this->name->getSimpleComponentArrayName() . ' implements \IteratorAggregate, \Countable
 {
     /**
      * @var array<int,' . $this->name->getSimpleInterfaceName() . '>|' . $this->name->getSimpleInterfaceName() . '[]
@@ -150,6 +150,11 @@ final class ' . $this->name->getSimpleComponentArrayName() . ' implements \Itera
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->' . $this->name->getSimpleComponentArrayPropertyName() . ');
+    }
+
+    public function count(): int
+    {
+        return count($this->' . $this->name->getSimpleComponentArrayPropertyName() . ');
     }
 }
 ';

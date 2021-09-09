@@ -48,7 +48,7 @@ final class SlotPropType implements PropTypeInterface
     public function getDefinitionData(string $propName): string
     {
         return '
-            <PackageFactory.AtomicFusion.PresentationObjects:Slot presentationObject={presentationObject.' . $propName . '} />
+            <PackageFactory.AtomicFusion.PresentationObjects:Slot presentationObject={presentationObject.' . $propName . '}' . ($this->nullable ? ' @if.isToBeRendered={presentationObject.' . $propName . '}' : '') . ' />
         ';
     }
 }

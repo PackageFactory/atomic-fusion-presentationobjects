@@ -5,6 +5,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Comp
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\SlotPropType;
 use Vendor\Site\Presentation\Component\MyReflectionComponent\MyReflectionComponent;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -120,6 +121,16 @@ final class PropTypeFactoryTest extends UnitTestCase
                 $componentName,
                 '?ImageSource',
                 new ImageSourcePropType(true)
+            ],
+            [
+                $componentName,
+                'slot',
+                new SlotPropType(false)
+            ],
+            [
+                $componentName,
+                '?slot',
+                new SlotPropType(true)
             ],
             [
                 $componentName,
@@ -293,6 +304,18 @@ final class PropTypeFactoryTest extends UnitTestCase
                     $reflectionPropertyCases[] = [
                         $reflectionProperty,
                         new ImageSourcePropType(true)
+                    ];
+                    break;
+                case 'slotProp':
+                    $reflectionPropertyCases[] = [
+                        $reflectionProperty,
+                        new SlotPropType(false)
+                    ];
+                    break;
+                case 'nullableSlotProp':
+                    $reflectionPropertyCases[] = [
+                        $reflectionProperty,
+                        new SlotPropType(true)
                     ];
                     break;
                 case 'enumProp':

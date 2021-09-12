@@ -5,6 +5,7 @@ namespace Vendor\Site\Presentation\Component\MyReflectionComponent;
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponentInterface;
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponents;
@@ -42,6 +43,10 @@ final class MyReflectionComponent extends AbstractComponentPresentationObject
     private ImageSourceHelperInterface $imageSourceProp;
 
     private ?ImageSourceHelperInterface $nullableImageSourceProp;
+
+    private SlotInterface $slotProp;
+
+    private ?SlotInterface $nullableSlotProp;
 
     private MyStringPseudoEnum $enumProp;
 

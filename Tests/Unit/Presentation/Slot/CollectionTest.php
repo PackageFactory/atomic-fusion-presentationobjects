@@ -14,10 +14,13 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Collection
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\CollectionInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ContentInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Iteration;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ValueInterface;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
+use Vendor\Site\Presentation\Component\Text\Text;
+use Vendor\Site\Presentation\Component\Text\TextInterface;
 
 final class CollectionTest extends UnitTestCase
 {
@@ -155,6 +158,55 @@ final class CollectionTest extends UnitTestCase
      * @test
      * @return void
      */
+    public function keepsSlotsInIterables(): void
+    {
+        $collection = Collection::fromIterable(
+            [new Text('Text')]
+        );
+
+        $this->assertInstanceOf(CollectionInterface::class, $collection);
+
+        /** @var array<int,TextInterface> $items */
+        $items = $collection->getItems();
+
+        $this->assertInstanceOf(Text::class, $items[0]);
+        $this->assertEquals('Text', $items[0]->getText());
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function acceptsButRemovesNullValuesInIterables(): void
+    {
+        $collection = Collection::fromIterable([
+            new Text('Text'),
+            null,
+            'Foo'
+        ]);
+
+        $this->assertInstanceOf(CollectionInterface::class, $collection);
+
+        /** @var array<int,SlotInterface> $items */
+        $items = $collection->getItems();
+
+        $this->assertSame(2, count($items));
+
+        $firstItem = $items[0];
+        $this->assertInstanceOf(Text::class, $firstItem);
+        /** @var Text $firstItem */
+        $this->assertEquals('Text', $firstItem->getText());
+
+        $secondItem = $items[1];
+        $this->assertInstanceOf(ValueInterface::class, $secondItem);
+        /** @var ValueInterface $secondItem */
+        $this->assertEquals('Foo', (string) $secondItem);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function canBeCreatedFromTraversableNodes(): void
     {
         $makeNode = function (string $nodeTypeName): ObjectProphecy {
@@ -171,12 +223,12 @@ final class CollectionTest extends UnitTestCase
 
         $keyVisualNode = $makeNode('Vendor.Site:Content.KeyVisual');
         $deckNode = $makeNode('Vendor.Site:Content.Deck');
-        $newletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
+        $newsletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
 
         $nodes = TraversableNodes::fromArray([
             $keyVisualNode->reveal(),
             $deckNode->reveal(),
-            $newletterSubscriptionNode->reveal()
+            $newsletterSubscriptionNode->reveal()
         ]);
 
         $collection = Collection::fromNodes($nodes);
@@ -195,7 +247,7 @@ final class CollectionTest extends UnitTestCase
         $this->assertEquals('Vendor.Site:Content.Deck', $items[1]->getContentPrototypeName());
 
         $this->assertInstanceOf(ContentInterface::class, $items[2]);
-        $this->assertSame($newletterSubscriptionNode->reveal(), $items[2]->getContentNode());
+        $this->assertSame($newsletterSubscriptionNode->reveal(), $items[2]->getContentNode());
         $this->assertEquals('Vendor.Site:Content.NewsletterSubscription', $items[2]->getContentPrototypeName());
     }
 
@@ -219,12 +271,12 @@ final class CollectionTest extends UnitTestCase
 
         $keyVisualNode = $makeNode('Vendor.Site:Content.KeyVisual');
         $deckNode = $makeNode('Vendor.Site:Content.Deck');
-        $newletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
+        $newsletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
 
         $nodes = TraversableNodes::fromArray([
             $keyVisualNode->reveal(),
             $deckNode->reveal(),
-            $newletterSubscriptionNode->reveal()
+            $newsletterSubscriptionNode->reveal()
         ]);
 
         $collection = Collection::fromNodes(

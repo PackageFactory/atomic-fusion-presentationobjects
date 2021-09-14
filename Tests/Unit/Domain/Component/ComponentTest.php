@@ -418,6 +418,7 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * @Flow\Proxy(false)
+ * @implements \IteratorAggregate<int,MyNewComponentInterface>
  */
 final class MyNewComponents implements \IteratorAggregate, \Countable
 {
@@ -426,6 +427,9 @@ final class MyNewComponents implements \IteratorAggregate, \Countable
      */
     private array $myNewComponents;
 
+    /**
+     * @param array<int,MyNewComponentInterface> $array
+     */
     public function __construct($array)
     {
         foreach ($array as $element) {

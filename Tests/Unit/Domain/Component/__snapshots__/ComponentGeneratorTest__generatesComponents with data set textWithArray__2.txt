@@ -9,6 +9,7 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * @Flow\Proxy(false)
+ * @implements \IteratorAggregate<int,NewTextInterface>
  */
 final class NewTexts implements \IteratorAggregate, \Countable
 {
@@ -17,6 +18,9 @@ final class NewTexts implements \IteratorAggregate, \Countable
      */
     private array $newTexts;
 
+    /**
+     * @param array<int,NewTextInterface> $array
+     */
     public function __construct($array)
     {
         foreach ($array as $element) {

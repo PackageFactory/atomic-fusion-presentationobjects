@@ -1,4 +1,30 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.Image: Vendor\Site\Presentation\Component\Image\ImageFactory
+prototype(Vendor.Site:Component.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\Image\\Image'
+
+    @styleguide {
+        title = 'Image'
+
+        props {
+            src = Sitegeist.Kaleidoscope:DummyImageSource {
+                height = 1920
+                width = 1080
+            }
+            alt = 'Text'
+            title = 'Text'
+        }
+    }
+
+    renderer = afx`
+        <div>[Image]</div>
+        <dl>
+            <dt>src:</dt>
+            <dd>
+                <Sitegeist.Kaleidoscope:Image imageSource={presentationObject.src} />
+            </dd>
+            <dt>alt:</dt>
+            <dd>{presentationObject.alt}</dd>
+            <dt>title:</dt>
+            <dd>{presentationObject.title}</dd>
+        </dl>
+    `
+}

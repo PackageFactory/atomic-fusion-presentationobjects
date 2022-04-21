@@ -33,11 +33,11 @@ final class ImageSourcePropTypeTest extends UnitTestCase
         return [
             [
                 new ImageSourcePropType(false),
-                'ImageSourceHelperInterface'
+                'ImageSourceInterface'
             ],
             [
                 new ImageSourcePropType(true),
-                'ImageSourceHelperInterface'
+                'ImageSourceInterface'
             ]
         ];
     }
@@ -61,12 +61,12 @@ final class ImageSourcePropTypeTest extends UnitTestCase
         return [
             [
                 new ImageSourcePropType(false),
-                'use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+                'use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 '
             ],
             [
                 new ImageSourcePropType(true),
-                'use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+                'use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 '
             ]
         ];
@@ -91,11 +91,11 @@ final class ImageSourcePropTypeTest extends UnitTestCase
         return [
             [
                 new ImageSourcePropType(false),
-                'ImageSourceHelperInterface'
+                'ImageSourceInterface'
             ],
             [
                 new ImageSourcePropType(true),
-                '?ImageSourceHelperInterface'
+                '?ImageSourceInterface'
             ]
         ];
     }
@@ -157,15 +157,15 @@ final class ImageSourcePropTypeTest extends UnitTestCase
                 new ImageSourcePropType(false),
                 'myProperty',
                 '
-            <Sitegeist.Lazybones:Image imageSource={presentationObject.myProperty} />
-        '
+                <Sitegeist.Kaleidoscope:Image imageSource={presentationObject.myProperty} />
+            '
             ],
             [
                 new ImageSourcePropType(true),
                 'myProperty',
                 '
-            <Sitegeist.Lazybones:Image imageSource={presentationObject.myProperty} @if.isToBeRendered={presentationObject.myProperty} />
-        '
+                <Sitegeist.Kaleidoscope:Image imageSource={presentationObject.myProperty} @if={presentationObject.myProperty} />
+            '
             ]
         ];
     }

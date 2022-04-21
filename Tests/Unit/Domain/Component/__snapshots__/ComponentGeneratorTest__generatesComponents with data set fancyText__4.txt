@@ -1,4 +1,19 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.NewText: Vendor\Site\Presentation\FancyComponent\NewText\NewTextFactory
+prototype(Vendor.Site:FancyComponent.NewText) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\FancyComponent\\NewText\\NewText'
+
+    @styleguide {
+        title = 'NewText'
+
+        props {
+            text = 'Text'
+        }
+    }
+
+    renderer = afx`
+        <div>[NewText]</div>
+        <dl>
+            <dt>text:</dt>
+            <dd>{presentationObject.text}</dd>
+        </dl>
+    `
+}

@@ -1,4 +1,22 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.NewLink: Vendor\Site\Presentation\Component\NewLink\NewLinkFactory
+prototype(Vendor.Site:Component.NewLink) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\NewLink\\NewLink'
+
+    @styleguide {
+        title = 'NewLink'
+
+        props {
+            href = 'https://www.neos.io'
+            title = 'Text'
+        }
+    }
+
+    renderer = afx`
+        <div>[NewLink]</div>
+        <dl>
+            <dt>href:</dt>
+            <dd>{presentationObject.href}</dd>
+            <dt>title:</dt>
+            <dd>{presentationObject.title}</dd>
+        </dl>
+    `
+}

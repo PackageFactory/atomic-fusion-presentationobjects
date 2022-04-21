@@ -209,28 +209,28 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
                 new ComponentArrayPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent')),
                 'myProperty',
                 '
-            <Neos.Fusion:Loop items={presentationObject.myProperty}>
-                <Vendor.Site:Component.MyComponent presentationObject={item} />
-            </Neos.Fusion:Loop>
-        '
+                <Neos.Fusion:Loop items={presentationObject.myProperty}>
+                    <Vendor.Site:Component.MyComponent presentationObject={item} />
+                </Neos.Fusion:Loop>
+            '
             ],
             [
                 new ComponentArrayPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent')),
                 'myProperty',
                 '
-            <Neos.Fusion:Loop items={presentationObject.myProperty}>
-                <Vendor.Site:CustomType.MyComponent presentationObject={item} />
-            </Neos.Fusion:Loop>
-        '
+                <Neos.Fusion:Loop items={presentationObject.myProperty}>
+                    <Vendor.Site:CustomType.MyComponent presentationObject={item} />
+                </Neos.Fusion:Loop>
+            '
             ],
             [
                 new ComponentArrayPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent')),
                 'myProperty',
                 '
-            <Neos.Fusion:Loop items={presentationObject.myProperty}>
-                <Vendor.Site:Custom.Type.MyComponent presentationObject={item} />
-            </Neos.Fusion:Loop>
-        '
+                <Neos.Fusion:Loop items={presentationObject.myProperty}>
+                    <Vendor.Site:Custom.Type.MyComponent presentationObject={item} />
+                </Neos.Fusion:Loop>
+            '
             ]
         ];
     }

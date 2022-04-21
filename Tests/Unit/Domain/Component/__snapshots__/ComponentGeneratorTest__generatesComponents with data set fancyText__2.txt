@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\FancyComponent\NewText;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
+declare(strict_types=1);
 
-interface NewTextInterface extends ComponentPresentationObjectInterface
+namespace Vendor\Site\Presentation\FancyComponent\NewText;
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class NewTextFactory extends AbstractComponentPresentationObjectFactory
 {
-    public function getText(): ?string;
 }

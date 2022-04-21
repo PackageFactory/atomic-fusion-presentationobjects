@@ -41,9 +41,8 @@ final class ComponentGenerator
         bool $listable = false
     ): void {
         $props = Props::fromInputArray($componentName, $serializedProps);
-        $component = new Component($componentName, $props, $listable);
+        $component = new Component($componentName, $props);
 
-        $this->fileWriter->writeFile($componentName->getInterfacePath($packagePath, $colocate), $component->getInterfaceContent());
         $this->fileWriter->writeFile($componentName->getClassPath($packagePath, $colocate), $component->getClassContent());
         $this->fileWriter->writeFile($componentName->getFactoryPath($packagePath, $colocate), $component->getFactoryContent());
         $this->fileWriter->writeFile($componentName->getFusionComponentPath($packagePath), $component->getFusionContent());

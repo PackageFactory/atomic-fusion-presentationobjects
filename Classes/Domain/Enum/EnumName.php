@@ -1,50 +1,35 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
-/**
- * @Flow\Proxy(false)
- */
+#[Flow\Proxy(false)]
 final class EnumName
 {
-    private ComponentName $componentName;
-
-    private string $name;
-
     public function __construct(
-        ComponentName $componentName,
-        string $name
+        public readonly ComponentName $componentName,
+        public readonly string $name
     ) {
-        $this->componentName = $componentName;
-        $this->name = $name;
     }
 
     public function getPackageKey(): PackageKey
     {
-        return $this->componentName->getPackageKey();
+        return $this->componentName->packageKey;
     }
 
     public function getFusionNamespace(): FusionNamespace
     {
-        return $this->componentName->getFusionNamespace();
-    }
-
-    public function getComponentName(): ComponentName
-    {
-        return $this->componentName;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
+        return $this->componentName->fusionNamespace;
     }
 
     public function getPhpNamespace(): string
@@ -52,9 +37,12 @@ final class EnumName
         return $this->componentName->getPhpNamespace();
     }
 
-    public function getExceptionName(): string
+    /**
+     * @return class-string<mixed>
+     */
+    public function getPhpClassName(): string
     {
-        return $this->name . 'IsInvalid';
+        return $this->componentName->getPhpNamespace() . '\\' . $this->name;
     }
 
     public function getProviderName(): string
@@ -70,10 +58,5 @@ final class EnumName
     public function getClassPath(string $packagePath, bool $colocate): string
     {
         return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . '.php';
-    }
-
-    public function getExceptionPath(string $packagePath, bool $colocate): string
-    {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->getExceptionName() . '.php';
     }
 }

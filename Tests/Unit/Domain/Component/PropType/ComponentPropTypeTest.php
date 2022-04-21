@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -80,32 +83,32 @@ final class ComponentPropTypeTest extends UnitTestCase
         return [
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'), false),
-                'use Vendor\Site\Presentation\Component\MyComponent\MyComponentInterface;
+                'use Vendor\Site\Presentation\Component\MyComponent\MyComponent;
 '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'), true),
-                'use Vendor\Site\Presentation\Component\MyComponent\MyComponentInterface;
+                'use Vendor\Site\Presentation\Component\MyComponent\MyComponent;
 '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'), false),
-                'use Vendor\Site\Presentation\CustomType\MyComponent\MyComponentInterface;
+                'use Vendor\Site\Presentation\CustomType\MyComponent\MyComponent;
 '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'), true),
-                'use Vendor\Site\Presentation\CustomType\MyComponent\MyComponentInterface;
+                'use Vendor\Site\Presentation\CustomType\MyComponent\MyComponent;
 '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'), false),
-                'use Vendor\Site\Presentation\Custom\Type\MyComponent\MyComponentInterface;
+                'use Vendor\Site\Presentation\Custom\Type\MyComponent\MyComponent;
 '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'), true),
-                'use Vendor\Site\Presentation\Custom\Type\MyComponent\MyComponentInterface;
+                'use Vendor\Site\Presentation\Custom\Type\MyComponent\MyComponent;
 '
             ]
         ];
@@ -130,27 +133,27 @@ final class ComponentPropTypeTest extends UnitTestCase
         return [
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'), false),
-                'MyComponentInterface'
+                'MyComponent'
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'), true),
-                '?MyComponentInterface'
+                '?MyComponent'
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'), false),
-                'MyComponentInterface'
+                'MyComponent'
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'), true),
-                '?MyComponentInterface'
+                '?MyComponent'
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'), false),
-                'MyComponentInterface'
+                'MyComponent'
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'), true),
-                '?MyComponentInterface'
+                '?MyComponent'
             ]
         ];
     }
@@ -257,43 +260,43 @@ final class ComponentPropTypeTest extends UnitTestCase
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'), false),
                 'myProperty',
                 '
-            <Vendor.Site:Component.MyComponent presentationObject={presentationObject.myProperty} />
-        '
+                <Vendor.Site:Component.MyComponent presentationObject={presentationObject.myProperty} />
+            '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyComponent'), true),
                 'myProperty',
                 '
-            <Vendor.Site:Component.MyComponent presentationObject={presentationObject.myProperty} @if.isToBeRendered={presentationObject.myProperty} />
-        '
+                <Vendor.Site:Component.MyComponent presentationObject={presentationObject.myProperty} @if={presentationObject.myProperty} />
+            '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'), false),
                 'myProperty',
                 '
-            <Vendor.Site:CustomType.MyComponent presentationObject={presentationObject.myProperty} />
-        '
+                <Vendor.Site:CustomType.MyComponent presentationObject={presentationObject.myProperty} />
+            '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('CustomType'), 'MyComponent'), true),
                 'myProperty',
                 '
-            <Vendor.Site:CustomType.MyComponent presentationObject={presentationObject.myProperty} @if.isToBeRendered={presentationObject.myProperty} />
-        '
+                <Vendor.Site:CustomType.MyComponent presentationObject={presentationObject.myProperty} @if={presentationObject.myProperty} />
+            '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'), false),
                 'myProperty',
                 '
-            <Vendor.Site:Custom.Type.MyComponent presentationObject={presentationObject.myProperty} />
-        '
+                <Vendor.Site:Custom.Type.MyComponent presentationObject={presentationObject.myProperty} />
+            '
             ],
             [
                 new ComponentPropType(new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::fromString('Custom.Type'), 'MyComponent'), true),
                 'myProperty',
                 '
-            <Vendor.Site:Custom.Type.MyComponent presentationObject={presentationObject.myProperty} @if.isToBeRendered={presentationObject.myProperty} />
-        '
+                <Vendor.Site:Custom.Type.MyComponent presentationObject={presentationObject.myProperty} @if={presentationObject.myProperty} />
+            '
             ]
         ];
     }

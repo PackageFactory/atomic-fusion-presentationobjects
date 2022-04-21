@@ -38,8 +38,8 @@ class EnumLabelTest extends UnitTestCase
                 new EnumLabel('headlineType.', 'Component.Headline', 'Vendor.Site')
             ],
             [
-                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum',
-                new EnumLabel('myStringPseudoEnum.', 'Component.MyNewComponent', 'Vendor.Site')
+                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum',
+                new EnumLabel('myStringEnum.', 'Component.MyNewComponent', 'Vendor.Site')
             ]
         ];
     }

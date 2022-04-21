@@ -1,18 +1,15 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Image;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+declare(strict_types=1);
 
-interface ImageInterface extends ComponentPresentationObjectInterface
+namespace Vendor\Site\Presentation\Component\Image;
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class ImageFactory extends AbstractComponentPresentationObjectFactory
 {
-    public function getSrc(): ImageSourceHelperInterface;
-
-    public function getAlt(): string;
-
-    public function getTitle(): ?string;
 }

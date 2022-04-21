@@ -10,25 +10,14 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Is
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
-/**
- * @Flow\Proxy(false)
- */
+#[Flow\Proxy(false)]
 final class ComponentName
 {
-    private PackageKey $packageKey;
-
-    private FusionNamespace $fusionNamespace;
-
-    private string $name;
-
     public function __construct(
-        PackageKey $packageKey,
-        FusionNamespace $fusionNamespace,
-        string $name
+        public readonly PackageKey $packageKey,
+        public readonly FusionNamespace $fusionNamespace,
+        public readonly string $name
     ) {
-        $this->packageKey = $packageKey;
-        $this->fusionNamespace = $fusionNamespace;
-        $this->name = $name;
     }
 
     public static function fromInput(string $input, PackageKey $fallbackPackageKey): self
@@ -98,21 +87,6 @@ final class ComponentName
             $fusionNamespace,
             $name
         );
-    }
-
-    public function getPackageKey(): PackageKey
-    {
-        return $this->packageKey;
-    }
-
-    public function getFusionNamespace(): FusionNamespace
-    {
-        return $this->fusionNamespace;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getFullyQualifiedFusionName(): string
@@ -201,7 +175,7 @@ final class ComponentName
             $this->packageKey->toPhpNamespace(),
             'Presentation',
             $this->fusionNamespace->toPhpNameSpace(),
-            $parentComponentName->getName(),
+            $parentComponentName->name,
             $this->name
         ]);
         return $className;

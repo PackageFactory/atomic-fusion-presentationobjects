@@ -10,19 +10,13 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
 
 /**
  * The specification for component classes
- * @Flow\Proxy(false)
  */
+#[Flow\Proxy(false)]
 final class IsComponent
 {
     public static function isSatisfiedByClassName(string $className): bool
     {
         return class_exists($className)
             && is_subclass_of($className, ComponentPresentationObjectInterface::class);
-    }
-
-    public static function isSatisfiedByInterfaceName(string $interfaceName): bool
-    {
-        return interface_exists($interfaceName)
-            && is_subclass_of($interfaceName, ComponentPresentationObjectInterface::class);
     }
 }

@@ -38,67 +38,23 @@ For more information on this pattern, have a look at this excellent article: htt
 
 #### HeadlineLook.php
 
-This is the central pseudo-enum class. It consists of:
-
-* A set of constants that represent the enum cases
-* Static factory methods that are named like the enum cases
-* `getIs*` methods to identify a value both in PHP and Neos.Eel
-* A static `cases` method to retrieve a list of all possible enum cases
-* A `getValue` method that will return the value of the enum instance as your chosen type
-* A `__toString` method for string casting
+This is the central enum. Additional to PHP's core enum functions, it consists of `getIs*` methods to identify a value both in PHP and Neos.Eel
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
-use Neos\Flow\Annotations as Flow;
+declare(strict_types=1);
 
-/**
- * @Flow\Proxy(false)
- */
-final class HeadlineLook
+namespace Vendor\Site\Presentation\Component\Headline;
+
+enum HeadlineLook:string
 {
-    const LOOK_REGULAR = 'regular';
-    const LOOK_HERO = 'hero';
-
-    /**
-     * @var array<string,self>|self[]
-     */
-    private static array $instances = [];
-
-    private string $value;
-
-    private function __construct(string $value)
-    {
-        $this->value = $value;
-    }
-
-    public static function from(string $string): self
-    {
-        if (!isset(self::$instances[$string])) {
-            if ($string !== self::LOOK_REGULAR
-                && $string !== self::LOOK_HERO) {
-                throw HeadlineLookIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
-            }
-            self::$instances[$string] = new self($string);
-        }
-
-        return self::$instances[$string];
-    }
-
-    public static function regular(): self
-    {
-        return self::from(self::LOOK_REGULAR);
-    }
-
-    public static function hero(): self
-    {
-        return self::from(self::LOOK_HERO);
-    }
+    case LOOK_REGULAR = 'regular';
+    case LOOK_HERO = 'hero';
 
     public function getIsRegular(): bool
     {
@@ -108,53 +64,6 @@ final class HeadlineLook
     public function getIsHero(): bool
     {
         return $this->value === self::LOOK_HERO;
-    }
-
-    /**
-     * @return array<int,self>|self[]
-     */
-    public static function cases(): array
-    {
-        return [
-            self::from(self::LOOK_REGULAR),
-            self::from(self::LOOK_HERO)
-        ];
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->value;
-    }
-}
-```
-
-#### HeadlineLookIsInvalid.php
-
-The exception in this file will be thrown, when the pseudo-enum is initialized with an invalid value (which could happen, when `::from` is called).
-
-```php
-<?php
-namespace Vendor\Site\Presentation\Component\Headline;
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-use Neos\Flow\Annotations as Flow;
-
-/**
- * @Flow\Proxy(false)
- */
-final class HeadlineLookIsInvalid extends \DomainException
-{
-    public static function becauseItMustBeOneOfTheDefinedConstants(string $attemptedValue): self
-    {
-        return new self('The given value "' . $attemptedValue . '" is no valid HeadlineLook, must be one of the defined constants. ', 1602423895);
     }
 }
 ```
@@ -167,14 +76,15 @@ Via --namespace, the component's Fusion namespace can be defined. It can be segm
 
 For type names, the following rules apply:
 
-* Any scalar type (`string`, `int`, `float`, `bool`) will be treated as-is
+* Any scalar type (`string`, `int`, `float`, `bool`) and enums will be treated as-is
 * Prefixing a type with `?` will make it nullable in PHP (https://wiki.php.net/rfc/nullable_types)
-* `ImageSource` will create a `use`-statement for the `ImageSourceHelperInterface` from [Sitegeist.Kaleidoscope](https://github.com/sitegeist/Sitegeist.Kaleidoscope), as well as a propery styleguide example with the `Sitegeist.Kaleidoscope:DummyImageSource` prototype
+* `ImageSource` will create a `use`-statement for the `ImageSourceInterface` from [Sitegeist.Kaleidoscope](https://github.com/sitegeist/Sitegeist.Kaleidoscope), as well as a propery styleguide example with the `Sitegeist.Kaleidoscope:DummyImageSource` prototype
 * `Uri` will create a `use`-statement for the `Psr\Http\Message\UriInterface`
+* `slot` will create a `use`-statement for the `SlotInterface`
 
 ### Example
 
-> **Hint:** It is recommended to create all required values and sub-components beforehand, so the kickstarter can find and create proper `use`-statements for them.
+> **Hint:** It is recommended to create all required enums and sub-components beforehand, so the kickstarter can find and create proper `use`-statements for them.
 
 ```sh
 ./flow component:kickstart Vendor.Site:Headline \
@@ -194,7 +104,7 @@ The is the fusion code for the component. It consists of a full `@styleguide` co
 
 ```fusion
 prototype(Vendor.Site:Component.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Headline\\HeadlineInterface'
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Headline\\Headline'
 
     @styleguide {
         title = 'Headline'
@@ -217,79 +127,32 @@ prototype(Vendor.Site:Component.Headline) < prototype(PackageFactory.AtomicFusio
 }
 ```
 
-#### HeadlineInterface.php
-
-This is the PHP interface of the PresentationObject. It consists of a getter for each property descriptor that was passed to `component:kickstart`.
-
-```php
-<?php
-namespace Vendor\Site\Presentation\Component\Headline;
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-
-interface HeadlineInterface extends ComponentPresentationObjectInterface
-{
-    public function getType(): HeadlineType;
-
-    public function getLook(): HeadlineLook;
-
-    public function getContent(): string;
-}
-```
-
 #### Headline.php
 
-This is the PresentationObject itself. It is a full implementation of the interface from above.
+This is the PresentationObject itself.
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
  */
+ 
+declare(strict_types=1);
+ 
+namespace Vendor\Site\Presentation\Component\Headline;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 
-/**
- * @Flow\Proxy(false)
- */
-final class Headline extends AbstractComponentPresentationObject implements HeadlineInterface
+ #[Flow\Proxy(false)]
+final class Headline extends AbstractComponentPresentationObject
 {
-    private HeadlineType $type;
-
-    private HeadlineLook $look;
-
-    private string $content;
-
     public function __construct(
-        HeadlineType $type,
-        HeadlineLook $look,
-        string $content
+        public readonly HeadlineType $type,
+        public readonly HeadlineLook $look,
+        public readonly string $content
     ) {
-        $this->type = $type;
-        $this->look = $look;
-        $this->content = $content;
-    }
-
-    public function getType(): HeadlineType
-    {
-        return $this->type;
-    }
-
-    public function getLook(): HeadlineLook
-    {
-        return $this->look;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
     }
 }
 ```
@@ -300,11 +163,14 @@ This is an empty factory for the PresentationObject that is supposed to be used 
 
 ```php
 <?php
-namespace Vendor\Site\Presentation\Component\Headline;
 
 /*
  * This file is part of the Vendor.Site package.
  */
+ 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\Headline;
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
 
@@ -344,7 +210,7 @@ Composer's PSR-4 autoload section allows for multiple entries. We can use this a
     }
   }
 ```
-This way, presentation objects, interfaces and factories placed in their component's Fusion folder are autoloaded as if they were located in the usual folders under `Classes`.
+This way, presentation objects, enums and factories placed in their component's Fusion folder are autoloaded as if they were located in the usual folders under `Classes`.
 
 #### Settings
 

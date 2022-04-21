@@ -33,12 +33,12 @@ class EnumTypeTest extends UnitTestCase
     {
         return [
             [
-                EnumType::string(),
+                EnumType::TYPE_STRING,
                 ['a', 'b', 'c'],
                 ['a' => 'a', 'b' => 'b', 'c' => 'c']
             ],
             [
-                EnumType::int(),
+                EnumType::TYPE_INT,
                 ['a:1', 'b:2', 'c:3'],
                 ['a' => 1, 'b' => 2, 'c' => 3]
             ]

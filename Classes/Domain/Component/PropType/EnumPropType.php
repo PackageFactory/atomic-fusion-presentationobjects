@@ -1,35 +1,23 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
-use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
+declare(strict_types=1);
 
-/**
- * @Flow\Proxy(false)
- */
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+
+use Neos\Flow\Annotations as Flow;
+
+#[Flow\Proxy(false)]
 final class EnumPropType implements PropTypeInterface
 {
-    /**
-     * @var class-string<mixed>
-     */
-    private string $className;
-
-    private bool $nullable;
-
-    /**
-     * @param class-string<mixed> $className
-     * @param boolean $nullable
-     */
     public function __construct(
-        string $className,
-        bool $nullable
+        /** @var class-string<\BackedEnum> */
+        private string $className,
+        private bool $nullable
     ) {
-        $this->className= $className;
-        $this->nullable = $nullable;
     }
 
     public function isNullable(): bool
@@ -44,7 +32,7 @@ final class EnumPropType implements PropTypeInterface
 
     public function getUseStatement(): string
     {
-        return "use " . $this->className . ";\n";
+        return '';
     }
 
     public function getType(): string
@@ -63,13 +51,13 @@ final class EnumPropType implements PropTypeInterface
 
         $cases = $this->className::cases();
         if (!empty($cases)) {
-            /** @var PseudoEnumInterface $defaultCase */
+            /** @var \BackedEnum $defaultCase */
             $defaultCase = reset($cases);
             switch ((string) $type) {
                 case 'string':
-                    return '= \'' . $defaultCase->getValue() . '\'';
+                    return '= \'' . $defaultCase->value . '\'';
                 case 'int':
-                    return '= ' . $defaultCase->getValue();
+                    return '= ' . $defaultCase->value;
                 default:
             }
         }
@@ -79,6 +67,6 @@ final class EnumPropType implements PropTypeInterface
 
     public function getDefinitionData(string $propName): string
     {
-        return '{presentationObject.' . $propName . '}';
+        return '{presentationObject.' . $propName . '.value}';
     }
 }

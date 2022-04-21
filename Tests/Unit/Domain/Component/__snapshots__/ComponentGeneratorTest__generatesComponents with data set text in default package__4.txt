@@ -1,5 +1,19 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Existing.Helper: Some\OtherPackage\Existing\HelperFactory
-      Default.NewText: Vendor\Default\Presentation\Component\NewText\NewTextFactory
+prototype(Vendor.Default:Component.NewText) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Default\\Presentation\\Component\\NewText\\NewText'
+
+    @styleguide {
+        title = 'NewText'
+
+        props {
+            content = 'Text'
+        }
+    }
+
+    renderer = afx`
+        <div>[NewText]</div>
+        <dl>
+            <dt>content:</dt>
+            <dd>{presentationObject.content}</dd>
+        </dl>
+    `
+}

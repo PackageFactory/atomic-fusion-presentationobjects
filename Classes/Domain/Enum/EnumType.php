@@ -1,54 +1,26 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
-use Neos\Flow\Annotations as Flow;
+declare(strict_types=1);
 
-/**
- * @Flow\Proxy(false)
- */
-final class EnumType
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
+
+enum EnumType:string
 {
-    const TYPE_STRING = 'string';
-    const TYPE_INT = 'int';
-
-    private string $value;
-
-    private function __construct(string $value)
-    {
-        $this->value = $value;
-    }
-
-    public static function fromInput(string $input): self
-    {
-        if ($input !== self::TYPE_STRING && $input !== self::TYPE_INT) {
-            throw EnumTypeIsInvalid::becauseItIsNoneOfTheSupportedTypes($input);
-        }
-
-        return new self($input);
-    }
-
-    public static function string(): self
-    {
-        return new self(self::TYPE_STRING);
-    }
-
-    public static function int(): self
-    {
-        return new self(self::TYPE_INT);
-    }
+    case TYPE_STRING = 'string';
+    case TYPE_INT = 'int';
 
     public function isString(): bool
     {
-        return $this->value === self::TYPE_STRING;
+        return $this === self::TYPE_STRING;
     }
 
-    public function __toString(): string
+    public function isInt(): bool
     {
-        return $this->value;
+        return $this === self::TYPE_INT;
     }
 
     /**
@@ -58,7 +30,7 @@ final class EnumType
     public function processValueArray(array $valueArray): array
     {
         $processedValueArray = [];
-        switch ($this->value) {
+        switch ($this) {
             case self::TYPE_INT:
                 foreach ($valueArray as $value) {
                     list($name, $intValue) = explode(':', $value);
@@ -66,7 +38,6 @@ final class EnumType
                 }
                 break;
             case self::TYPE_STRING:
-            default:
                 foreach ($valueArray as $value) {
                     $processedValueArray[$value] = $value;
                 }

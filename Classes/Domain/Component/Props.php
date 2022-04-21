@@ -110,8 +110,8 @@ final class Props implements \IteratorAggregate
     {
         $terms = [];
         foreach ($this as $propName => $propType) {
-            $terms[] = '        <dt>' . $propName . ':</dt>
-        <dd>' . $propType->getDefinitionData($propName) . '</dd>';
+            $terms[] = '            <dt>' . $propName . ':</dt>
+            <dd>' . $propType->getDefinitionData($propName) . '</dd>';
         }
 
         return trim(implode("\n", $terms));

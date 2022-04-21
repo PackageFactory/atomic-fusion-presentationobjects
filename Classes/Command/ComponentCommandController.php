@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Command;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Command;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
@@ -67,7 +70,7 @@ class ComponentCommandController extends CommandController
         );
         $package = $this->packageResolver->resolvePackage();
         $componentName = ComponentName::fromInput($name, PackageKey::fromPackage($package));
-        $componentPackage = $this->packageResolver->resolvePackage((string)$componentName->getPackageKey());
+        $componentPackage = $this->packageResolver->resolvePackage((string)$componentName->packageKey);
 
         $componentGenerator->generateComponent(
             $componentName,
@@ -99,12 +102,11 @@ class ComponentCommandController extends CommandController
     public function kickStartEnumCommand(string $componentName, string $name, string $type, array $values = [], bool $yes = false): void
     {
         $enumGenerator = new EnumGenerator(
-            new \DateTimeImmutable(),
             new DefensiveConfirmationFileWriter($this->output, $yes)
         );
         $package = $this->packageResolver->resolvePackage();
         $componentNameObject = ComponentName::fromInput($componentName, PackageKey::fromPackage($package));
-        $componentPackage = $this->packageResolver->resolvePackage((string)$componentNameObject->getPackageKey());
+        $componentPackage = $this->packageResolver->resolvePackage((string)$componentNameObject->packageKey);
 
         $enumGenerator->generateEnum(
             $componentNameObject,

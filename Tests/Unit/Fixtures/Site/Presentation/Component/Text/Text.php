@@ -1,28 +1,24 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Text;
+<?php
 
 /*
  * This file is part of the Vendor.Site package
  */
+
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\Text;
 
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 use Neos\Flow\Annotations as Flow;
 
 /**
  * Text component for test purposes
- * @Flow\Proxy(false)
  */
-final class Text extends AbstractComponentPresentationObject implements TextInterface
+#[Flow\Proxy(false)]
+final class Text extends AbstractComponentPresentationObject
 {
-    private string $text;
-
-    public function __construct(string $text)
-    {
-        $this->text = $text;
-    }
-
-    public function getText(): string
-    {
-        return $this->text;
+    public function __construct(
+        public readonly string $text
+    ) {
     }
 }

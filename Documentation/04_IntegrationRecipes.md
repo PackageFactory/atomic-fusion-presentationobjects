@@ -82,103 +82,37 @@ Resolves URIs with the special `asset://` and `node://` protocols.
 
 ## The EnumProvider
 
-All pseudo-enums implementing the PseudoEnumInterface can be provided to the inspector or the Fusion runtime using the PseudoEnumProvider.
+All backed enums can be provided to the inspector or the Fusion runtime using the EnumProvider.
 This makes the enum itself the single source of discrete values a node or presentation object property may have, obsoleting value adjustments in Fusion, configuration etc.
 
-As an example, we use the following pseudo-enum:
+As an example, we use the following enum:
 
 ```php
-<?php declare(strict_types=1);
+<?php
+ 
+declare(strict_types=1);
+
 namespace Acme\Site\Presentation\Block\Headline;
 
-use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
-
-/**
- * @Flow\Proxy(false)
- */
-final class HeadlineType implements PseudoEnumInterface
+enum HeadlineType:string
 {
     const TYPE_H1 = 'h1';
     const TYPE_H2 = 'h2';
     const TYPE_H3 = 'h3';
 
-    /**
-     * @var array<string,self>|self[]
-     */
-    private static array $instances = [];
-
-    private string $value;
-
-    private function __construct(string $value)
-    {
-        $this->value = $value;
-    }
-
-    public static function from(string $string): self
-    {
-        if (!isset(self::$instances[$string])) {
-            if ($string !== self::TYPE_H1
-                && $string !== self::TYPE_H2
-                && $string !== self::TYPE_H3) {
-                throw HeadlineTypeIsInvalid::becauseItMustBeOneOfTheDefinedConstants($string);
-            }
-            self::$instances[$string] = new self($string);
-        }
-
-        return self::$instances[$string];
-    }
-
-    public static function h1(): self
-    {
-        return self::from(self::TYPE_H1);
-    }
-
-    public static function h2(): self
-    {
-        return self::from(self::TYPE_H2);
-    }
-
-    public static function h3(): self
-    {
-        return self::from(self::TYPE_H3);
-    }
-
     public function getIsH1(): bool
     {
-        return $this->value === self::TYPE_H1;
+        return $this === self::TYPE_H1;
     }
 
     public function getIsH2(): bool
     {
-        return $this->value === self::TYPE_H2;
+        return $this === self::TYPE_H2;
     }
 
     public function getIsH3(): bool
     {
-        return $this->value === self::TYPE_H3;
-    }
-
-    /**
-     * @return array<int,self>|self[]
-     */
-    public static function cases(): array
-    {
-        return [
-            self::from(self::TYPE_H1),
-            self::from(self::TYPE_H2),
-            self::from(self::TYPE_H3)
-        ];
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->value;
+        return $this === self::TYPE_H3;
     }
 }
 ```
@@ -191,20 +125,20 @@ When we now declare our NodeType property, we do this as follows:
 
 ```yaml
   properties:
-    headline:
-      type: string
-      ui:
-        inspector:
-          editor: Neos.Neos/Inspector/Editors/SelectBoxEditor
-          editorOptions:
-            values: []
+      headline:
+          type: string
+          ui:
+              inspector:
+                  editor: Neos.Neos/Inspector/Editors/SelectBoxEditor
+                  editorOptions:
+                      values: [ ]
   postprocessors:
-    headline-types:
-      postprocessor: PackageFactory\AtomicFusion\PresentationObjects\Application\PseudoEnumProvider
-      postprocessorOptions:
-        enumName: Acme\Site\Presentation\Block\Headline\HeadlineType
-        propertyNames:
-          - headline
+      headline-types:
+          postprocessor: EnumProvider
+          postprocessorOptions:
+              enumName: Acme\Site\Presentation\Block\Headline\HeadlineType
+              propertyNames:
+                  - headline
 ```
 
 The initial values are left empty and will be completely populated by the postprocessor. While the postprocessor is the same for all enums, there are two configuration options available:
@@ -236,9 +170,9 @@ If you need the enum's values in Fusion, you can declare the provider as an EEL 
 
 ```yaml
 Neos:
-  Fusion:
-    defaultContext:
-      Enum: PackageFactory\AtomicFusion\PresentationObjects\Application\PseudoEnumProvider
+    Fusion:
+        defaultContext:
+            Enum: EnumProvider
 ```
 and use it in Fusion to get the cases or values.
 ```neosfusion

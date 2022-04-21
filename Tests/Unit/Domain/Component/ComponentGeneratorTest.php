@@ -65,7 +65,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/NewText/NewText.fusion'
@@ -79,7 +78,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewTextInterface.php',
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/NewText/NewTextFactory.php',
                     'vfs://DistributionPackages/Vendor.Default/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Default/Resources/Private/Fusion/Presentation/Component/NewText/NewText.fusion'
@@ -93,7 +91,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/Headline.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/Headline.fusion'
@@ -107,7 +104,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/Image.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/ImageInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Image/ImageFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Image/Image.fusion'
@@ -121,7 +117,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLink.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLinkInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewLink/NewLinkFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/NewLink/NewLink.fusion'
@@ -135,7 +130,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
@@ -149,7 +143,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewTextInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/FancyComponent/NewText/NewTextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/FancyComponent/NewText/NewText.fusion'
@@ -163,7 +156,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewTextInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Even/FancierComponent/NewText/NewTextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Even/FancierComponent/NewText/NewText.fusion'
@@ -178,7 +170,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewText.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTexts.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/NewText/NewTextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/NewText/NewText.fusion'
@@ -192,7 +183,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArray.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArrayInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/WithTextArray/WithTextArrayFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/WithTextArray/WithTextArray.fusion'
@@ -206,7 +196,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
@@ -220,7 +209,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
@@ -234,7 +222,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/Card.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Card/CardFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Card/Card.fusion'
@@ -248,7 +235,6 @@ final class ComponentGeneratorTest extends UnitTestCase
                 false,
                 [
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedText.php',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedTextInterface.php',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedTextFactory.php',
                     'vfs://DistributionPackages/Vendor.Site/Configuration/Settings.PresentationHelpers.yaml',
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/ColocatedText/ColocatedText.fusion'

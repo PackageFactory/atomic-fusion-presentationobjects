@@ -1,4 +1,30 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.WithTextArray: Vendor\Site\Presentation\Component\WithTextArray\WithTextArrayFactory
+prototype(Vendor.Site:Component.WithTextArray) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\WithTextArray\\WithTextArray'
+
+    @styleguide {
+        title = 'WithTextArray'
+
+        props {
+            texts {
+                0 {
+                    text = 'Text'
+                }
+                1 {
+                    text = 'Text'
+                }
+            }
+        }
+    }
+
+    renderer = afx`
+        <div>[WithTextArray]</div>
+        <dl>
+            <dt>texts:</dt>
+            <dd>
+                <Neos.Fusion:Loop items={presentationObject.texts}>
+                    <Vendor.Site:Component.Text presentationObject={item} />
+                </Neos.Fusion:Loop>
+            </dd>
+        </dl>
+    `
+}

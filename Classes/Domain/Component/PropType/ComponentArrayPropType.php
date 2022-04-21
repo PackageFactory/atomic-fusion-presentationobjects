@@ -29,7 +29,7 @@ final class ComponentArrayPropType implements PropTypeInterface
 
     public function getSimpleName(): string
     {
-        return PluralName::forName($this->componentName->getName());
+        return PluralName::forName($this->componentName->name);
     }
 
     public function getUseStatement(): string
@@ -66,9 +66,9 @@ final class ComponentArrayPropType implements PropTypeInterface
     public function getDefinitionData(string $propName): string
     {
         return '
-            <Neos.Fusion:Loop items={presentationObject.' . $propName. '}>
-                <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={item} />
-            </Neos.Fusion:Loop>
-        ';
+                <Neos.Fusion:Loop items={presentationObject.' . $propName. '}>
+                    <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={item} />
+                </Neos.Fusion:Loop>
+            ';
     }
 }

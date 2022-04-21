@@ -31,7 +31,7 @@ A presentational component uses a slot like this:
 
 ```fusion
 prototype(Vendor.Site:Button) < prototype(PresentationObjectComponent) {
-    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Block\\Button\\ButtonInterface'
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Block\\Button\\Button'
 
     renderer = afx`
         <button type={props.model.type}>
@@ -42,27 +42,15 @@ prototype(Vendor.Site:Button) < prototype(PresentationObjectComponent) {
 ```
 
 ```php
-final class Button implements ButtonInterface
+final class Button
 {
-    /**
-     * @param ButtonVariant $variant
-     * @param ButtonType $type
-     * @param HorizontalAlignment $horizontalAlignment
-     * @param string $title
-     * @param SlotInterface $label
-     */
     public function __construct(
-        ButtonVariant $variant,
-        ButtonType $type,
-        HorizontalAlignment $horizontalAlignment,
-        string $title,
-        SlotInterface $label
+        public readonly ButtonVariant $variant,
+        public readonly ButtonType $type,
+        public readonly HorizontalAlignment $horizontalAlignment,
+        public readonly string $title,
+        public readonly SlotInterface $label
     ) {
-        $this->variant = $variant;
-        $this->type = $type;
-        $this->horizontalAlignment = $horizontalAlignment;
-        $this->title = $title;
-        $this->label = $label;
     }
 
    // ...
@@ -95,7 +83,7 @@ The fusion prototype addressed by `$contentPrototypeName` can in theory be any k
 
 `Collection` is a Wrapper for `Neos.Fusion:Loop` and simply joins an array of `SlotInterface`s.
 
-In Factories, it can be initialized via static factory method, taking `TraversableNodes` as its first argument:
+In Factories, it can be initialized via static factory method, taking `Nodes` as its first argument:
 
 ```php
 /* ... */
@@ -105,11 +93,7 @@ final class DeckFactory extends AbstractComponentPresentationObjectFactory
 {
     /* ... */
 
-    /**
-     * @param TraversableNodeInterface $node
-     * @return DeckInterface
-     */
-    public function forDeckNode(TraversableNodeInterface $node): DeckInterface
+    public function forDeckNode(TraversableNodeInterface $node): Deck
     {
         // Optional: Use assertions to ensure the incoming node type
         assert($node->getNodeType()->isOfType('Vendor.Site:Content.Deck'));
@@ -135,11 +119,7 @@ final class DeckFactory extends AbstractComponentPresentationObjectFactory
 {
     /* ... */
 
-    /**
-     * @param TraversableNodeInterface $node
-     * @return DeckInterface
-     */
-    public function forDeckNode(TraversableNodeInterface $node): DeckInterface
+    public function forDeckNode(NodeInterface $node): Deck
     {
         // Optional: Use assertions to ensure the incoming node type
         assert($node->getNodeType()->isOfType('Vendor.Site:Content.Deck'));
@@ -177,7 +157,7 @@ Value wraps any given php value into a `SlotInterface` and sees through that it 
 
 In Factories, it can be initialized via static factory method:
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+<small>*`EXAMPLE: PresentationObject Factory`*</small>
 
 ```php
 /* ... */
@@ -185,20 +165,14 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
 
 final class ButtonFactory extends AbstractComponentPresentationObjectFactory
 {
-    /**
-     * @return ButtonInterface
-     */
-    public function forSaveAction(): ButtonInterface
+    public function forSaveAction(): Button
     {
         return new Button(
             Value::fromAny('Save')
         );
     }
 
-    /**
-     * @return ButtonInterface
-     */
-    public function forCancelAction(): ButtonInterface
+    public function forCancelAction(): Button
     {
         return new Button(
             Value::fromAny('Cancel')
@@ -215,7 +189,7 @@ In plain AtomicFusion we would use `Neos.Neos:Editable` to integrate a property 
 
 In Factories, it can be initialized via static factory method:
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+<small>*`EXAMPLE: PresentationObject Factory`*</small>
 
 ```php
 /* ... */
@@ -223,11 +197,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Editable;
 
 final class TextFactory extends AbstractComponentPresentationObjectFactory
 {
-    /**
-     * @param TraversableNodeInterface $node
-     * @return TextInterface
-     */
-    public function forTextNode(TraversableNodeInterface $node): TextInterface
+    public function forTextNode(TraversableNodeInterface $node): Text
     {
         // Optional: Use assertions to ensure the incoming node type
         assert($node->getNodeType()->isOfType('Vendor.Site:Content.Text'));

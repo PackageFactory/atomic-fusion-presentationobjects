@@ -1,12 +1,12 @@
 <?php
 
 /*
- * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
+ * This file is part of the Vendor.Site package
  */
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Component\MyComponent;
+namespace Vendor\Site\Presentation\CustomType\MyComponent;
 
 use Neos\Flow\Annotations as Flow;
 

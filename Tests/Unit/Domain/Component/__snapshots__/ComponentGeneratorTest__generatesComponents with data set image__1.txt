@@ -1,47 +1,24 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Image;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\Image;
+
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 
-/**
- * @Flow\Proxy(false)
- */
-final class Image extends AbstractComponentPresentationObject implements ImageInterface
+#[Flow\Proxy(false)]
+final class Image extends AbstractComponentPresentationObject
 {
-    private ImageSourceHelperInterface $src;
-
-    private string $alt;
-
-    private ?string $title;
-
     public function __construct(
-        ImageSourceHelperInterface $src,
-        string $alt,
-        ?string $title
+        public readonly ImageSourceInterface $src,
+        public readonly string $alt,
+        public readonly ?string $title
     ) {
-        $this->src = $src;
-        $this->alt = $alt;
-        $this->title = $title;
-    }
-
-    public function getSrc(): ImageSourceHelperInterface
-    {
-        return $this->src;
-    }
-
-    public function getAlt(): string
-    {
-        return $this->alt;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
     }
 }

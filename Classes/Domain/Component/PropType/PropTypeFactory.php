@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Uri;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 use Psr\Http\Message\UriInterface;
-use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 
 /**
  * @Flow\Proxy(false)
@@ -48,7 +48,7 @@ final class PropTypeFactory
                 }
                 $componentName = $parentComponentName->mergeInput($input);
 
-                if (IsComponent::isSatisfiedByInterfaceName($componentName->getFullyQualifiedInterfaceName())) {
+                if (IsComponent::isSatisfiedByClassName($componentName->getFullyQualifiedClassName())) {
                     return $isComponentArray
                         ? new ComponentArrayPropType($componentName)
                         : new ComponentPropType($componentName, $nullable);
@@ -68,8 +68,8 @@ final class PropTypeFactory
     {
         if ($type = $property->getType()) {
             $nullable = $type->allowsNull();
-            $type = (string) $type;
-            switch ($type) {
+            $typeString = ltrim((string)$type, '?');
+            switch ($typeString) {
                 case 'string':
                     return new StringPropType($nullable);
                 case 'int':
@@ -81,28 +81,28 @@ final class PropTypeFactory
                 case UriInterface::class:
                 case Uri::class:
                     return new UriPropType($nullable);
-                case ImageSourceHelperInterface::class:
+                case ImageSourceInterface::class:
                     return new ImageSourcePropType($nullable);
                 case SlotInterface::class:
                     return new SlotPropType($nullable);
                 default:
-                    if (IsEnum::isSatisfiedByClassName($type)) {
-                        /** @phpstan-var class-string<mixed> $type */
-                        return new EnumPropType($type, $nullable);
+                    if (IsEnum::isSatisfiedByClassName($typeString)) {
+                        /** @phpstan-var class-string<mixed> $typeString */
+                        return new EnumPropType($typeString, $nullable);
                     }
-                    if (IsComponent::isSatisfiedByInterfaceName($type)) {
-                        /** @phpstan-var class-string<mixed> $type */
-                        $componentName = ComponentName::fromClassName($type);
+                    if (IsComponent::isSatisfiedByClassName($typeString)) {
+                        /** @phpstan-var class-string<mixed> $typeString */
+                        $componentName = ComponentName::fromClassName($typeString);
                         return new ComponentPropType($componentName, $nullable);
                     }
-                    if (IsComponentArray::isSatisfiedByClassName($type)) {
-                        /** @phpstan-var class-string<mixed> $type */
-                        $componentName = ComponentName::fromClassName($type);
+                    if (IsComponentArray::isSatisfiedByClassName($typeString)) {
+                        /** @phpstan-var class-string<mixed> $typeString */
+                        $componentName = ComponentName::fromClassName($typeString);
                         return new ComponentArrayPropType($componentName);
                     }
             }
 
-            throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($type);
+            throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($typeString);
         }
 
         throw PropTypeIsInvalid::becausePropertyIsNotTyped($property);

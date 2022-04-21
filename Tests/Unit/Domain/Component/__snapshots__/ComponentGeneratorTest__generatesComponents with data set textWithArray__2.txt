@@ -1,34 +1,33 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewText;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\NewText;
+
 use Neos\Flow\Annotations as Flow;
 
 /**
- * @Flow\Proxy(false)
+ * @implements \IteratorAggregate<int,NewText>
  */
+#[Flow\Proxy(false)]
 final class NewTexts implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,NewTextInterface>|NewTextInterface[]
+     * @var array<int,NewText>
      */
     private array $newTexts;
 
-    public function __construct($array)
+    public function __construct(NewText ...$newTexts)
     {
-        foreach ($array as $element) {
-            if (!$element instanceof NewTextInterface) {
-                throw new \InvalidArgumentException(self::class . ' can only consist of ' . NewTextInterface::class);
-            }
-        }
-        $this->newTexts = $array;
+        $this->newTexts = $newTexts;
     }
 
     /**
-     * @return \ArrayIterator<int,NewTextInterface>|NewTextInterface[]
+     * @return \ArrayIterator<int,NewText>|NewText[]
      */
     public function getIterator(): \ArrayIterator
     {

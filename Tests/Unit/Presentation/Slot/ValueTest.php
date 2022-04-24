@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Presentation\Slot;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Presentation\Slot;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
@@ -61,7 +64,7 @@ final class ValueTest extends UnitTestCase
                     }
                 }, 'Hello Object!'],
             'object without __toString method' =>
-                [new \stdClass, '[stdClass]'],
+                [new \stdClass(), '[stdClass]'],
             'resource' =>
                 [$resource, '[unknown type: resource (closed)]'],
         ];

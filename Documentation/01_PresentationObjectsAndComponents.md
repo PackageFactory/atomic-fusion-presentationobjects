@@ -18,7 +18,7 @@ The most important function of PresentationObjects is to enforce the interface b
 
 For a single component that interface is represented by an actual PHP interface. So let's start with that:
 
-<small>*`EXAMPLE: PresentationObject Interface`*<small>
+<small>*`EXAMPLE: PresentationObject Interface`*</small>
 
 ```php
 <?php declare(strict_types=1);
@@ -38,7 +38,7 @@ Next, we're going to write the actual object implementing the Interface from abo
 
 **Important:** PresentationObject are ValueObjects. In that they are immutable and can only consist of scalar properties, other value objects or arrays of the former two.
 
-<small>*`EXAMPLE: PresentationObject`*<small>
+<small>*`EXAMPLE: PresentationObject`*</small>
 
 ```php
 <?php declare(strict_types=1);
@@ -107,7 +107,7 @@ The first difference to `Neos.Fusion:Component` is the mandatory `@presentationO
 
 The second difference is, that besides the usual `props`-Context, your renderer can now also access the special `presentationObject`-Context, which holds our verified data.
 
-<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Component/Image/Image.fusion`*<small>
+<small>*`EXAMPLE: Resources/Private/Fusion/Presentation/Component/Image/Image.fusion`*</small>
 
 ```fusion
 prototype(Vendor.Site:Component.Image) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
@@ -145,7 +145,7 @@ It is recommended to model discrete values for presentation object properties as
 Since PHP does not support enums yet, this package provides an interface to be implemented by classes that behave similarly to enums.
 > **Hint:** For more information on enums in PHP, see https://stitcher.io/blog/php-enums
 
-<small>*`EXAMPLE: Pseudo-enum`*<small>
+<small>*`EXAMPLE: Pseudo-enum`*</small>
 
 Given we have a presentation object Headline with properties type and content.
 While content can be an arbitrary string, in our project by specification we only support h1-h3 as types for headlines.

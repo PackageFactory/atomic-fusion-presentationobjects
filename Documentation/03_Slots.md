@@ -177,7 +177,7 @@ Value wraps any given php value into a `SlotInterface` and sees through that it 
 
 In Factories, it can be initialized via static factory method:
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+<small>*`EXAMPLE: PresentationObject Factory`*</small>
 
 ```php
 /* ... */
@@ -215,7 +215,7 @@ In plain AtomicFusion we would use `Neos.Neos:Editable` to integrate a property 
 
 In Factories, it can be initialized via static factory method:
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+<small>*`EXAMPLE: PresentationObject Factory`*</small>
 
 ```php
 /* ... */

@@ -14,6 +14,9 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
  */
 final class IsComponent
 {
+    /**
+     * @param \ReflectionClass<mixed> $reflectionClass
+     */
     public static function isSatisfiedByReflectionClass(\ReflectionClass $reflectionClass): bool
     {
         return self::isSatisfiedByClassName($reflectionClass->getName());

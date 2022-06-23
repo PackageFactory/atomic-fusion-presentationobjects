@@ -25,8 +25,16 @@ final class Props implements \IteratorAggregate
     /**
      * @param array<string,PropTypeInterface> $props
      */
-    private function __construct(array $props)
+    public function __construct(array $props)
     {
+        foreach ($props as $propName => $propType) {
+            if (!is_string($propName)) {
+                throw new \InvalidArgumentException('Prop names must be strings', 1656015548);
+            }
+            if (!$propType instanceof PropTypeInterface) {
+                throw new \InvalidArgumentException('Props collections must only contain PropType objects', 1656015581);
+            }
+        }
         $this->props = $props;
     }
 
@@ -63,13 +71,32 @@ final class Props implements \IteratorAggregate
         if (!IsComponent::isSatisfiedByClassName($className)) {
             throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($className);
         }
-        $props = [];
         $reflection = new \ReflectionClass($className);
-        foreach ($reflection->getProperties() as $reflectionProperty) {
+        $props = self::extractPropsFromReflectionClass($reflection);
+
+        return new self($props);
+    }
+
+    /**
+     * @return array<string,PropTypeInterface>
+     */
+    private static function extractPropsFromReflectionClass(\ReflectionClass $reflectionClass): array
+    {
+        $parentReflectionClass = $reflectionClass->getParentClass();
+        if (
+            $parentReflectionClass instanceof \ReflectionClass
+            && IsComponent::isSatisfiedByReflectionClass($parentReflectionClass)
+        ) {
+            $props = self::extractPropsFromReflectionClass($parentReflectionClass);
+        } else {
+            $props = [];
+        }
+
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $props[$reflectionProperty->getName()] = PropTypeFactory::fromReflectionProperty($reflectionProperty);
         }
 
-        return new self($props);
+        return $props;
     }
 
     public function renderUseStatements(): string

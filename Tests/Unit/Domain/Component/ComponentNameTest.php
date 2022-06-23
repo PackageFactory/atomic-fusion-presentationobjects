@@ -108,6 +108,9 @@ final class ComponentNameTest extends UnitTestCase
         Assert::assertEquals($expectedName, ComponentName::fromFusionPath($className));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function fusionPathProvider(): array
     {
         return [

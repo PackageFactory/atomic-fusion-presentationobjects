@@ -83,7 +83,7 @@ final class ComponentName
         list($serializedPackageKey, $componentNamespaceAndName) = explode(':', $fullyQualifiedFusionName);
         $packageKey = new PackageKey($serializedPackageKey);
 
-        $pivot = \mb_strrpos($componentNamespaceAndName, '.');
+        $pivot = \mb_strrpos($componentNamespaceAndName, '.') ?: null;
         $fusionNamespace = FusionNamespace::fromString(\mb_substr($componentNamespaceAndName, 0, $pivot));
         $name = \mb_substr($componentNamespaceAndName, $pivot + 1);
 

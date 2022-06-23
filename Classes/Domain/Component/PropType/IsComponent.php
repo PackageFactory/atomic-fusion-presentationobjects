@@ -15,7 +15,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
 final class IsComponent
 {
     /**
-     * @param \ReflectionClass<mixed> $reflectionClass
+     * @param \ReflectionClass<class-string> $reflectionClass
      */
     public static function isSatisfiedByReflectionClass(\ReflectionClass $reflectionClass): bool
     {

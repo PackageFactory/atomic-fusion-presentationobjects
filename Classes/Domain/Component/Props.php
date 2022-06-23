@@ -78,7 +78,7 @@ final class Props implements \IteratorAggregate
     }
 
     /**
-     * @param \ReflectionClass<mixed> $reflectionClass
+     * @param \ReflectionClass<class-string> $reflectionClass
      * @return array<string,PropTypeInterface>
      */
     private static function extractPropsFromReflectionClass(\ReflectionClass $reflectionClass): array

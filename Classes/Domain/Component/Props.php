@@ -78,9 +78,9 @@ final class Props implements \IteratorAggregate
     }
 
     /**
-     * @param \ReflectionClass<T> $reflectionClass
      * @return array<string,PropTypeInterface>
      */
+    /** @phpstan-ignore-next-line */
     private static function extractPropsFromReflectionClass(\ReflectionClass $reflectionClass): array
     {
         $parentReflectionClass = $reflectionClass->getParentClass();

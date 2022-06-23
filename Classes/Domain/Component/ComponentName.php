@@ -74,6 +74,26 @@ final class ComponentName
         return new self($packageKey, $fusionNamespace, $componentName);
     }
 
+    public static function fromFusionPath(string $fusionPath): self
+    {
+        $startingPoint = \mb_strrpos($fusionPath, '<') + 1;
+        $endpoint = \mb_strrpos($fusionPath, '>');
+        $fullyQualifiedFusionName = \mb_substr($fusionPath, $startingPoint, $endpoint - $startingPoint);
+
+        list($serializedPackageKey, $componentNamespaceAndName) = explode(':', $fullyQualifiedFusionName);
+        $packageKey = new PackageKey($serializedPackageKey);
+
+        $pivot = \mb_strrpos($componentNamespaceAndName, '.');
+        $fusionNamespace = FusionNamespace::fromString(\mb_substr($componentNamespaceAndName, 0, $pivot));
+        $name = \mb_substr($componentNamespaceAndName, $pivot + 1);
+
+        return new self(
+            $packageKey,
+            $fusionNamespace,
+            $name
+        );
+    }
+
     public function mergeInput(string $input): self
     {
         if (\mb_strrpos($input, ':') !== false) {

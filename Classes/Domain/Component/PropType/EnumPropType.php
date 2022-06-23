@@ -81,4 +81,9 @@ final class EnumPropType implements PropTypeInterface
     {
         return '{presentationObject.' . $propName . '}';
     }
+
+    public function getClassName(): string
+    {
+        return $this->className;
+    }
 }

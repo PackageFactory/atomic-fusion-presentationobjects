@@ -61,8 +61,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
                     unset($props[self::OBJECT_NAME]);
                     $presentationObjectProps = Props::fromClassName(ComponentName::fromFusionPath($this->path)->getFullyQualifiedClassName());
                     foreach ($presentationObjectProps as $propName => $propType) {
-                        if (
-                            isset($props[$propName])
+                        if (isset($props[$propName])
                             && (is_string($props[$propName]) || is_int($props[$propName]))
                             && $propType instanceof EnumPropType
                         ) {

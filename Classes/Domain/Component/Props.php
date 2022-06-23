@@ -83,8 +83,7 @@ final class Props implements \IteratorAggregate
     private static function extractPropsFromReflectionClass(\ReflectionClass $reflectionClass): array
     {
         $parentReflectionClass = $reflectionClass->getParentClass();
-        if (
-            $parentReflectionClass instanceof \ReflectionClass
+        if ($parentReflectionClass instanceof \ReflectionClass
             && IsComponent::isSatisfiedByReflectionClass($parentReflectionClass)
         ) {
             $props = self::extractPropsFromReflectionClass($parentReflectionClass);

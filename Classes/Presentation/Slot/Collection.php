@@ -27,6 +27,11 @@ final class Collection implements CollectionInterface
         $this->items = $items;
     }
 
+    public static function fromSlots(SlotInterface ...$items)
+    {
+        return new self(...$items);
+    }
+
     /**
      * @param iterable<mixed> $iterable
      * @param callable|null $itemRenderer
@@ -80,6 +85,11 @@ final class Collection implements CollectionInterface
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    public static function getIdentityFunction(): \Closure
+    {
+        return fn (SlotInterface $slot): SlotInterface => $slot;
     }
 
     /**

@@ -8,24 +8,21 @@ declare(strict_types=1);
 
 namespace Vendor\Default\Presentation\Component\Crossing;
 
-enum TrafficLight:int
+use Neos\Eel\ProtectedContextAwareInterface;
+
+enum TrafficLight:int implements ProtectedContextAwareInterface
 {
     case LIGHT_RED = 1;
     case LIGHT_YELLOW = 2;
     case LIGHT_GREEN = 3;
 
-    public function getIsRed(): bool
+    public function equals(int $other): bool
     {
-        return $this === self::LIGHT_RED;
+        return $this === self::from($other);
     }
 
-    public function getIsYellow(): bool
+    public function allowsCallOfMethod($methodName): bool
     {
-        return $this === self::LIGHT_YELLOW;
-    }
-
-    public function getIsGreen(): bool
-    {
-        return $this === self::LIGHT_GREEN;
+        return true;
     }
 }

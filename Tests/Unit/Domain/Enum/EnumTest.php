@@ -58,25 +58,22 @@ declare(strict_types=1);
 
 namespace Vendor\Site\Presentation\Component\MyComponent;
 
-enum MyComponentType:string
+use Neos\Eel\ProtectedContextAwareInterface;
+
+enum MyComponentType:string implements ProtectedContextAwareInterface
 {
     case TYPE_PRIMARY = \'primary\';
     case TYPE_SECONDARY = \'secondary\';
     case TYPE_YET_ANOTHER = \'yetAnother\';
 
-    public function getIsPrimary(): bool
+    public function equals(string $other): bool
     {
-        return $this === self::TYPE_PRIMARY;
+        return $this === self::from($other);
     }
 
-    public function getIsSecondary(): bool
+    public function allowsCallOfMethod($methodName): bool
     {
-        return $this === self::TYPE_SECONDARY;
-    }
-
-    public function getIsYetAnother(): bool
-    {
-        return $this === self::TYPE_YET_ANOTHER;
+        return true;
     }
 }
 ',

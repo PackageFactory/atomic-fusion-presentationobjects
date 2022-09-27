@@ -36,11 +36,21 @@ declare(strict_types=1);
 
 namespace ' . $this->name->getPhpNamespace() . ';
 
-enum ' . $this->name->name . ':' . $this->type->value . '
+use Neos\Eel\ProtectedContextAwareInterface;
+
+enum ' . $this->name->name . ':' . $this->type->value . ' implements ProtectedContextAwareInterface
 {
     ' . $this->renderCases() . '
 
-    ' . $this->renderComparators() . '
+    public function equals(' . $this->type->value . ' $other): bool
+    {
+        return $this === self::from($other);
+    }
+
+    public function allowsCallOfMethod($methodName): bool
+    {
+        return true;
+    }
 }
 ';
     }
@@ -56,19 +66,6 @@ enum ' . $this->name->name . ':' . $this->type->value . '
         }
 
         return trim(implode("\n    ", $constants));
-    }
-
-    private function renderComparators(): string
-    {
-        $comparators = [];
-        foreach ($this->cases as $name => $case) {
-            $comparators[]  = 'public function getIs' . ucfirst($name) . '(): bool
-    {
-        return $this === self::' . $this->getConstantName($name) . ';
-    }';
-        }
-
-        return trim(implode("\n\n    ", $comparators));
     }
 
     private function getConstantName(string $value): string

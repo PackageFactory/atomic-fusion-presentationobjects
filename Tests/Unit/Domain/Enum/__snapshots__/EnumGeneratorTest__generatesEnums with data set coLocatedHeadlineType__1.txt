@@ -8,24 +8,21 @@ declare(strict_types=1);
 
 namespace Vendor\Site\Presentation\Component\Headline;
 
-enum HeadlineType:string
+use Neos\Eel\ProtectedContextAwareInterface;
+
+enum HeadlineType:string implements ProtectedContextAwareInterface
 {
     case TYPE_H1 = 'h1';
     case TYPE_H2 = 'h2';
     case TYPE_DIV = 'div';
 
-    public function getIsH1(): bool
+    public function equals(string $other): bool
     {
-        return $this === self::TYPE_H1;
+        return $this === self::from($other);
     }
 
-    public function getIsH2(): bool
+    public function allowsCallOfMethod($methodName): bool
     {
-        return $this === self::TYPE_H2;
-    }
-
-    public function getIsDiv(): bool
-    {
-        return $this === self::TYPE_DIV;
+        return true;
     }
 }

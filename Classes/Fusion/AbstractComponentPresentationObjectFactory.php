@@ -32,11 +32,8 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
      */
     protected $contentElementEditableService;
 
-    /**
-     * @Flow\Inject
-     * @var UriServiceInterface
-     */
-    protected $uriService;
+    #[Flow\Inject]
+    protected UriServiceInterface $uriService;
 
     /**
      * @Flow\Inject

@@ -22,7 +22,7 @@ final class Collection implements CollectionInterface
     /**
      * @param SlotInterface ...$items
      */
-    private function __construct(SlotInterface ...$items)
+    public function __construct(SlotInterface ...$items)
     {
         $this->items = $items;
     }

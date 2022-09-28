@@ -9,6 +9,7 @@ use Neos\Fusion\FusionObjects\DataStructureImplementation;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\Props;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\EnumPropType;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsComponent;
 
 /**
  * A custom component implementation allowing the usage of presentation objects in the fusion runtime
@@ -55,26 +56,31 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
     {
         if ($this->isInPreviewMode()) {
             $props = $this->getProps();
+
             if (isset($props[self::OBJECT_NAME])) {
                 if (is_array($props[self::OBJECT_NAME])) {
                     $props = array_merge($props, $props[self::OBJECT_NAME]);
                     unset($props[self::OBJECT_NAME]);
-                    $presentationObjectProps = Props::fromClassName(ComponentName::fromFusionPath($this->path)->getFullyQualifiedClassName());
-                    foreach ($presentationObjectProps as $propName => $propType) {
-                        if (isset($props[$propName])
-                            && (is_string($props[$propName]) || is_int($props[$propName]))
-                            && $propType instanceof EnumPropType
-                        ) {
-                            $props[$propName] = $propType->className::from($props[$propName]);
-                        }
-                    }
-                    $context[self::OBJECT_NAME] = $props;
+                    $contextProps = $props;
                 } else {
-                    $context[self::OBJECT_NAME] = $props[self::OBJECT_NAME];
+                    $contextProps = $props[self::OBJECT_NAME];
                 }
             } else {
-                $context[self::OBJECT_NAME] = $props;
+                $contextProps = $props;
             }
+            $className = ComponentName::fromFusionPath($this->path)->getFullyQualifiedClassName();
+            if (IsComponent::isSatisfiedByClassName($className)) {
+                $presentationObjectProps = Props::fromClassName($className);
+                foreach ($presentationObjectProps as $propName => $propType) {
+                    if (isset($contextProps[$propName])
+                        && (is_string($contextProps[$propName]) || is_int($contextProps[$propName]))
+                        && $propType instanceof EnumPropType
+                    ) {
+                        $contextProps[$propName] = $propType->className::from($contextProps[$propName]);
+                    }
+                }
+            }
+            $context[self::OBJECT_NAME] = $contextProps;
         } else {
             $context[self::OBJECT_NAME] = $this->getPresentationObject();
         }

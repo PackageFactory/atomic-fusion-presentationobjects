@@ -12,7 +12,6 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Editable;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\EditableInterface;
 use Prophecy\Prophet;
 
 final class EditableTest extends UnitTestCase
@@ -47,15 +46,15 @@ final class EditableTest extends UnitTestCase
         $editable1 = Editable::fromNodeProperty($contentNode1->reveal(), 'someProperty');
         $editable2 = Editable::fromNodeProperty($contentNode2->reveal(), 'someOtherProperty', false);
 
-        $this->assertInstanceOf(EditableInterface::class, $editable1);
-        $this->assertSame($contentNode1->reveal(), $editable1->getNode());
-        $this->assertEquals('someProperty', $editable1->getPropertyName());
-        $this->assertEquals(true, $editable1->getIsBlock());
+        $this->assertInstanceOf(Editable::class, $editable1);
+        $this->assertSame($contentNode1->reveal(), $editable1->node);
+        $this->assertEquals('someProperty', $editable1->propertyName);
+        $this->assertEquals(true, $editable1->isBlock);
 
-        $this->assertInstanceOf(EditableInterface::class, $editable2);
-        $this->assertSame($contentNode2->reveal(), $editable2->getNode());
-        $this->assertEquals('someOtherProperty', $editable2->getPropertyName());
-        $this->assertEquals(false, $editable2->getIsBlock());
+        $this->assertInstanceOf(Editable::class, $editable2);
+        $this->assertSame($contentNode2->reveal(), $editable2->node);
+        $this->assertEquals('someOtherProperty', $editable2->propertyName);
+        $this->assertEquals(false, $editable2->isBlock);
     }
 
     /**

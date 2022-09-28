@@ -14,11 +14,9 @@ use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Collection;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\CollectionInterface;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ContentInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Content;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Iteration;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ValueInterface;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 
@@ -46,21 +44,21 @@ final class CollectionTest extends UnitTestCase
     {
         $collection = Collection::fromIterable(['Foo', 'Bar', 'Baz', 'Qux']);
 
-        $this->assertInstanceOf(CollectionInterface::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
-        /** @var ValueInterface[] $items */
-        $items = $collection->getItems();
+        /** @var Value[] $items */
+        $items = $collection->items;
 
-        $this->assertInstanceOf(ValueInterface::class, $items[0]);
+        $this->assertInstanceOf(Value::class, $items[0]);
         $this->assertEquals('Foo', (string) $items[0]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[1]);
+        $this->assertInstanceOf(Value::class, $items[1]);
         $this->assertEquals('Bar', (string) $items[1]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[2]);
+        $this->assertInstanceOf(Value::class, $items[2]);
         $this->assertEquals('Baz', (string) $items[2]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[3]);
+        $this->assertInstanceOf(Value::class, $items[3]);
         $this->assertEquals('Qux', (string) $items[3]);
     }
 
@@ -72,26 +70,26 @@ final class CollectionTest extends UnitTestCase
     {
         $collection = Collection::fromIterable(
             ['Foo', 'Bar', 'Baz', 'Qux'],
-            function (string $item): ValueInterface {
+            function (string $item): Value {
                 return Value::fromString('(' . $item . ')');
             }
         );
 
-        $this->assertInstanceOf(CollectionInterface::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
-        /** @var ValueInterface[] $items */
-        $items = $collection->getItems();
+        /** @var Value[] $items */
+        $items = $collection->items;
 
-        $this->assertInstanceOf(ValueInterface::class, $items[0]);
+        $this->assertInstanceOf(Value::class, $items[0]);
         $this->assertEquals('(Foo)', (string) $items[0]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[1]);
+        $this->assertInstanceOf(Value::class, $items[1]);
         $this->assertEquals('(Bar)', (string) $items[1]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[2]);
+        $this->assertInstanceOf(Value::class, $items[2]);
         $this->assertEquals('(Baz)', (string) $items[2]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[3]);
+        $this->assertInstanceOf(Value::class, $items[3]);
         $this->assertEquals('(Qux)', (string) $items[3]);
     }
 
@@ -106,7 +104,7 @@ final class CollectionTest extends UnitTestCase
 
         Collection::fromIterable(
             ['Foo', 'Bar', 'Baz', 'Qux'],
-            function (string $item, int $key, Iteration $it) use (&$keys, &$iterations): ValueInterface {
+            function (string $item, int $key, Iteration $it) use (&$keys, &$iterations): Value {
                 $keys[] = $key;
                 $iterations[] = $it;
 
@@ -174,32 +172,32 @@ final class CollectionTest extends UnitTestCase
 
         $keyVisualNode = $makeNode('Vendor.Site:Content.KeyVisual');
         $deckNode = $makeNode('Vendor.Site:Content.Deck');
-        $newletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
+        $newsletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
 
         $nodes = TraversableNodes::fromArray([
             $keyVisualNode->reveal(),
             $deckNode->reveal(),
-            $newletterSubscriptionNode->reveal()
+            $newsletterSubscriptionNode->reveal()
         ]);
 
         $collection = Collection::fromNodes($nodes);
 
-        $this->assertInstanceOf(CollectionInterface::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
-        /** @var ContentInterface[] $items */
-        $items = $collection->getItems();
+        /** @var Content[] $items */
+        $items = $collection->items;
 
-        $this->assertInstanceOf(ContentInterface::class, $items[0]);
-        $this->assertSame($keyVisualNode->reveal(), $items[0]->getContentNode());
-        $this->assertEquals('Vendor.Site:Content.KeyVisual', $items[0]->getContentPrototypeName());
+        $this->assertInstanceOf(Content::class, $items[0]);
+        $this->assertSame($keyVisualNode->reveal(), $items[0]->contentNode);
+        $this->assertEquals('Vendor.Site:Content.KeyVisual', $items[0]->contentPrototypeName);
 
-        $this->assertInstanceOf(ContentInterface::class, $items[1]);
-        $this->assertSame($deckNode->reveal(), $items[1]->getContentNode());
-        $this->assertEquals('Vendor.Site:Content.Deck', $items[1]->getContentPrototypeName());
+        $this->assertInstanceOf(Content::class, $items[1]);
+        $this->assertSame($deckNode->reveal(), $items[1]->contentNode);
+        $this->assertEquals('Vendor.Site:Content.Deck', $items[1]->contentPrototypeName);
 
-        $this->assertInstanceOf(ContentInterface::class, $items[2]);
-        $this->assertSame($newletterSubscriptionNode->reveal(), $items[2]->getContentNode());
-        $this->assertEquals('Vendor.Site:Content.NewsletterSubscription', $items[2]->getContentPrototypeName());
+        $this->assertInstanceOf(Content::class, $items[2]);
+        $this->assertSame($newsletterSubscriptionNode->reveal(), $items[2]->contentNode);
+        $this->assertEquals('Vendor.Site:Content.NewsletterSubscription', $items[2]->contentPrototypeName);
     }
 
     /**
@@ -222,33 +220,33 @@ final class CollectionTest extends UnitTestCase
 
         $keyVisualNode = $makeNode('Vendor.Site:Content.KeyVisual');
         $deckNode = $makeNode('Vendor.Site:Content.Deck');
-        $newletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
+        $newsletterSubscriptionNode = $makeNode('Vendor.Site:Content.NewsletterSubscription');
 
         $nodes = TraversableNodes::fromArray([
             $keyVisualNode->reveal(),
             $deckNode->reveal(),
-            $newletterSubscriptionNode->reveal()
+            $newsletterSubscriptionNode->reveal()
         ]);
 
         $collection = Collection::fromNodes(
             $nodes,
-            function (TraversableNodeInterface $node): ValueInterface {
+            function (TraversableNodeInterface $node): Value {
                 return Value::fromString($node->getNodeType()->getName());
             }
         );
 
-        $this->assertInstanceOf(CollectionInterface::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
-        /** @var ValueInterface[] $items */
-        $items = $collection->getItems();
+        /** @var Value[] $items */
+        $items = $collection->items;
 
-        $this->assertInstanceOf(ValueInterface::class, $items[0]);
+        $this->assertInstanceOf(Value::class, $items[0]);
         $this->assertEquals('Vendor.Site:Content.KeyVisual', (string) $items[0]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[1]);
+        $this->assertInstanceOf(Value::class, $items[1]);
         $this->assertEquals('Vendor.Site:Content.Deck', (string) $items[1]);
 
-        $this->assertInstanceOf(ValueInterface::class, $items[2]);
+        $this->assertInstanceOf(Value::class, $items[2]);
         $this->assertEquals('Vendor.Site:Content.NewsletterSubscription', (string) $items[2]);
     }
 
@@ -285,7 +283,7 @@ final class CollectionTest extends UnitTestCase
 
         Collection::fromNodes(
             $nodes,
-            function (TraversableNodeInterface $node, int $key, Iteration $it) use (&$keys, &$iterations): ValueInterface {
+            function (TraversableNodeInterface $node, int $key, Iteration $it) use (&$keys, &$iterations): Value {
                 $keys[] = $key;
                 $iterations[] = $it;
 

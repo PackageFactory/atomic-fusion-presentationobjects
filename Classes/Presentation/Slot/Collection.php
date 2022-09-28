@@ -1,27 +1,25 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
 
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
+
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
 use Neos\Flow\Annotations as Flow;
 
-/**
- * @Flow\Proxy(false)
- */
-final class Collection implements CollectionInterface
+#[Flow\Proxy(false)]
+final class Collection implements SlotInterface
 {
     /**
-     * @var array|SlotInterface[]
+     * @var array<int,SlotInterface>
      */
-    private $items;
+    public readonly array $items;
 
-    /**
-     * @param SlotInterface ...$items
-     */
     private function __construct(SlotInterface ...$items)
     {
         $this->items = $items;
@@ -34,14 +32,12 @@ final class Collection implements CollectionInterface
 
     /**
      * @param iterable<mixed> $iterable
-     * @param callable|null $itemRenderer
-     * @return self
      */
     public static function fromIterable(iterable $iterable, ?callable $itemRenderer = null): self
     {
         $items = [];
         $iteration = Iteration::fromIterable($iterable);
-        $itemRenderer = $itemRenderer ?? function ($any): ValueInterface {
+        $itemRenderer = $itemRenderer ?? function ($any): Value {
             return Value::fromAny($any);
         };
 
@@ -66,13 +62,11 @@ final class Collection implements CollectionInterface
     }
 
     /**
-     * @param TraversableNodes<mixed> $nodes
-     * @param null|callable $itemRenderer
-     * @return self
+     * @param TraversableNodes<int,TraversableNodeInterface> $nodes
      */
     public static function fromNodes(TraversableNodes $nodes, ?callable $itemRenderer = null): self
     {
-        $itemRenderer = $itemRenderer ?? function (TraversableNodeInterface $node): ContentInterface {
+        $itemRenderer = $itemRenderer ?? function (TraversableNodeInterface $node): Content {
             return Content::fromNode($node);
         };
 
@@ -80,7 +74,7 @@ final class Collection implements CollectionInterface
     }
 
     /**
-     * @return array|SlotInterface[]
+     * @return array<int,SlotInterface>
      */
     public function getItems(): array
     {
@@ -92,9 +86,6 @@ final class Collection implements CollectionInterface
         return fn (SlotInterface $slot): SlotInterface => $slot;
     }
 
-    /**
-     * @return string
-     */
     public function getPrototypeName(): string
     {
         return 'PackageFactory.AtomicFusion.PresentationObjects:Collection';

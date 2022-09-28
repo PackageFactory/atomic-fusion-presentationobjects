@@ -75,7 +75,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
     protected function getProps()
     {
         /** @phpstan-var string[] $sortedChildFusionKeys */
-        $sortedChildFusionKeys = $this->sortNestedFusionKeys();
+        $sortedChildFusionKeys = $this->preparePropertyKeys($this->properties, $this->ignoreProperties);
         $props = [];
         foreach ($sortedChildFusionKeys as $key) {
             try {

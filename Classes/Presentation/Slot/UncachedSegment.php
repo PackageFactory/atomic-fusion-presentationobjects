@@ -9,9 +9,7 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 
 use Neos\Flow\Annotations as Flow;
 
-/**
- * @Flow\Proxy(false)
- */
+#[Flow\Proxy(false)]
 final class UncachedSegment implements SlotInterface
 {
     private string $prototypeName;

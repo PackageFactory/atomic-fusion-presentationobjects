@@ -1,53 +1,34 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
 
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
+
 use Neos\Flow\Annotations as Flow;
 
-/**
- * @Flow\Proxy(false)
- */
-final class Value implements ValueInterface
+#[Flow\Proxy(false)]
+final class Value implements SlotInterface, StringLike, \Stringable
 {
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * @param string $value
-     */
-    private function __construct(string $value)
-    {
-        $this->value = $value;
+    private function __construct(
+        public readonly string $value
+    ) {
     }
 
-    /**
-     * @param string $string
-     * @return self
-     */
     public static function fromString(string $string): self
     {
         return new self($string);
     }
 
-    /**
-     * @param mixed $any
-     * @return self
-     */
-    public static function fromAny($any): self
+    public static function fromAny(mixed $any): self
     {
         return new self(self::convertToString($any));
     }
 
-    /**
-     * @param mixed $any
-     * @return string
-     */
-    private static function convertToString($any): string
+    private static function convertToString(mixed $any): string
     {
         if (is_null($any)) {
             return '';
@@ -66,17 +47,11 @@ final class Value implements ValueInterface
         }
     }
 
-    /**
-     * @return string
-     */
     public function getPrototypeName(): string
     {
         return 'PackageFactory.AtomicFusion.PresentationObjects:Value';
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->value;

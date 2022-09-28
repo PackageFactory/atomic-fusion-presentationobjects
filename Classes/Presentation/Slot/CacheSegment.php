@@ -9,26 +9,13 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 
 use Neos\Flow\Annotations as Flow;
 
-/**
- * @Flow\Proxy(false)
- */
-final class CacheSegment implements CacheSegmentInterface
+#[Flow\Proxy(false)]
+final class CacheSegment implements SlotInterface
 {
-    private SlotInterface $content;
-
-    private string $prototypeName;
-
     public function __construct(
-        SlotInterface $content,
-        string $prototypeName
+        public readonly SlotInterface $content,
+        public readonly string $prototypeName
     ) {
-        $this->content = $content;
-        $this->prototypeName = $prototypeName;
-    }
-
-    public function getContent(): SlotInterface
-    {
-        return $this->content;
     }
 
     public function getPrototypeName(): string

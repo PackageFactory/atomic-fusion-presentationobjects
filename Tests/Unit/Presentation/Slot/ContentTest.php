@@ -13,7 +13,6 @@ use Neos\ContentRepository\Domain\Model\NodeType;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Content;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ContentInterface;
 use Prophecy\Prophet;
 
 final class ContentTest extends UnitTestCase
@@ -48,9 +47,9 @@ final class ContentTest extends UnitTestCase
 
         $content = Content::fromNode($contentNode->reveal());
 
-        $this->assertInstanceOf(ContentInterface::class, $content);
-        $this->assertSame($contentNode->reveal(), $content->getContentNode());
-        $this->assertEquals('Vendor.Site:Content.Element', $content->getContentPrototypeName());
+        $this->assertInstanceOf(Content::class, $content);
+        $this->assertSame($contentNode->reveal(), $content->contentNode);
+        $this->assertEquals('Vendor.Site:Content.Element', $content->contentPrototypeName);
     }
 
     /**
@@ -66,9 +65,9 @@ final class ContentTest extends UnitTestCase
 
         $content = Content::fromNode($contentNode->reveal(), 'Vendor.Site:Custom.Prototype');
 
-        $this->assertInstanceOf(ContentInterface::class, $content);
-        $this->assertSame($contentNode->reveal(), $content->getContentNode());
-        $this->assertEquals('Vendor.Site:Custom.Prototype', $content->getContentPrototypeName());
+        $this->assertInstanceOf(Content::class, $content);
+        $this->assertSame($contentNode->reveal(), $content->contentNode);
+        $this->assertEquals('Vendor.Site:Custom.Prototype', $content->contentPrototypeName);
     }
 
     /**

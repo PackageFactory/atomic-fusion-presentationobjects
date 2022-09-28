@@ -10,7 +10,6 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Presentatio
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ValueInterface;
 
 final class ValueTest extends UnitTestCase
 {
@@ -22,7 +21,7 @@ final class ValueTest extends UnitTestCase
     {
         $value = Value::fromString('Some Value');
         $this->assertEquals('Some Value', (string) $value);
-        $this->assertInstanceOf(ValueInterface::class, $value);
+        $this->assertInstanceOf(Value::class, $value);
     }
 
     /**
@@ -81,7 +80,7 @@ final class ValueTest extends UnitTestCase
     {
         $value = Value::fromAny($inputValue);
 
-        $this->assertInstanceOf(ValueInterface::class, $value);
+        $this->assertInstanceOf(Value::class, $value);
         $this->assertEquals($expectedString, (string) $value);
     }
 }

@@ -15,7 +15,7 @@ final class EnumPropType implements PropTypeInterface
 {
     public function __construct(
         /** @var class-string<\BackedEnum> */
-        private string $className,
+        public readonly string $className,
         private bool $nullable
     ) {
     }

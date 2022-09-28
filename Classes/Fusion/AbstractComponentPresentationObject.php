@@ -23,7 +23,7 @@ abstract class AbstractComponentPresentationObject implements ComponentPresentat
      */
     final public function __call(string $name, array $arguments)
     {
-        throw new \BadMethodCallException('"' . $name . '" is not part of the component API for ' . __CLASS__ . '. Please check your Fusion presentation component for typos.', 1578905708);
+        throw new \BadMethodCallException('"' . $name . '" is not part of the component API for ' . get_class($this) . '. Please check your Fusion presentation component for typos.', 1578905708);
     }
 
     /**

@@ -6,6 +6,9 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
  */
 
 use Neos\Fusion\FusionObjects\DataStructureImplementation;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\Props;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\EnumPropType;
 
 /**
  * A custom component implementation allowing the usage of presentation objects in the fusion runtime
@@ -53,10 +56,25 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
         if ($this->isInPreviewMode()) {
             $props = $this->getProps();
             if (isset($props[self::OBJECT_NAME])) {
-                $props = array_merge($props, $props[self::OBJECT_NAME]);
-                unset($props[self::OBJECT_NAME]);
+                if (is_array($props[self::OBJECT_NAME])) {
+                    $props = array_merge($props, $props[self::OBJECT_NAME]);
+                    unset($props[self::OBJECT_NAME]);
+                    $presentationObjectProps = Props::fromClassName(ComponentName::fromFusionPath($this->path)->getFullyQualifiedClassName());
+                    foreach ($presentationObjectProps as $propName => $propType) {
+                        if (isset($props[$propName])
+                            && (is_string($props[$propName]) || is_int($props[$propName]))
+                            && $propType instanceof EnumPropType
+                        ) {
+                            $props[$propName] = $propType->className::from($props[$propName]);
+                        }
+                    }
+                    $context[self::OBJECT_NAME] = $props;
+                } else {
+                    $context[self::OBJECT_NAME] = $props[self::OBJECT_NAME];
+                }
+            } else {
+                $context[self::OBJECT_NAME] = $props;
             }
-            $context[self::OBJECT_NAME] = $props;
         } else {
             $context[self::OBJECT_NAME] = $this->getPresentationObject();
         }

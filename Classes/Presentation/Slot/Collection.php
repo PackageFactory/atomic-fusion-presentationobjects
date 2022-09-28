@@ -37,13 +37,22 @@ final class Collection implements SlotInterface
     {
         $items = [];
         $iteration = Iteration::fromIterable($iterable);
-        $itemRenderer = $itemRenderer ?? function ($any): Value {
+        $itemRenderer = $itemRenderer ?? function ($any): ?SlotInterface {
+            if (is_null($any)) {
+                return null;
+            } elseif ($any instanceof SlotInterface) {
+                return $any;
+            }
             return Value::fromAny($any);
         };
 
+        /** @var array<int,mixed> $current */
         $current = null;
         $started = false;
         foreach ($iterable as $key => $item) {
+            if (is_null($item)) {
+                continue;
+            }
             if ($started) {
                 $items[] = $itemRenderer($current[0], $current[1], $iteration);
                 $iteration = $iteration->next();

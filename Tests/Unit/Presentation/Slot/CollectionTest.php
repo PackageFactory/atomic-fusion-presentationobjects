@@ -16,9 +16,11 @@ use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Collection;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Content;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Iteration;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
+use Vendor\Site\Presentation\Component\Text\Text;
 
 final class CollectionTest extends UnitTestCase
 {
@@ -150,6 +152,55 @@ final class CollectionTest extends UnitTestCase
         $this->assertEquals(true, $iterations[3]->isLast());
         $this->assertEquals(false, $iterations[3]->isOdd());
         $this->assertEquals(true, $iterations[3]->isEven());
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function keepsSlotsInIterables(): void
+    {
+        $collection = Collection::fromIterable(
+            [new Text('Text')]
+        );
+
+        $this->assertInstanceOf(CollectionInterface::class, $collection);
+
+        /** @var array<int,TextInterface> $items */
+        $items = $collection->getItems();
+
+        $this->assertInstanceOf(Text::class, $items[0]);
+        $this->assertEquals('Text', $items[0]->getText());
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function acceptsButRemovesNullValuesInIterables(): void
+    {
+        $collection = Collection::fromIterable([
+            new Text('Text'),
+            null,
+            'Foo'
+        ]);
+
+        $this->assertInstanceOf(CollectionInterface::class, $collection);
+
+        /** @var array<int,SlotInterface> $items */
+        $items = $collection->getItems();
+
+        $this->assertSame(2, count($items));
+
+        $firstItem = $items[0];
+        $this->assertInstanceOf(Text::class, $firstItem);
+        /** @var Text $firstItem */
+        $this->assertEquals('Text', $firstItem->getText());
+
+        $secondItem = $items[1];
+        $this->assertInstanceOf(ValueInterface::class, $secondItem);
+        /** @var ValueInterface $secondItem */
+        $this->assertEquals('Foo', (string) $secondItem);
     }
 
     /**

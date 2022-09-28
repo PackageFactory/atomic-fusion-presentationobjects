@@ -191,12 +191,12 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
      * @dataProvider definitionDataProvider
      * @param ComponentArrayPropType $subject
      * @param string $propName
-     * @param string $expectedStyleGuideValue
+     * @param string $expectedDefinitionData
      * @return void
      */
-    public function testGetDefinitionData(ComponentArrayPropType $subject, string $propName, string $expectedStyleGuideValue): void
+    public function testGetDefinitionData(ComponentArrayPropType $subject, string $propName, string $expectedDefinitionData): void
     {
-        Assert::assertSame($expectedStyleGuideValue, $subject->getDefinitionData($propName));
+        Assert::assertSame($expectedDefinitionData, $subject->getDefinitionData($propName));
     }
 
     /**

@@ -10,6 +10,7 @@ namespace Vendor\Site\Presentation\Component\MyReflectionComponent;
 
 use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponent;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponents;
 use Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
@@ -35,6 +36,8 @@ final class MyReflectionComponent extends AbstractComponentPresentationObject
         public readonly ?UriInterface $nullableUriProp,
         public readonly ImageSourceInterface $imageSourceProp,
         public readonly ?ImageSourceInterface $nullableImageSourceProp,
+        public readonly SlotInterface $slotProp,
+        public readonly ?SlotInterface $nullableSlotProp,
         public readonly MyStringEnum $enumProp,
         public readonly ?MyStringEnum $nullableEnumProp,
         public readonly AnotherComponent $componentProp,

@@ -14,6 +14,12 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentation
 #[Flow\Proxy(false)]
 final class IsComponent
 {
+    /** @phpstan-ignore-next-line */
+    public static function isSatisfiedByReflectionClass(\ReflectionClass $reflectionClass): bool
+    {
+        return self::isSatisfiedByClassName($reflectionClass->getName());
+    }
+
     public static function isSatisfiedByClassName(string $className): bool
     {
         return class_exists($className)

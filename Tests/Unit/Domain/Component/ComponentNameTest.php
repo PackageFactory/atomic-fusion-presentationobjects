@@ -100,6 +100,56 @@ final class ComponentNameTest extends UnitTestCase
     }
 
     /**
+     * @dataProvider fusionPathProvider
+     * @return void
+     */
+    public function testFromFusionPath(string $className, ComponentName $expectedName): void
+    {
+        Assert::assertEquals($expectedName, ComponentName::fromFusionPath($className));
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function fusionPathProvider(): array
+    {
+        return [
+            [
+                '/<Acme.Site:Block.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block'),
+                    'Text'
+                )
+            ],
+            [
+                '/<Acme.Site:Block.Fancy.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block.Fancy'),
+                    'Text'
+                )
+            ],
+            [
+                '/<Acme.Site:Layout.SomeComponent>/__meta/styleguide/useCases/introduction/props<Neos.Fusion:DataStructure>/text<Acme.Site:Block.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block'),
+                    'Text'
+                )
+            ],
+            [
+                '/<Acme.Site:Layout.SomeComponent>/__meta/styleguide/useCases/introduction/props<Neos.Fusion:DataStructure>/text<Acme.Site:Block.Fancy.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block.Fancy'),
+                    'Text'
+                )
+            ]
+        ];
+    }
+
+    /**
      * @dataProvider fusionNameProvider
      * @param ComponentName $subject
      * @param string $expectedValue

@@ -9,6 +9,7 @@ use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\Psr7\Uri;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\StringLike;
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 
@@ -85,6 +86,8 @@ final class PropTypeFactory
                     return new ImageSourcePropType($nullable);
                 case SlotInterface::class:
                     return new SlotPropType($nullable);
+                case StringLike::class:
+                    return new StringLikePropType($nullable);
                 default:
                     if (IsEnum::isSatisfiedByClassName($typeString)) {
                         /** @phpstan-var class-string<mixed> $typeString */

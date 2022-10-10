@@ -87,7 +87,7 @@ final class EnumProvider extends AbstractDataSource implements ProtectedContextA
     public function getValues(string $enumName): array
     {
         return array_map(function (\BackedEnum $case) {
-            return $case->getValue();
+            return $case->value;
         }, $this->getCases($enumName));
     }
 

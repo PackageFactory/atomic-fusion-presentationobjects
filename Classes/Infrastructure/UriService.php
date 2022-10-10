@@ -11,6 +11,7 @@ use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ControllerContext;
+use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Flow\Http;
 use Neos\Media\Domain\Model\AssetInterface;
@@ -79,6 +80,15 @@ final class UriService implements UriServiceInterface
     public function getResourceUri(string $packageKey, string $resourcePath): Uri
     {
         return new Uri($this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath));
+    }
+
+    public function getPersistentResourceUri(PersistentResource $resource): ?Uri
+    {
+        $uri = $this->resourceManager->getPublicPersistentResourceUri($resource);
+
+        return $uri
+            ? new Uri($uri)
+            : null;
     }
 
     /**

@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Mvc\Controller\ControllerContext;
+use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Media\Domain\Model\AssetInterface;
 
 interface UriServiceInterface
@@ -27,6 +28,8 @@ interface UriServiceInterface
      * @return Uri
      */
     public function getResourceUri(string $packageKey, string $resourcePath): Uri;
+
+    public function getPersistentResourceUri(PersistentResource $resource): ?Uri;
 
     /**
      * @param AssetInterface $asset

@@ -45,7 +45,13 @@ final class PropTypeFactory
             case 'ImageSource':
                 return new ImageSourcePropType($nullable);
             case 'slot':
+            case 'Slot':
                 return new SlotPropType($nullable);
+            case 'stringLike':
+            case 'stringlike':
+            case 'StringLike':
+            case 'Stringlike':
+                return new StringLikePropType($nullable);
             default:
                 if ($isComponentArray = IsComponentArray::isSatisfiedByInputString($input)) {
                     $input = \mb_substr($input, 6, \mb_strlen($input) - 7);

@@ -63,9 +63,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(true);
-        $runtime
             ->evaluate('test/foo', $subject)
             ->willReturn('bar');
 
@@ -94,9 +91,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->getCurrentContext()
             ->willReturn([]);
-        $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn($presentationObject);
@@ -159,9 +153,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(null);
 
@@ -188,9 +179,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->getCurrentContext()
             ->willReturn([]);
-        $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(new \DateTimeImmutable);
@@ -222,9 +210,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(new \DateTimeImmutable);
         $runtime
@@ -255,9 +240,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(new \stdClass);
         $runtime
@@ -287,9 +269,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->getCurrentContext()
             ->willReturn([]);
-        $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(new \DateTimeImmutable);

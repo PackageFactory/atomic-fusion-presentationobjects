@@ -12,14 +12,14 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           extensions: mbstring, intl
           tools: phpcs
 
       - name: Run PHP Code Sniffer
         run: |
           phpcs \
-            --standard=PSR2 \
+            --standard=PSR12 \
             --extensions=php \
             --exclude=Generic.Files.LineLength \
             Classes/ Tests/
@@ -33,7 +33,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           extensions: mbstring, intl
 
       - name: Get composer cache directory
@@ -66,7 +66,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           extensions: mbstring, intl
           coverage: xdebug
 

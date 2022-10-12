@@ -26,7 +26,7 @@ final class EnumLabel
         list($packageNamespace, $componentName) = explode('\Presentation\\', $enumName);
         $pivot = \mb_strrpos($componentName, '\\') ?: null;
         $componentNamespace = \mb_substr($componentName, 0, $pivot);
-        $enumShort = lcfirst(\mb_substr($componentName, $pivot+1));
+        $enumShort = lcfirst(\mb_substr($componentName, $pivot + 1));
 
         return new self(
             $enumShort . '.',

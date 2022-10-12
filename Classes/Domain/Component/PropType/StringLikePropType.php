@@ -50,7 +50,7 @@ final class StringLikePropType implements PropTypeInterface
     {
         return '
                 <PackageFactory.AtomicFusion.PresentationObjects:Slot presentationObject={presentationObject.' . $propName . '}'
-            . ($this->nullable ? ' @if={presentationObject.' . $propName. '}' : '') . ' />
+            . ($this->nullable ? ' @if={presentationObject.' . $propName . '}' : '') . ' />
             ';
     }
 }

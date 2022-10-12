@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\SelfWrapping;
@@ -24,7 +27,7 @@ final class SelfWrappingTest extends UnitTestCase
             return 'wrapped(' . $value . ')';
         };
 
-        $selfWrappingSubject = new class($wrapper) {
+        $selfWrappingSubject = new class ($wrapper) {
             use SelfWrapping;
 
             public function __construct(callable $wrapper)
@@ -45,7 +48,7 @@ final class SelfWrappingTest extends UnitTestCase
      */
     public function returnsUnalteredStringValueIfWrapperIsNotSet(): void
     {
-        $selfWrappingSubject = new class() {
+        $selfWrappingSubject = new class () {
             use SelfWrapping;
         };
 

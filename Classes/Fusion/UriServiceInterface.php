@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
 use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
@@ -20,7 +23,11 @@ interface UriServiceInterface
      * @param string|null $format
      * @return Uri
      */
-    public function getNodeUri(TraversableNodeInterface $documentNode, bool $absolute = false, ?string $format = null): Uri;
+    public function getNodeUri(
+        TraversableNodeInterface $documentNode,
+        bool $absolute = false,
+        ?string $format = null
+    ): Uri;
 
     /**
      * @param string $packageKey

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 
-enum EnumType:string
+enum EnumType: string
 {
     case TYPE_STRING = 'string';
     case TYPE_INT = 'int';

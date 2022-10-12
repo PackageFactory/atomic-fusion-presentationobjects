@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsEnum;
@@ -215,22 +218,22 @@ final class ComponentName
 
     public function getInterfacePath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . 'Interface.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . 'Interface.php';
     }
 
     public function getClassPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . '.php';
     }
 
     public function getFactoryPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . 'Factory.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . 'Factory.php';
     }
 
     public function getComponentArrayPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. PluralName::forName($this->name) . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . PluralName::forName($this->name) . '.php';
     }
 
     public function getFusionFilePath(string $packagePath): string

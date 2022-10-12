@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -66,7 +69,7 @@ final class ComponentPropType implements PropTypeInterface
     public function getDefinitionData(string $propName): string
     {
         return '
-                <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={presentationObject.' . $propName . '}' . ($this->isNullable() ? ' @if={presentationObject.' . $propName. '}' : '') . ' />
+                <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={presentationObject.' . $propName . '}' . ($this->isNullable() ? ' @if={presentationObject.' . $propName . '}' : '') . ' />
             ';
     }
 }

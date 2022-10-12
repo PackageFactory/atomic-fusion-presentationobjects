@@ -10,7 +10,7 @@ namespace Vendor\Site\Presentation\Component\Headline;
 
 use Neos\Eel\ProtectedContextAwareInterface;
 
-enum HeadlineType:string implements ProtectedContextAwareInterface
+enum HeadlineType: string implements ProtectedContextAwareInterface
 {
     case TYPE_H1 = 'h1';
     case TYPE_H2 = 'h2';

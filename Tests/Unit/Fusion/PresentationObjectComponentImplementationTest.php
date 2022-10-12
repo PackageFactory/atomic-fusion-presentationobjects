@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
 
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Fusion\Core\Runtime;
@@ -181,7 +184,7 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->willReturn([]);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \DateTimeImmutable);
+            ->willReturn(new \DateTimeImmutable());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(null);
@@ -211,7 +214,7 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->willReturn([]);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \DateTimeImmutable);
+            ->willReturn(new \DateTimeImmutable());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn('\I\Do\Not\Exist');
@@ -241,7 +244,7 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->willReturn([]);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \stdClass);
+            ->willReturn(new \stdClass());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(\DateTimeInterface::class);
@@ -271,7 +274,7 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->willReturn([]);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \DateTimeImmutable);
+            ->willReturn(new \DateTimeImmutable());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(\DateTimeInterface::class);

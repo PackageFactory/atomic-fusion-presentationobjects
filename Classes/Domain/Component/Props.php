@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsComponent;
@@ -84,7 +87,8 @@ final class Props implements \IteratorAggregate
     private static function extractPropsFromReflectionClass(\ReflectionClass $reflectionClass): array
     {
         $parentReflectionClass = $reflectionClass->getParentClass();
-        if ($parentReflectionClass instanceof \ReflectionClass
+        if (
+            $parentReflectionClass instanceof \ReflectionClass
             && IsComponent::isSatisfiedByReflectionClass($parentReflectionClass)
         ) {
             $props = self::extractPropsFromReflectionClass($parentReflectionClass);

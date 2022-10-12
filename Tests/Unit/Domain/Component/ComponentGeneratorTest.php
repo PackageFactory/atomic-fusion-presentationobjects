@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component;
 
 use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;

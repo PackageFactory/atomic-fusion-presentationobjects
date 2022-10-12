@@ -11,7 +11,7 @@ namespace Vendor\Site\Presentation\Component\Headline;
 /**
  * HeadlineLook enum for test purposes
  */
-enum HeadlineLook:string
+enum HeadlineLook: string
 {
     case LOOK_LARGE = 'large';
 }

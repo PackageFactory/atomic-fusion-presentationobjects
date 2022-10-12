@@ -15,9 +15,9 @@ use Neos\Fusion\FusionObjects\DataStructureImplementation;
  */
 class PresentationObjectComponentImplementation extends DataStructureImplementation
 {
-    const OBJECT_NAME = 'presentationObject';
+    public const OBJECT_NAME = 'presentationObject';
 
-    const INTERFACE_DECLARATION_NAME = '__meta/presentationObjectInterface';
+    public const INTERFACE_DECLARATION_NAME = '__meta/presentationObjectInterface';
 
     /**
      * Properties that are ignored and not included into the ``props`` context

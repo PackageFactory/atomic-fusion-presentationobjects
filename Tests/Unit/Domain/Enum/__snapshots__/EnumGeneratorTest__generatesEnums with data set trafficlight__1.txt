@@ -10,7 +10,7 @@ namespace Vendor\Default\Presentation\Component\Crossing;
 
 use Neos\Eel\ProtectedContextAwareInterface;
 
-enum TrafficLight:int implements ProtectedContextAwareInterface
+enum TrafficLight: int implements ProtectedContextAwareInterface
 {
     case LIGHT_RED = 1;
     case LIGHT_YELLOW = 2;

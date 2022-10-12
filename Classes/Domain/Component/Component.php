@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 use Neos\Flow\Annotations as Flow;
 
@@ -111,7 +114,7 @@ final class ' . $this->name->getSimpleComponentArrayName() . ' implements \Itera
         title = \'' . $this->name->name . '\'
 
         props {
-' . $this->props->renderStyleGuideProps() .'
+' . $this->props->renderStyleGuideProps() . '
         }
     }
 

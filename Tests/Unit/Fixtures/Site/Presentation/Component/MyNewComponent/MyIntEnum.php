@@ -11,7 +11,7 @@ namespace Vendor\Site\Presentation\Component\MyNewComponent;
 /**
  * Dummy int enum for test purposes
  */
-enum MyIntPseudoEnum:int
+enum MyIntEnum: int
 {
     case VALUE_ANSWER = 42;
     case VALUE_OTHER = 8472;

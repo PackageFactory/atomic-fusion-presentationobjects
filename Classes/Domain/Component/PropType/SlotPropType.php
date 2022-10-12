@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
 
 use Neos\Flow\Annotations as Flow;
 
@@ -49,7 +52,7 @@ final class SlotPropType implements PropTypeInterface
     {
         return '
                 <PackageFactory.AtomicFusion.PresentationObjects:Slot presentationObject={presentationObject.' . $propName . '}'
-            . ($this->nullable ? ' @if={presentationObject.' . $propName. '}' : '') . ' />
+            . ($this->nullable ? ' @if={presentationObject.' . $propName . '}' : '') . ' />
             ';
     }
 }

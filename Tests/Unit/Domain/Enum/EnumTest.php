@@ -60,7 +60,7 @@ namespace Vendor\Site\Presentation\Component\MyComponent;
 
 use Neos\Eel\ProtectedContextAwareInterface;
 
-enum MyComponentType:string implements ProtectedContextAwareInterface
+enum MyComponentType: string implements ProtectedContextAwareInterface
 {
     case TYPE_PRIMARY = \'primary\';
     case TYPE_SECONDARY = \'secondary\';

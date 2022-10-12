@@ -47,9 +47,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Allow Neos composer plugin
-        run: composer config --no-plugins allow-plugins.neos/composer-plugin true
-
       - name: Install composer dependencies
         run: |
           composer install
@@ -83,9 +80,6 @@ jobs:
           path: ${{ steps.composercache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
-
-      - name: Allow Neos composer plugin
-        run: composer config --no-plugins allow-plugins.neos/composer-plugin true
 
       - name: Install composer dependencies
         run: |

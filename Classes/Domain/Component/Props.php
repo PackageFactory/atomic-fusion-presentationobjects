@@ -13,6 +13,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Is
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeFactory;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeIsInvalid;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\UnionPropType;
 
 /**
  * @Flow\Proxy(false)
@@ -109,9 +110,15 @@ final class Props implements \IteratorAggregate
 
         $statedTypes = [];
         foreach ($this as $propType) {
-            if (!isset($statedTypes[$propType->getSimpleName()])) {
-                $statedTypes[$propType->getSimpleName()] = true;
-                $statements .= $propType->getUseStatement();
+            $propTypesToBeRendered = $propType instanceof UnionPropType
+                ? $propType->propTypes
+                : [$propType];
+
+            foreach ($propTypesToBeRendered as $propTypeToBeRendered) {
+                if (!isset($statedTypes[$propTypeToBeRendered->getSimpleName()])) {
+                    $statedTypes[$propTypeToBeRendered->getSimpleName()] = true;
+                    $statements .= $propTypeToBeRendered->getUseStatement();
+                }
             }
         }
 

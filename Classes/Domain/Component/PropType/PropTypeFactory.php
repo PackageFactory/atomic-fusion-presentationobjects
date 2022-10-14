@@ -77,46 +77,63 @@ final class PropTypeFactory
     public static function fromReflectionProperty(\ReflectionProperty $property): PropTypeInterface
     {
         if ($type = $property->getType()) {
-            $nullable = $type->allowsNull();
-            $typeString = ltrim((string)$type, '?');
-            switch ($typeString) {
-                case 'string':
-                    return new StringPropType($nullable);
-                case 'int':
-                    return new IntPropType($nullable);
-                case 'float':
-                    return new FloatPropType($nullable);
-                case 'bool':
-                    return new BoolPropType($nullable);
-                case UriInterface::class:
-                case Uri::class:
-                    return new UriPropType($nullable);
-                case ImageSourceInterface::class:
-                    return new ImageSourcePropType($nullable);
-                case SlotInterface::class:
-                    return new SlotPropType($nullable);
-                case StringLike::class:
-                    return new StringLikePropType($nullable);
-                default:
-                    if (IsEnum::isSatisfiedByClassName($typeString)) {
-                        /** @phpstan-var class-string<mixed> $typeString */
-                        return new EnumPropType($typeString, $nullable);
-                    }
-                    if (IsComponent::isSatisfiedByClassName($typeString)) {
-                        /** @phpstan-var class-string<mixed> $typeString */
-                        $componentName = ComponentName::fromClassName($typeString);
-                        return new ComponentPropType($componentName, $nullable);
-                    }
-                    if (IsComponentArray::isSatisfiedByClassName($typeString)) {
-                        /** @phpstan-var class-string<mixed> $typeString */
-                        $componentName = ComponentName::fromClassName($typeString);
-                        return new ComponentArrayPropType($componentName);
-                    }
-            }
+            if ($type instanceof \ReflectionNamedType) {
+                $nullable = $type->allowsNull();
+                $typeString = ltrim((string)$type, '?');
 
-            throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($typeString);
+                return self::resolvePropTypeByTypeString($typeString, $nullable);
+            } elseif ($type instanceof \ReflectionUnionType) {
+                $nullable = $type->allowsNull();
+                $propTypes = [];
+                foreach ($type->getTypes() as $type) {
+                    if ($type->getName() !== 'null') {
+                        $propTypes[] = self::resolvePropTypeByTypeString($type->getName(), false);
+                    }
+                }
+                return new UnionPropType($nullable, ...$propTypes);
+            }
         }
 
         throw PropTypeIsInvalid::becausePropertyIsNotTyped($property);
+    }
+
+    private static function resolvePropTypeByTypeString(string $typeString, bool $nullable): PropTypeInterface
+    {
+        switch ($typeString) {
+            case 'string':
+                return new StringPropType($nullable);
+            case 'int':
+                return new IntPropType($nullable);
+            case 'float':
+                return new FloatPropType($nullable);
+            case 'bool':
+                return new BoolPropType($nullable);
+            case UriInterface::class:
+            case Uri::class:
+                return new UriPropType($nullable);
+            case ImageSourceInterface::class:
+                return new ImageSourcePropType($nullable);
+            case SlotInterface::class:
+                return new SlotPropType($nullable);
+            case StringLike::class:
+                return new StringLikePropType($nullable);
+            default:
+                if (IsEnum::isSatisfiedByClassName($typeString)) {
+                    /** @phpstan-var class-string<mixed> $typeString */
+                    return new EnumPropType($typeString, $nullable);
+                }
+                if (IsComponent::isSatisfiedByClassName($typeString)) {
+                    /** @phpstan-var class-string<mixed> $typeString */
+                    $componentName = ComponentName::fromClassName($typeString);
+                    return new ComponentPropType($componentName, $nullable);
+                }
+                if (IsComponentArray::isSatisfiedByClassName($typeString)) {
+                    /** @phpstan-var class-string<mixed> $typeString */
+                    $componentName = ComponentName::fromClassName($typeString);
+                    return new ComponentArrayPropType($componentName);
+                }
+        }
+
+        throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($typeString);
     }
 }

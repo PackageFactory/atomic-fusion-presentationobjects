@@ -102,6 +102,7 @@ final class CollectionTest extends UnitTestCase
     public function providesIterationInfoForIterables(): void
     {
         $keys = [];
+        /** @var array<int,Iteration> $iterations */
         $iterations = [];
 
         Collection::fromIterable(
@@ -118,38 +119,38 @@ final class CollectionTest extends UnitTestCase
         $this->assertCount(4, $iterations);
 
         $this->assertEquals(0, $keys[0]);
-        $this->assertEquals(0, $iterations[0]->getIndex());
+        $this->assertEquals(0, $iterations[0]->index);
         $this->assertEquals(1, $iterations[0]->getCycle());
-        $this->assertEquals(4, $iterations[0]->getCount());
-        $this->assertEquals(true, $iterations[0]->isFirst());
-        $this->assertEquals(false, $iterations[0]->isLast());
+        $this->assertEquals(4, $iterations[0]->count);
+        $this->assertEquals(true, $iterations[0]->isFirst);
+        $this->assertEquals(false, $iterations[0]->isLast);
         $this->assertEquals(true, $iterations[0]->isOdd());
         $this->assertEquals(false, $iterations[0]->isEven());
 
         $this->assertEquals(1, $keys[1]);
-        $this->assertEquals(1, $iterations[1]->getIndex());
+        $this->assertEquals(1, $iterations[1]->index);
         $this->assertEquals(2, $iterations[1]->getCycle());
-        $this->assertEquals(4, $iterations[1]->getCount());
-        $this->assertEquals(false, $iterations[1]->isFirst());
-        $this->assertEquals(false, $iterations[1]->isLast());
+        $this->assertEquals(4, $iterations[1]->count);
+        $this->assertEquals(false, $iterations[1]->isFirst);
+        $this->assertEquals(false, $iterations[1]->isLast);
         $this->assertEquals(false, $iterations[1]->isOdd());
         $this->assertEquals(true, $iterations[1]->isEven());
 
         $this->assertEquals(2, $keys[2]);
-        $this->assertEquals(2, $iterations[2]->getIndex());
+        $this->assertEquals(2, $iterations[2]->index);
         $this->assertEquals(3, $iterations[2]->getCycle());
-        $this->assertEquals(4, $iterations[2]->getCount());
-        $this->assertEquals(false, $iterations[2]->isFirst());
-        $this->assertEquals(false, $iterations[2]->isLast());
+        $this->assertEquals(4, $iterations[2]->count);
+        $this->assertEquals(false, $iterations[2]->isFirst);
+        $this->assertEquals(false, $iterations[2]->isLast);
         $this->assertEquals(true, $iterations[2]->isOdd());
         $this->assertEquals(false, $iterations[2]->isEven());
 
         $this->assertEquals(3, $keys[3]);
-        $this->assertEquals(3, $iterations[3]->getIndex());
+        $this->assertEquals(3, $iterations[3]->index);
         $this->assertEquals(4, $iterations[3]->getCycle());
-        $this->assertEquals(4, $iterations[3]->getCount());
-        $this->assertEquals(false, $iterations[3]->isFirst());
-        $this->assertEquals(true, $iterations[3]->isLast());
+        $this->assertEquals(4, $iterations[3]->count);
+        $this->assertEquals(false, $iterations[3]->isFirst);
+        $this->assertEquals(true, $iterations[3]->isLast);
         $this->assertEquals(false, $iterations[3]->isOdd());
         $this->assertEquals(true, $iterations[3]->isEven());
     }
@@ -164,13 +165,13 @@ final class CollectionTest extends UnitTestCase
             [new Text('Text')]
         );
 
-        $this->assertInstanceOf(CollectionInterface::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
-        /** @var array<int,TextInterface> $items */
+        /** @var array<int,Text> $items */
         $items = $collection->getItems();
 
         $this->assertInstanceOf(Text::class, $items[0]);
-        $this->assertEquals('Text', $items[0]->getText());
+        $this->assertEquals('Text', $items[0]->text);
     }
 
     /**
@@ -185,7 +186,7 @@ final class CollectionTest extends UnitTestCase
             'Foo'
         ]);
 
-        $this->assertInstanceOf(CollectionInterface::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
         /** @var array<int,SlotInterface> $items */
         $items = $collection->getItems();
@@ -195,11 +196,11 @@ final class CollectionTest extends UnitTestCase
         $firstItem = $items[0];
         $this->assertInstanceOf(Text::class, $firstItem);
         /** @var Text $firstItem */
-        $this->assertEquals('Text', $firstItem->getText());
+        $this->assertEquals('Text', $firstItem->text);
 
         $secondItem = $items[1];
-        $this->assertInstanceOf(ValueInterface::class, $secondItem);
-        /** @var ValueInterface $secondItem */
+        $this->assertInstanceOf(Value::class, $secondItem);
+        /** @var Value $secondItem */
         $this->assertEquals('Foo', (string) $secondItem);
     }
 
@@ -308,6 +309,7 @@ final class CollectionTest extends UnitTestCase
     public function providesIterationInfoForTraversableNodes(): void
     {
         $keys = [];
+        /** @var array<int,Iteration> $iterations */
         $iterations = [];
 
         $makeNode = function (string $nodeTypeName): ObjectProphecy {
@@ -346,26 +348,26 @@ final class CollectionTest extends UnitTestCase
         $this->assertCount(3, $iterations);
 
         $this->assertEquals(0, $keys[0]);
-        $this->assertEquals(0, $iterations[0]->getIndex());
+        $this->assertEquals(0, $iterations[0]->index);
         $this->assertEquals(1, $iterations[0]->getCycle());
-        $this->assertEquals(true, $iterations[0]->isFirst());
-        $this->assertEquals(false, $iterations[0]->isLast());
+        $this->assertEquals(true, $iterations[0]->isFirst);
+        $this->assertEquals(false, $iterations[0]->isLast);
         $this->assertEquals(true, $iterations[0]->isOdd());
         $this->assertEquals(false, $iterations[0]->isEven());
 
         $this->assertEquals(1, $keys[1]);
-        $this->assertEquals(1, $iterations[1]->getIndex());
+        $this->assertEquals(1, $iterations[1]->index);
         $this->assertEquals(2, $iterations[1]->getCycle());
-        $this->assertEquals(false, $iterations[1]->isFirst());
-        $this->assertEquals(false, $iterations[1]->isLast());
+        $this->assertEquals(false, $iterations[1]->isFirst);
+        $this->assertEquals(false, $iterations[1]->isLast);
         $this->assertEquals(false, $iterations[1]->isOdd());
         $this->assertEquals(true, $iterations[1]->isEven());
 
         $this->assertEquals(2, $keys[2]);
-        $this->assertEquals(2, $iterations[2]->getIndex());
+        $this->assertEquals(2, $iterations[2]->index);
         $this->assertEquals(3, $iterations[2]->getCycle());
-        $this->assertEquals(false, $iterations[2]->isFirst());
-        $this->assertEquals(true, $iterations[2]->isLast());
+        $this->assertEquals(false, $iterations[2]->isFirst);
+        $this->assertEquals(true, $iterations[2]->isLast);
         $this->assertEquals(true, $iterations[2]->isOdd());
         $this->assertEquals(false, $iterations[2]->isEven());
     }

@@ -38,7 +38,7 @@ namespace ' . $this->name->getPhpNamespace() . ';
 
 use Neos\Eel\ProtectedContextAwareInterface;
 
-enum ' . $this->name->name . ':' . $this->type->value . ' implements ProtectedContextAwareInterface
+enum ' . $this->name->name . ': ' . $this->type->value . ' implements ProtectedContextAwareInterface
 {
     ' . $this->renderCases() . '
 

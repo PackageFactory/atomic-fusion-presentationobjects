@@ -68,7 +68,7 @@ final class PropTypeFactory
     {
         if ($type = $property->getType()) {
             $nullable = $type->allowsNull();
-            $type = (string) $type;
+            $type = ltrim((string)$type, '?');
             switch ($type) {
                 case 'string':
                     return new StringPropType($nullable);

@@ -24,22 +24,6 @@ use Vendor\Shared\Presentation\Component\Text\Text as SharedText;
 final class AbstractComponentPresentationObjectTest extends UnitTestCase
 {
     /**
-     * @test
-     * @small
-     * @return void
-     */
-    public function enforcesStructuralPropertyAccessToCircumventFaultToleranceInEel(): void
-    {
-        $this->expectException(\BadMethodCallException::class);
-
-        $presentationObject = new class extends AbstractComponentPresentationObject {
-        };
-
-        // @phpstan-ignore-next-line
-        $presentationObject->getFoo();
-    }
-
-    /**
      * @return array<mixed>
      */
     public function presentationObjectsAndPrototypeNamesProvider(): array

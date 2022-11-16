@@ -47,40 +47,11 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
     }
 
     /**
-     * @test
+     * @todo adjust to Neos 8
      * @throws \ReflectionException
      * @return void
      */
-    public function prepareProperlyMergesPropsToStubbedPresentationObjectInPreviewMode(): void
-    {
-        $runtime = $this->prophet->prophesize(Runtime::class);
-
-        $subject = new PresentationObjectComponentImplementation(
-            $runtime->reveal(),
-            'test',
-            'My.Package:Component'
-        );
-        $subject['foo'] = 'bar';
-
-        $runtime
-            ->getCurrentContext()
-            ->willReturn([]);
-        $runtime
-            ->evaluate('test/foo', $subject)
-            ->willReturn('bar');
-
-        $context = $this->getPrepare()->invokeArgs($subject, [[]]);
-
-        $this->assertSame(['foo' => 'bar'], $context['props']);
-        $this->assertSame(['foo' => 'bar'], $context[PresentationObjectComponentImplementation::OBJECT_NAME]);
-    }
-
-    /**
-     * @test
-     * @throws \ReflectionException
-     * @return void
-     */
-    public function prepareWritesPresentationObjectToContextWhenNotInPreviewMode(): void
+    public function prepareWritesPresentationObjectToContext(): void
     {
         $runtime = $this->prophet->prophesize(Runtime::class);
         $presentationObject = $this->prophet->prophesize(ComponentPresentationObjectInterface::class);
@@ -91,9 +62,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             'My.Package:Component'
         );
 
-        $runtime
-            ->getCurrentContext()
-            ->willReturn([]);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn($presentationObject);

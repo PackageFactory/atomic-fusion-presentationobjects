@@ -53,9 +53,7 @@ jobs:
 
       - name: Run phpstan
         run: |
-          bin/phpstan analyse \
-            --level 8 \
-            Tests/Unit Classes
+          composer lint
 
   unit-tests:
     runs-on: ubuntu-20.04
@@ -87,7 +85,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          bin/phpunit -c phpunit.xml \
-            --enforce-time-limit \
-            --coverage-text \
-            Tests
+          composer test

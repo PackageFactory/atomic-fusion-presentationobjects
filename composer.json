@@ -22,7 +22,15 @@
         "mikey179/vfsstream": "^1.6",
         "squizlabs/php_codesniffer": "^3.6",
         "jangregor/phpstan-prophecy": "^1.0",
+        "phpspec/prophecy": "^1.15",
         "spatie/phpunit-snapshot-assertions": "^4.2"
+    },
+    "suggest": {
+        "sitegeist/monocle-presentationobjects": "For Monocle integration"
+    },
+    "scripts": {
+        "lint": "bin/phpunit -c phpunit.xml --enforce-time-limit --coverage-html Build/Reports/coverage Tests",
+        "test": "bin/phpunit -c phpunit.xml --enforce-time-limit --coverage-html Build/Reports/coverage Tests"
     },
     "config": {
         "vendor-dir": "Packages/Libraries",

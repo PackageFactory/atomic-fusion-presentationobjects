@@ -19,7 +19,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\FileWriterInterface;
 final class EnumGenerator
 {
     public function __construct(
-        private FileWriterInterface $fileWriter
+        private readonly FileWriterInterface $fileWriter
     ) {
     }
 

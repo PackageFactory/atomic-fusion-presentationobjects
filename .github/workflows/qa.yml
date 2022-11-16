@@ -18,11 +18,7 @@ jobs:
 
       - name: Run PHP Code Sniffer
         run: |
-          phpcs \
-            --standard=PSR12 \
-            --extensions=php \
-            --exclude=Generic.Files.LineLength \
-            Classes/ Tests/
+          composer lint
 
   static-analysis:
     runs-on: ubuntu-20.04
@@ -53,7 +49,7 @@ jobs:
 
       - name: Run phpstan
         run: |
-          composer lint
+          composer analyze
 
   unit-tests:
     runs-on: ubuntu-20.04

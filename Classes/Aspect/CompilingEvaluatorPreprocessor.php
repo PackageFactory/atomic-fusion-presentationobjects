@@ -18,7 +18,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\PresentationO
 final class CompilingEvaluatorPreprocessor
 {
     #[Flow\Before('method(Neos\Eel\CompilingEvaluator->evaluate())')]
-    public function preprocessEvaluate(JoinPointInterface $joinPoint)
+    public function preprocessEvaluate(JoinPointInterface $joinPoint): void
     {
         $context = $joinPoint->getMethodArgument('context');
         $joinPoint->setMethodArgument(

@@ -22,10 +22,11 @@ final class Collection implements SlotInterface
 
     private function __construct(SlotInterface ...$items)
     {
+        /** @var array<int,SlotInterface> $items */
         $this->items = $items;
     }
 
-    public static function fromSlots(SlotInterface ...$items)
+    public static function fromSlots(SlotInterface ...$items): self
     {
         return new self(...$items);
     }

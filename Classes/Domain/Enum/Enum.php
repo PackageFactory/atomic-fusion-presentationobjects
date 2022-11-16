@@ -74,7 +74,7 @@ enum ' . $this->name->name . ': ' . $this->type->value . ' implements ProtectedC
 
     private function camelCaseToUpperSnakeCase(string $value): string
     {
-        return strtoupper(preg_replace('/(?<!^)[A-Z]/', '_$0', $value));
+        return strtoupper(preg_replace('/(?<!^)[A-Z]/', '_$0', $value) ?: '');
     }
 
     /**

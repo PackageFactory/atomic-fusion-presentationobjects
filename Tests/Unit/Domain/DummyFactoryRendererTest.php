@@ -64,6 +64,9 @@ class DummyFactoryRendererTest extends UnitTestCase
 
     public function testGetFactoryContent(): void
     {
+        /** @var Component $object */
+        $object = $this->component;
+
         Assert::assertSame(
             '<?php
 
@@ -81,7 +84,7 @@ final class MyNewComponentFactory extends AbstractComponentPresentationObjectFac
 {
 }
 ',
-            (new DummyFactoryRenderer())->renderFactoryContent($this->component)
+            (new DummyFactoryRenderer())->renderFactoryContent($object)
         );
     }
 }

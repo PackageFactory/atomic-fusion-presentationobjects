@@ -89,7 +89,7 @@ final class UriService implements UriServiceInterface
     {
         $uri = $this->resourceManager->getPublicPersistentResourceUri($resource);
 
-        return $uri
+        return is_string($uri)
             ? new Uri($uri)
             : null;
     }

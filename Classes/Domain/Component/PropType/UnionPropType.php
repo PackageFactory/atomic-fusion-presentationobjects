@@ -22,6 +22,7 @@ final class UnionPropType implements PropTypeInterface
         private readonly bool $nullable,
         PropTypeInterface ...$propTypes
     ) {
+        /** @var array<int,PropTypeInterface> $propTypes */
         $this->propTypes = $propTypes;
     }
 

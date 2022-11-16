@@ -42,12 +42,21 @@ final class EnumName
      */
     public function getPhpClassName(): string
     {
-        return $this->componentName->getPhpNamespace() . '\\' . $this->name;
+        /** @var class-string<mixed> $name */
+        $name = $this->componentName->getPhpNamespace() . '\\' . $this->name;
+
+        return $name;
     }
 
+    /**
+     * @return class-string<mixed>
+     */
     public function getProviderName(): string
     {
-        return $this->name . 'Provider';
+        /** @var class-string<mixed> $name */
+        $name = $this->name . 'Provider';
+
+        return $name;
     }
 
     public function getPhpFilePath(string $packagePath, bool $colocate): string

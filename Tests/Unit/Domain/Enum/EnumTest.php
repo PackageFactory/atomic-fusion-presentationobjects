@@ -59,22 +59,15 @@ declare(strict_types=1);
 namespace Vendor\Site\Presentation\Component\MyComponent;
 
 use Neos\Eel\ProtectedContextAwareInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\StringComponentVariant;
 
 enum MyComponentType: string implements ProtectedContextAwareInterface
 {
+    use StringComponentVariant;
+
     case TYPE_PRIMARY = \'primary\';
     case TYPE_SECONDARY = \'secondary\';
     case TYPE_YET_ANOTHER = \'yetAnother\';
-
-    public function equals(string $other): bool
-    {
-        return $this === self::from($other);
-    }
-
-    public function allowsCallOfMethod($methodName): bool
-    {
-        return true;
-    }
 }
 ',
             $this->subject->getClassContent()

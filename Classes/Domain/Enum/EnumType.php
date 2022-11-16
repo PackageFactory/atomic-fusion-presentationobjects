@@ -45,4 +45,20 @@ enum EnumType: string
 
         return $processedValueArray;
     }
+
+    public function getFullyQualifiedVariantName(): string
+    {
+        return match ($this) {
+            self::TYPE_STRING => 'PackageFactory\AtomicFusion\PresentationObjects\Fusion\StringComponentVariant',
+            self::TYPE_INT => 'PackageFactory\AtomicFusion\PresentationObjects\Fusion\IntComponentVariant'
+        };
+    }
+
+    public function getVariantName(): string
+    {
+        return match ($this) {
+            self::TYPE_STRING => 'StringComponentVariant',
+            self::TYPE_INT => 'IntComponentVariant'
+        };
+    }
 }

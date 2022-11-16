@@ -37,20 +37,13 @@ declare(strict_types=1);
 namespace ' . $this->name->getPhpNamespace() . ';
 
 use Neos\Eel\ProtectedContextAwareInterface;
+use ' . $this->type->getFullyQualifiedVariantName() . ';
 
 enum ' . $this->name->name . ': ' . $this->type->value . ' implements ProtectedContextAwareInterface
 {
+    use ' . $this->type->getVariantName() . ';
+
     ' . $this->renderCases() . '
-
-    public function equals(' . $this->type->value . ' $other): bool
-    {
-        return $this === self::from($other);
-    }
-
-    public function allowsCallOfMethod($methodName): bool
-    {
-        return true;
-    }
 }
 ';
     }

@@ -12,6 +12,7 @@ use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\DummyFactoryRenderer;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\SimpleFileWriter;
@@ -50,7 +51,8 @@ final class ComponentGeneratorTest extends UnitTestCase
         ]);
 
         $this->componentGenerator = new ComponentGenerator(
-            new SimpleFileWriter()
+            new SimpleFileWriter(),
+            new DummyFactoryRenderer()
         );
     }
 

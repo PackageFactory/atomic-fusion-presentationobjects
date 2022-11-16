@@ -116,29 +116,6 @@ final class MyNewComponent extends AbstractComponentPresentationObject
         );
     }
 
-    public function testGetFactoryContent(): void
-    {
-        Assert::assertSame(
-            '<?php
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-declare(strict_types=1);
-
-namespace Vendor\Site\Presentation\Component\MyNewComponent;
-
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
-
-final class MyNewComponentFactory extends AbstractComponentPresentationObjectFactory
-{
-}
-',
-            $this->subject->getFactoryContent()
-        );
-    }
-
     public function testGetFusionContent(): void
     {
         Assert::assertSame(

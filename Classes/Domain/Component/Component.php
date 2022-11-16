@@ -14,8 +14,8 @@ use Neos\Flow\Annotations as Flow;
 final class Component
 {
     public function __construct(
-        private ComponentName $name,
-        private Props $props
+        public readonly ComponentName $name,
+        public readonly Props $props
     ) {
     }
 
@@ -36,24 +36,6 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
 final class ' . $this->name->getSimpleClassName() . ' extends AbstractComponentPresentationObject
 {
     ' . $this->renderConstructor() .  '
-}
-';
-    }
-
-    public function getFactoryContent(): string
-    {
-        return '<?php
-
-' . $this->name->renderClassComment() . '
-
-declare(strict_types=1);
-
-namespace ' . $this->name->getPhpNamespace() . ';
-
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
-
-final class ' . $this->name->getSimpleFactoryName() . ' extends AbstractComponentPresentationObjectFactory
-{
 }
 ';
     }

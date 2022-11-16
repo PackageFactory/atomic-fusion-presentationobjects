@@ -13,6 +13,7 @@ use Neos\Flow\Cli\CommandController;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentGenerator;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumGenerator;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FactoryRendererInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageResolver;
 use PackageFactory\AtomicFusion\PresentationObjects\Infrastructure\DefensiveConfirmationFileWriter;
@@ -33,6 +34,9 @@ class ComponentCommandController extends CommandController
      * @var bool
      */
     protected $colocate;
+
+    #[Flow\Inject]
+    protected FactoryRendererInterface $factoryRenderer;
 
     /**
      * Create a new PresentationObject component and factory
@@ -66,7 +70,8 @@ class ComponentCommandController extends CommandController
     public function kickStartCommand(string $name, bool $listable = false, bool $yes = false): void
     {
         $componentGenerator = new ComponentGenerator(
-            new DefensiveConfirmationFileWriter($this->output, $yes)
+            new DefensiveConfirmationFileWriter($this->output, $yes),
+            $this->factoryRenderer
         );
         $package = $this->packageResolver->resolvePackage();
         $componentName = ComponentName::fromInput($name, PackageKey::fromPackage($package));

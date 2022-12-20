@@ -63,6 +63,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
+        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(true);
         $runtime
@@ -94,6 +97,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->getCurrentContext()
             ->willReturn([]);
+        $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(false);
@@ -159,6 +165,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
+        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(false);
         $runtime
@@ -188,6 +197,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->getCurrentContext()
             ->willReturn([]);
+        $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(false);
@@ -222,6 +234,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
+        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(false);
         $runtime
@@ -255,6 +270,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
+        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(false);
         $runtime
@@ -287,6 +305,9 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
         $runtime
             ->getCurrentContext()
             ->willReturn([]);
+        $runtime
+            ->evaluate('test/__meta/sortProperties', $subject)
+            ->willReturn(true);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
             ->willReturn(false);

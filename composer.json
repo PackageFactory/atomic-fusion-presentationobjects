@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ~8.0.0",
-        "neos/neos": "^5.0 || ^7.0 || dev-master",
+        "php": "^7.4 || ~8.0.0 || ~8.1.0",
+        "neos/neos": "^5.0 || ^7.0 || ^8.0 || dev-master",
         "sitegeist/kaleidoscope": "^5.0 || ^6.0 || dev-master"
     },
     "require-dev": {

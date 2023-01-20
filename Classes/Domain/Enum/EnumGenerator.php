@@ -20,7 +20,7 @@ final class EnumGenerator
 
     private FileWriterInterface $fileWriter;
 
-    public function __construct(?\DateTimeImmutable $now = null, FileWriterInterface $fileWriter)
+    public function __construct(?\DateTimeImmutable $now, FileWriterInterface $fileWriter)
     {
         $this->now = $now ?? new \DateTimeImmutable();
         $this->fileWriter = $fileWriter;

@@ -1,4 +1,25 @@
-Neos:
-  Fusion:
-    defaultContext:
-      Site.Headline: Vendor\Site\Presentation\Component\Headline\HeadlineFactory
+prototype(Vendor.Site:Component.Headline) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Component\\Headline\\Headline'
+
+    @styleguide {
+        title = 'Headline'
+
+        props {
+            type = 'h1'
+            look = 'large'
+            content = 'Text'
+        }
+    }
+
+    renderer = afx`
+        <div>[Headline]</div>
+        <dl>
+            <dt>type:</dt>
+            <dd>{presentationObject.type.value}</dd>
+            <dt>look:</dt>
+            <dd>{presentationObject.look.value}</dd>
+            <dt>content:</dt>
+            <dd>{presentationObject.content}</dd>
+        </dl>
+    `
+}

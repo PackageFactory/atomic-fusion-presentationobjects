@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
 use Neos\Fusion\FusionObjects\DataStructureImplementation;
 
@@ -12,11 +15,9 @@ use Neos\Fusion\FusionObjects\DataStructureImplementation;
  */
 class PresentationObjectComponentImplementation extends DataStructureImplementation
 {
-    const PREVIEW_MODE = 'isInPreviewMode';
+    public const OBJECT_NAME = 'presentationObject';
 
-    const OBJECT_NAME = 'presentationObject';
-
-    const INTERFACE_DECLARATION_NAME = '__meta/presentationObjectInterface';
+    public const INTERFACE_DECLARATION_NAME = '__meta/presentationObjectInterface';
 
     /**
      * Properties that are ignored and not included into the ``props`` context
@@ -50,17 +51,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
      */
     protected function prepare(array $context): array
     {
-        if ($this->isInPreviewMode()) {
-            $props = $this->getProps();
-            if (isset($props[self::OBJECT_NAME])) {
-                $props = array_merge($props, $props[self::OBJECT_NAME]);
-                unset($props[self::OBJECT_NAME]);
-            }
-            $context[self::OBJECT_NAME] = $props;
-        } else {
-            $context[self::OBJECT_NAME] = $this->getPresentationObject();
-        }
-
+        $context[self::OBJECT_NAME] = $this->getPresentationObject();
         $context['props'] = $this->getProps();
 
         return $context;
@@ -75,7 +66,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
     protected function getProps()
     {
         /** @phpstan-var string[] $sortedChildFusionKeys */
-        $sortedChildFusionKeys = $this->sortNestedFusionKeys();
+        $sortedChildFusionKeys = $this->preparePropertyKeys($this->properties, $this->ignoreProperties);
         $props = [];
         foreach ($sortedChildFusionKeys as $key) {
             try {
@@ -110,14 +101,6 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
     public function getPath(): string
     {
         return $this->path;
-    }
-
-    /**
-     * @return boolean
-     */
-    protected function isInPreviewMode(): bool
-    {
-        return $this->fusionValue(self::PREVIEW_MODE);
     }
 
     /**

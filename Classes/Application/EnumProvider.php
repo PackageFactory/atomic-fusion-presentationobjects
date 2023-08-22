@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Application;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Application;
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
@@ -14,9 +17,8 @@ use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Neos\Eel\ProtectedContextAwareInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsEnum;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumLabel;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
 
-final class PseudoEnumProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
+final class EnumProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
     /**
      * @Flow\Inject(lazy=false)
@@ -84,19 +86,19 @@ final class PseudoEnumProvider extends AbstractDataSource implements ProtectedCo
      */
     public function getValues(string $enumName): array
     {
-        return array_map(function (PseudoEnumInterface $case) {
-            return $case->getValue();
+        return array_map(function (\BackedEnum $case) {
+            return $case->value;
         }, $this->getCases($enumName));
     }
 
     /**
      * @param class-string<mixed> $enumName
-     * @return array|PseudoEnumInterface[]
+     * @return array<int,\BackedEnum>
      */
     public function getCases(string $enumName): array
     {
         if (!IsEnum::isSatisfiedByClassName($enumName)) {
-            throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not exist or does not implement the required ' . PseudoEnumInterface::class, 1625297031);
+            throw new \InvalidArgumentException('Given enum "' . $enumName . '" does not exist or does not implement the required ' . \BackedEnum::class, 1625297031);
         }
 
         return $enumName::cases();

@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -29,7 +32,7 @@ final class ComponentArrayPropType implements PropTypeInterface
 
     public function getSimpleName(): string
     {
-        return PluralName::forName($this->componentName->getName());
+        return PluralName::forName($this->componentName->name);
     }
 
     public function getUseStatement(): string
@@ -49,7 +52,7 @@ final class ComponentArrayPropType implements PropTypeInterface
         $componentStyleGuideValue = $componentPropType->getStyleGuideValue($nestingLevel + 1);
         return '{
 ' . self::innerLeftPad($nestingLevel) . '0 ' . $componentStyleGuideValue . '
-' . self::innerLeftPad($nestingLevel) . '1 ' .$componentStyleGuideValue . '
+' . self::innerLeftPad($nestingLevel) . '1 ' . $componentStyleGuideValue . '
 ' . self::outerLeftPad($nestingLevel) . '}';
     }
 
@@ -66,9 +69,9 @@ final class ComponentArrayPropType implements PropTypeInterface
     public function getDefinitionData(string $propName): string
     {
         return '
-            <Neos.Fusion:Loop items={presentationObject.' . $propName. '}>
-                <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={item} />
-            </Neos.Fusion:Loop>
-        ';
+                <Neos.Fusion:Loop items={presentationObject.' . $propName . '}>
+                    <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={item} />
+                </Neos.Fusion:Loop>
+            ';
     }
 }

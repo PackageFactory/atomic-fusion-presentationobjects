@@ -1,0 +1,11 @@
+prototype(PackageFactory.AtomicFusion.PresentationObjects:CacheSegment) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
+    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\CacheSegment'
+
+    renderer = PackageFactory.AtomicFusion.PresentationObjects:Slot {
+        presentationObject = ${presentationObject.content}
+    }
+
+    @cache {
+        mode = 'cached'
+    }
+}

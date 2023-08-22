@@ -1,92 +1,21 @@
-<?php declare(strict_types=1);
-namespace Vendor\Default\Presentation\Component\Crossing;
+<?php
 
 /*
  * This file is part of the Vendor.Default package.
  */
 
-use Neos\Flow\Annotations as Flow;
-use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\PseudoEnumInterface;
+declare(strict_types=1);
 
-/**
- * @Flow\Proxy(false)
- */
-final class TrafficLight implements PseudoEnumInterface
+namespace Vendor\Default\Presentation\Component\Crossing;
+
+use Neos\Eel\ProtectedContextAwareInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\IntComponentVariant;
+
+enum TrafficLight: int implements ProtectedContextAwareInterface
 {
-    const LIGHT_RED = 1;
-    const LIGHT_YELLOW = 2;
-    const LIGHT_GREEN = 3;
+    use IntComponentVariant;
 
-    /**
-     * @var array<int,self>|self[]
-     */
-    private static array $instances;
-
-    private int $value;
-
-    private function __construct(int $value)
-    {
-        $this->value = $value;
-    }
-
-    public static function from(int $int): self
-    {
-        if (!isset(self::$instances[$int])) {
-            if ($int !== self::LIGHT_RED
-                && $int !== self::LIGHT_YELLOW
-                && $int !== self::LIGHT_GREEN) {
-                throw TrafficLightIsInvalid::becauseItMustBeOneOfTheDefinedConstants($int);
-            }
-            self::$instances[$int] = new self($int);
-        }
-
-        return self::$instances[$int];
-    }
-
-    public static function red(): self
-    {
-        return self::from(self::LIGHT_RED);
-    }
-
-    public static function yellow(): self
-    {
-        return self::from(self::LIGHT_YELLOW);
-    }
-
-    public static function green(): self
-    {
-        return self::from(self::LIGHT_GREEN);
-    }
-
-    public function getIsRed(): bool
-    {
-        return $this->value === self::LIGHT_RED;
-    }
-
-    public function getIsYellow(): bool
-    {
-        return $this->value === self::LIGHT_YELLOW;
-    }
-
-    public function getIsGreen(): bool
-    {
-        return $this->value === self::LIGHT_GREEN;
-    }
-
-    /**
-     * @return array<int,self>|self[]
-     */
-    public static function cases(): array
-    {
-        return [
-            self::from(self::LIGHT_RED),
-            self::from(self::LIGHT_YELLOW),
-            self::from(self::LIGHT_GREEN)
-        ];
-    }
-
-    public function getValue(): int
-    {
-        return $this->value;
-    }
+    case LIGHT_RED = 1;
+    case LIGHT_YELLOW = 2;
+    case LIGHT_GREEN = 3;
 }

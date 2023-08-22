@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Presentation\Slot;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Presentation\Slot;
+
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
-use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\ValueInterface;
 
 final class ValueTest extends UnitTestCase
 {
@@ -19,7 +21,7 @@ final class ValueTest extends UnitTestCase
     {
         $value = Value::fromString('Some Value');
         $this->assertEquals('Some Value', (string) $value);
-        $this->assertInstanceOf(ValueInterface::class, $value);
+        $this->assertInstanceOf(Value::class, $value);
     }
 
     /**
@@ -61,7 +63,7 @@ final class ValueTest extends UnitTestCase
                     }
                 }, 'Hello Object!'],
             'object without __toString method' =>
-                [new \stdClass, '[stdClass]'],
+                [new \stdClass(), '[stdClass]'],
             'resource' =>
                 [$resource, '[unknown type: resource (closed)]'],
         ];
@@ -78,7 +80,7 @@ final class ValueTest extends UnitTestCase
     {
         $value = Value::fromAny($inputValue);
 
-        $this->assertInstanceOf(ValueInterface::class, $value);
+        $this->assertInstanceOf(Value::class, $value);
         $this->assertEquals($expectedString, (string) $value);
     }
 }

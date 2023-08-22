@@ -12,17 +12,28 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           extensions: mbstring, intl
           tools: phpcs
 
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install composer dependencies
+        run: |
+          composer install
+
       - name: Run PHP Code Sniffer
         run: |
-          phpcs \
-            --standard=PSR2 \
-            --extensions=php \
-            --exclude=Generic.Files.LineLength \
-            Classes/ Tests/
+          composer lint
 
   static-analysis:
     runs-on: ubuntu-20.04
@@ -33,7 +44,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           extensions: mbstring, intl
 
       - name: Get composer cache directory
@@ -53,9 +64,7 @@ jobs:
 
       - name: Run phpstan
         run: |
-          bin/phpstan analyse \
-            --level 8 \
-            Tests/Unit Classes
+          composer analyse
 
   unit-tests:
     runs-on: ubuntu-20.04
@@ -66,7 +75,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           extensions: mbstring, intl
           coverage: xdebug
 
@@ -87,7 +96,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          bin/phpunit -c phpunit.xml \
-            --enforce-time-limit \
-            --coverage-text \
-            Tests
+          composer test

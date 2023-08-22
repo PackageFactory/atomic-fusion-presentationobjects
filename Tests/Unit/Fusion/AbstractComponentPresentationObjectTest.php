@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
 
 use GuzzleHttp\Psr7\Uri;
 use Neos\Flow\Tests\UnitTestCase;
@@ -20,22 +23,6 @@ use Vendor\Shared\Presentation\Component\Text\Text as SharedText;
  */
 final class AbstractComponentPresentationObjectTest extends UnitTestCase
 {
-    /**
-     * @test
-     * @small
-     * @return void
-     */
-    public function enforcesStructuralPropertyAccessToCircumventFaultToleranceInEel(): void
-    {
-        $this->expectException(\BadMethodCallException::class);
-
-        $presentationObject = new class extends AbstractComponentPresentationObject {
-        };
-
-        // @phpstan-ignore-next-line
-        $presentationObject->getFoo();
-    }
-
     /**
      * @return array<mixed>
      */

@@ -1,12 +1,5 @@
-<?php declare(strict_types=1);
-namespace Vendor\Default\Presentation\Component\NewText;
-
-/*
- * This file is part of the Vendor.Default package.
- */
-
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
-
-final class NewTextFactory extends AbstractComponentPresentationObjectFactory
-{
-}
+Neos:
+  Fusion:
+    defaultContext:
+      Existing.Helper: Some\OtherPackage\Existing\HelperFactory
+      Default.NewText: Vendor\Default\Presentation\Component\NewText\NewTextFactory

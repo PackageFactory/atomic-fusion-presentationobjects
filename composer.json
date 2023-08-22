@@ -22,11 +22,23 @@
         "mikey179/vfsstream": "^1.6",
         "squizlabs/php_codesniffer": "^3.7",
         "jangregor/phpstan-prophecy": "^1.0",
+        "phpspec/prophecy": "^1.15",
         "spatie/phpunit-snapshot-assertions": "^5.0"
+    },
+    "suggest": {
+        "sitegeist/monocle-presentationobjects": "For Monocle integration"
+    },
+    "scripts": {
+        "lint": "bin/phpcs --standard=PSR12 --extensions=php --exclude=Generic.Files.LineLength Classes/ Tests/",
+        "analyse": "bin/phpstan analyse --level 8 Tests/Unit Classes",
+        "test": "bin/phpunit -c phpunit.xml --enforce-time-limit --coverage-html Build/Reports/coverage Tests"
     },
     "config": {
         "vendor-dir": "Packages/Libraries",
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "neos/composer-plugin": true
+        }
     },
     "autoload": {
         "psr-4": {

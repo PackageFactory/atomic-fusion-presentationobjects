@@ -1,19 +1,15 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Headline;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Vendor\Site\Presentation\Component\Headline\HeadlineType;
-use Vendor\Site\Presentation\Component\Headline\HeadlineLook;
+declare(strict_types=1);
 
-interface HeadlineInterface extends ComponentPresentationObjectInterface
+namespace Vendor\Site\Presentation\Component\Headline;
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class HeadlineFactory extends AbstractComponentPresentationObjectFactory
 {
-    public function getType(): HeadlineType;
-
-    public function getLook(): HeadlineLook;
-
-    public function getContent(): string;
 }

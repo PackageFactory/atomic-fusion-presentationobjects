@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumType;
@@ -33,12 +36,12 @@ class EnumTypeTest extends UnitTestCase
     {
         return [
             [
-                EnumType::string(),
+                EnumType::TYPE_STRING,
                 ['a', 'b', 'c'],
                 ['a' => 'a', 'b' => 'b', 'c' => 'c']
             ],
             [
-                EnumType::int(),
+                EnumType::TYPE_INT,
                 ['a:1', 'b:2', 'c:3'],
                 ['a' => 1, 'b' => 2, 'c' => 3]
             ]

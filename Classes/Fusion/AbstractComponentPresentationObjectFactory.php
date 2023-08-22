@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\NodeType\NodeTypeConstraintFactory;
@@ -18,7 +21,9 @@ use Neos\Neos\Service\ContentElementWrappingService;
 /**
  * The generic abstract component presentation object factory implementation
  */
-abstract class AbstractComponentPresentationObjectFactory implements ComponentPresentationObjectFactoryInterface, ProtectedContextAwareInterface
+abstract class AbstractComponentPresentationObjectFactory implements
+    ComponentPresentationObjectFactoryInterface,
+    ProtectedContextAwareInterface
 {
     /**
      * @Flow\Inject
@@ -32,11 +37,8 @@ abstract class AbstractComponentPresentationObjectFactory implements ComponentPr
      */
     protected $contentElementEditableService;
 
-    /**
-     * @Flow\Inject
-     * @var UriServiceInterface
-     */
-    protected $uriService;
+    #[Flow\Inject]
+    protected UriServiceInterface $uriService;
 
     /**
      * @Flow\Inject

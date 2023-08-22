@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\ImageSourcePropType;
@@ -33,11 +36,11 @@ final class ImageSourcePropTypeTest extends UnitTestCase
         return [
             [
                 new ImageSourcePropType(false),
-                'ImageSourceHelperInterface'
+                'ImageSourceInterface'
             ],
             [
                 new ImageSourcePropType(true),
-                'ImageSourceHelperInterface'
+                'ImageSourceInterface'
             ]
         ];
     }
@@ -61,12 +64,12 @@ final class ImageSourcePropTypeTest extends UnitTestCase
         return [
             [
                 new ImageSourcePropType(false),
-                'use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+                'use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 '
             ],
             [
                 new ImageSourcePropType(true),
-                'use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+                'use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 '
             ]
         ];
@@ -91,11 +94,11 @@ final class ImageSourcePropTypeTest extends UnitTestCase
         return [
             [
                 new ImageSourcePropType(false),
-                'ImageSourceHelperInterface'
+                'ImageSourceInterface'
             ],
             [
                 new ImageSourcePropType(true),
-                '?ImageSourceHelperInterface'
+                '?ImageSourceInterface'
             ]
         ];
     }
@@ -139,12 +142,12 @@ final class ImageSourcePropTypeTest extends UnitTestCase
      * @dataProvider definitionDataProvider
      * @param ImageSourcePropType $subject
      * @param string $propName
-     * @param string $expectedStyleGuideValue
+     * @param string $expectedDefinitionData
      * @return void
      */
-    public function testGetDefinitionData(ImageSourcePropType $subject, string $propName, string $expectedStyleGuideValue): void
+    public function testGetDefinitionData(ImageSourcePropType $subject, string $propName, string $expectedDefinitionData): void
     {
-        Assert::assertSame($expectedStyleGuideValue, $subject->getDefinitionData($propName));
+        Assert::assertSame($expectedDefinitionData, $subject->getDefinitionData($propName));
     }
 
     /**
@@ -157,15 +160,15 @@ final class ImageSourcePropTypeTest extends UnitTestCase
                 new ImageSourcePropType(false),
                 'myProperty',
                 '
-            <Sitegeist.Lazybones:Image imageSource={presentationObject.myProperty} />
-        '
+                <Sitegeist.Kaleidoscope:Image imageSource={presentationObject.myProperty} />
+            '
             ],
             [
                 new ImageSourcePropType(true),
                 'myProperty',
                 '
-            <Sitegeist.Lazybones:Image imageSource={presentationObject.myProperty} @if.isToBeRendered={presentationObject.myProperty} />
-        '
+                <Sitegeist.Kaleidoscope:Image imageSource={presentationObject.myProperty} @if={presentationObject.myProperty} />
+            '
             ]
         ];
     }

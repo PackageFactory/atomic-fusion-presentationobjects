@@ -18,24 +18,22 @@ In this tutorial, we're going to write a PresentationObject factory for the imag
 
 PresentationObject factories are co-located with their respective PresentationObjects. It's recommended to create factory methods with a speaking name prefixed with `for*` or `from*` to describe their use-case. When your code base grows, the factory will act like an index showing you all the different places in which the respective component is used.
 
-<small>*`EXAMPLE: PresentationObject Factory`*<small>
+<small>*`EXAMPLE: PresentationObject Factory`*</small>
 
 ```php
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Vendor\Site\Presentation\Image;
 
+use Neos\ContentRepository\Domain\Projection\Content\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 
-/**
- * @Flow\Scope("singleton")
- */
+#[Flow\Scope("singleton")]
 final class ImageFactory extends AbstractComponentPresentationObjectFactory
 {
-    /**
-     * @param TraversableNodeInterface $node
-     * @return ImageInterface
-     */
-    public function forImageNode(TraversableNodeInterface $node): ImageInterface
+    public function forImageNode(NodeInterface $node): Image
     {
         // Optional: Use assertions to ensure the incoming node type
         assert($node->getNodeType()->isOfType('Vendor.Site:Content.Image'));
@@ -55,7 +53,7 @@ final class ImageFactory extends AbstractComponentPresentationObjectFactory
 
 Each factory that extends `AbstractComponentPresentationObjectFactory` automatically implements the `Neos\Eel\ProtectedContextAwareInterface` and can be used as an Eel helper. To make our factory available in Fusion, we need to register it in the Settings:
 
-<small>*`EXAMPLE: Settings.PresentationHelpers.yaml`*<small>
+<small>*`EXAMPLE: Settings.PresentationHelpers.yaml`*</small>
 
 ```yaml
 Neos:
@@ -70,7 +68,7 @@ Neos uses the `Neos.Neos:ContentCase` to map nodes to rendering prototypes. For 
 
 From here, we just need to extend `Neos.Neos:ContentComponent` and provide our PresentationObject component `Vendor.Site:Component.Image` as the renderer. As the `presentationObject` we pass the result of the `forImageNode`-method of our newly registered `ImageFactory`.
 
-<small>*`EXAMPLE: Resources/Private/Fusion/Integration/Content/Image.fusion`*<small>
+<small>*`EXAMPLE: Resources/Private/Fusion/Integration/Content/Image.fusion`*</small>
 
 ```fusion
 prototype(Vendor.Site:Content.Image) < prototype(Neos.Neos:ContentComponent) {

@@ -1,0 +1,5 @@
+prototype(PackageFactory.AtomicFusion.PresentationObjects:UncachedSegment) < prototype(Neos.Fusion:Component) {
+    @cache {
+        mode = 'uncached'
+    }
+}

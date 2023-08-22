@@ -17,11 +17,11 @@ is folded into the `presentationObject` context and the PresentationObject enfor
 
 This allows seamless use with tools like Sitegeist.Monocle.
 
-<small>*`EXAMPLE: Root.fusion`*<small>
+<small>*`EXAMPLE: Root.fusion`*</small>
 
 ```fusion
 prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    isInPreviewMode = ${request.controllerPackageKey == 'Sitegeist.Monocle'}
+    isInPreviewMode = ${String.startsWith(request.httpRequest.uri.path, '/monocle/')}
 }
 ```
 

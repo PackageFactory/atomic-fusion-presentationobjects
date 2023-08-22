@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\UriPropType;
@@ -133,12 +136,12 @@ final class UriPropTypeTest extends UnitTestCase
      * @dataProvider definitionDataProvider
      * @param UriPropType $subject
      * @param string $propName
-     * @param string $expectedStyleGuideValue
+     * @param string $expectedDefinitionData
      * @return void
      */
-    public function testGetDefinitionData(UriPropType $subject, string $propName, string $expectedStyleGuideValue): void
+    public function testGetDefinitionData(UriPropType $subject, string $propName, string $expectedDefinitionData): void
     {
-        Assert::assertSame($expectedStyleGuideValue, $subject->getDefinitionData($propName));
+        Assert::assertSame($expectedDefinitionData, $subject->getDefinitionData($propName));
     }
 
     /**

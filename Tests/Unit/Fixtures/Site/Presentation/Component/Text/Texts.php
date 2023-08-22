@@ -1,36 +1,33 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Text;
+<?php
 
 /*
  * This file is part of the Vendor.Site package
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\Text;
+
 use Neos\Flow\Annotations as Flow;
-use Vendor\Shared\Presentation\Component\Text\TextInterface;
 
 /**
- * A list of texts
- * @Flow\Proxy(false)
+ * A list of texts for testing purposes
  */
+#[Flow\Proxy(false)]
 final class Texts implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,TextInterface>|TextInterface[]
+     * @var array<int,Text>
      */
     private array $texts;
 
-    public function __construct($array)
+    public function __construct(Text ...$texts)
     {
-        foreach ($array as $element) {
-            if (!$element instanceof TextInterface) {
-                throw new \InvalidArgumentException(self::class . ' can only consist of ' . TextInterface::class);
-            }
-        }
-        $this->texts = $array;
+        $this->texts = $texts;
     }
 
     /**
-     * @return \ArrayIterator<int,TextInterface>|TextInterface[]
+     * @return \ArrayIterator<int,Text>|Text[]
      */
     public function getIterator(): \ArrayIterator
     {

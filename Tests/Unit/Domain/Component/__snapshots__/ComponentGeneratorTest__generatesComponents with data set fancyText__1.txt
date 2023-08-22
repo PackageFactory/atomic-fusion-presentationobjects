@@ -1,28 +1,21 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\FancyComponent\NewText;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\FancyComponent\NewText;
+
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 
-/**
- * @Flow\Proxy(false)
- */
-final class NewText extends AbstractComponentPresentationObject implements NewTextInterface
+#[Flow\Proxy(false)]
+final class NewText extends AbstractComponentPresentationObject
 {
-    private ?string $text;
-
     public function __construct(
-        ?string $text
+        public readonly ?string $text
     ) {
-        $this->text = $text;
-    }
-
-    public function getText(): ?string
-    {
-        return $this->text;
     }
 }

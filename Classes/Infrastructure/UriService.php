@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Infrastructure;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Infrastructure;
 
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
@@ -11,6 +14,7 @@ use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\ContentRepository\Domain\Service\Context as ContentContext;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ControllerContext;
+use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Flow\Http;
 use Neos\Media\Domain\Model\AssetInterface;
@@ -79,6 +83,15 @@ final class UriService implements UriServiceInterface
     public function getResourceUri(string $packageKey, string $resourcePath): Uri
     {
         return new Uri($this->resourceManager->getPublicPackageResourceUri($packageKey, $resourcePath));
+    }
+
+    public function getPersistentResourceUri(PersistentResource $resource): ?Uri
+    {
+        $uri = $this->resourceManager->getPublicPersistentResourceUri($resource);
+
+        return is_string($uri)
+            ? new Uri($uri)
+            : null;
     }
 
     /**

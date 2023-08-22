@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -38,13 +41,13 @@ final class ComponentPropType implements PropTypeInterface
 
     public function getUseStatement(): string
     {
-        return 'use ' . $this->componentName->getFullyQualifiedInterfaceName() . ';
+        return 'use ' . $this->componentName->getFullyQualifiedClassName() . ';
 ';
     }
 
     public function getType(): string
     {
-        return ($this->nullable ? '?' : '') . $this->componentName->getSimpleInterfaceName();
+        return ($this->nullable ? '?' : '') . $this->componentName->getSimpleClassName();
     }
 
     public function getStyleGuideValue(int $nestingLevel = 0): string
@@ -66,7 +69,7 @@ final class ComponentPropType implements PropTypeInterface
     public function getDefinitionData(string $propName): string
     {
         return '
-            <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={presentationObject.' . $propName . '}' . ($this->isNullable() ? ' @if.isToBeRendered={presentationObject.' . $propName. '}' : '') . ' />
-        ';
+                <' . $this->componentName->getFullyQualifiedFusionName() . ' presentationObject={presentationObject.' . $propName . '}' . ($this->isNullable() ? ' @if={presentationObject.' . $propName . '}' : '') . ' />
+            ';
     }
 }

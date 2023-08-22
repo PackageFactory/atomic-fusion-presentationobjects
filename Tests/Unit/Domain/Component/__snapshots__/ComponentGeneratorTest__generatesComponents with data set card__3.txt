@@ -1,12 +1,4 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Card;
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
-
-final class CardFactory extends AbstractComponentPresentationObjectFactory
-{
-}
+Neos:
+  Fusion:
+    defaultContext:
+      Site.Card: Vendor\Site\Presentation\Component\Card\CardFactory

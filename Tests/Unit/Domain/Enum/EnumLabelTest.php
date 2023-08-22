@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumLabel;
@@ -38,8 +41,8 @@ class EnumLabelTest extends UnitTestCase
                 new EnumLabel('headlineType.', 'Component.Headline', 'Vendor.Site')
             ],
             [
-                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum',
-                new EnumLabel('myStringPseudoEnum.', 'Component.MyNewComponent', 'Vendor.Site')
+                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum',
+                new EnumLabel('myStringEnum.', 'Component.MyNewComponent', 'Vendor.Site')
             ]
         ];
     }

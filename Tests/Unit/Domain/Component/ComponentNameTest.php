@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component;
 
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -89,12 +92,62 @@ final class ComponentNameTest extends UnitTestCase
                 new ComponentName($packageKey, FusionNamespace::fromString('Custom.Type'), 'MyComponent')
             ],
             [
-                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum',
-                new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyStringPseudoEnum')
+                'Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum',
+                new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'MyStringEnum')
             ],
             [
                 'Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponents',
                 new ComponentName($packageKey, FusionNamespace::fromString('Component'), 'AnotherComponent')
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider fusionPathProvider
+     * @return void
+     */
+    public function testFromFusionPath(string $className, ComponentName $expectedName): void
+    {
+        Assert::assertEquals($expectedName, ComponentName::fromFusionPath($className));
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function fusionPathProvider(): array
+    {
+        return [
+            [
+                '/<Acme.Site:Block.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block'),
+                    'Text'
+                )
+            ],
+            [
+                '/<Acme.Site:Block.Fancy.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block.Fancy'),
+                    'Text'
+                )
+            ],
+            [
+                '/<Acme.Site:Layout.SomeComponent>/__meta/styleguide/useCases/introduction/props<Neos.Fusion:DataStructure>/text<Acme.Site:Block.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block'),
+                    'Text'
+                )
+            ],
+            [
+                '/<Acme.Site:Layout.SomeComponent>/__meta/styleguide/useCases/introduction/props<Neos.Fusion:DataStructure>/text<Acme.Site:Block.Fancy.Text>',
+                new ComponentName(
+                    new PackageKey('Acme.Site'),
+                    FusionNamespace::fromString('Block.Fancy'),
+                    'Text'
+                )
             ]
         ];
     }

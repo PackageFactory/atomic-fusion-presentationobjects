@@ -1,34 +1,26 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsEnum;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
-/**
- * @Flow\Proxy(false)
- */
+#[Flow\Proxy(false)]
 final class ComponentName
 {
-    private PackageKey $packageKey;
-
-    private FusionNamespace $fusionNamespace;
-
-    private string $name;
-
     public function __construct(
-        PackageKey $packageKey,
-        FusionNamespace $fusionNamespace,
-        string $name
+        public readonly PackageKey $packageKey,
+        public readonly FusionNamespace $fusionNamespace,
+        public readonly string $name
     ) {
-        $this->packageKey = $packageKey;
-        $this->fusionNamespace = $fusionNamespace;
-        $this->name = $name;
     }
 
     public static function fromInput(string $input, PackageKey $fallbackPackageKey): self
@@ -74,6 +66,26 @@ final class ComponentName
         return new self($packageKey, $fusionNamespace, $componentName);
     }
 
+    public static function fromFusionPath(string $fusionPath): self
+    {
+        $startingPoint = \mb_strrpos($fusionPath, '<') + 1;
+        $endpoint = \mb_strrpos($fusionPath, '>');
+        $fullyQualifiedFusionName = \mb_substr($fusionPath, $startingPoint, $endpoint - $startingPoint);
+
+        list($serializedPackageKey, $componentNamespaceAndName) = explode(':', $fullyQualifiedFusionName);
+        $packageKey = new PackageKey($serializedPackageKey);
+
+        $pivot = \mb_strrpos($componentNamespaceAndName, '.') ?: null;
+        $fusionNamespace = FusionNamespace::fromString(\mb_substr($componentNamespaceAndName, 0, $pivot));
+        $name = \mb_substr($componentNamespaceAndName, $pivot + 1);
+
+        return new self(
+            $packageKey,
+            $fusionNamespace,
+            $name
+        );
+    }
+
     public function mergeInput(string $input): self
     {
         if (\mb_strrpos($input, ':') !== false) {
@@ -98,21 +110,6 @@ final class ComponentName
             $fusionNamespace,
             $name
         );
-    }
-
-    public function getPackageKey(): PackageKey
-    {
-        return $this->packageKey;
-    }
-
-    public function getFusionNamespace(): FusionNamespace
-    {
-        return $this->fusionNamespace;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getFullyQualifiedFusionName(): string
@@ -201,7 +198,7 @@ final class ComponentName
             $this->packageKey->toPhpNamespace(),
             'Presentation',
             $this->fusionNamespace->toPhpNameSpace(),
-            $parentComponentName->getName(),
+            $parentComponentName->name,
             $this->name
         ]);
         return $className;
@@ -221,22 +218,22 @@ final class ComponentName
 
     public function getInterfacePath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . 'Interface.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . 'Interface.php';
     }
 
     public function getClassPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . '.php';
     }
 
     public function getFactoryPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. $this->name . 'Factory.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . $this->name . 'Factory.php';
     }
 
     public function getComponentArrayPath(string $packagePath, bool $colocate): string
     {
-        return $this->getPhpFilePath($packagePath, $colocate) . '/'. PluralName::forName($this->name) . '.php';
+        return $this->getPhpFilePath($packagePath, $colocate) . '/' . PluralName::forName($this->name) . '.php';
     }
 
     public function getFusionFilePath(string $packagePath): string

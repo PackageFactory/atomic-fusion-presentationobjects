@@ -1,12 +1,4 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\Image;
-
-/*
- * This file is part of the Vendor.Site package.
- */
-
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
-
-final class ImageFactory extends AbstractComponentPresentationObjectFactory
-{
-}
+Neos:
+  Fusion:
+    defaultContext:
+      Site.Image: Vendor\Site\Presentation\Component\Image\ImageFactory

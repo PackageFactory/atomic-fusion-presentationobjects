@@ -1,16 +1,19 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\InvalidComponent;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\InvalidComponent;
+
 use Neos\Flow\Annotations as Flow;
 
 /**
  * Dummy invalid enum for test purposes
- * @Flow\Proxy(false)
  */
+#[Flow\Proxy(false)]
 final class InvalidEnum
 {
     private string $value;

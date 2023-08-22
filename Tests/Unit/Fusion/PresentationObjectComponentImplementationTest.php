@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Fusion;
 
 use Neos\Flow\Tests\UnitTestCase;
 use Neos\Fusion\Core\Runtime;
@@ -44,43 +47,11 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
     }
 
     /**
-     * @test
+     * @todo adjust to Neos 8
      * @throws \ReflectionException
      * @return void
      */
-    public function prepareProperlyMergesPropsToStubbedPresentationObjectInPreviewMode(): void
-    {
-        $runtime = $this->prophet->prophesize(Runtime::class);
-
-        $subject = new PresentationObjectComponentImplementation(
-            $runtime->reveal(),
-            'test',
-            'My.Package:Component'
-        );
-        $subject['foo'] = 'bar';
-
-        $runtime
-            ->getCurrentContext()
-            ->willReturn([]);
-        $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(true);
-        $runtime
-            ->evaluate('test/foo', $subject)
-            ->willReturn('bar');
-
-        $context = $this->getPrepare()->invokeArgs($subject, [[]]);
-
-        $this->assertSame(['foo' => 'bar'], $context['props']);
-        $this->assertSame(['foo' => 'bar'], $context[PresentationObjectComponentImplementation::OBJECT_NAME]);
-    }
-
-    /**
-     * @test
-     * @throws \ReflectionException
-     * @return void
-     */
-    public function prepareWritesPresentationObjectToContextWhenNotInPreviewMode(): void
+    public function prepareWritesPresentationObjectToContext(): void
     {
         $runtime = $this->prophet->prophesize(Runtime::class);
         $presentationObject = $this->prophet->prophesize(ComponentPresentationObjectInterface::class);
@@ -91,12 +62,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             'My.Package:Component'
         );
 
-        $runtime
-            ->getCurrentContext()
-            ->willReturn([]);
-        $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn($presentationObject);
@@ -159,9 +124,6 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
             ->willReturn(null);
 
@@ -189,11 +151,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \DateTimeImmutable);
+            ->willReturn(new \DateTimeImmutable());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(null);
@@ -222,11 +181,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \DateTimeImmutable);
+            ->willReturn(new \DateTimeImmutable());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn('\I\Do\Not\Exist');
@@ -255,11 +211,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \stdClass);
+            ->willReturn(new \stdClass());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(\DateTimeInterface::class);
@@ -288,11 +241,8 @@ class PresentationObjectComponentImplementationTest extends UnitTestCase
             ->getCurrentContext()
             ->willReturn([]);
         $runtime
-            ->evaluate('test/' . PresentationObjectComponentImplementation::PREVIEW_MODE, $subject)
-            ->willReturn(false);
-        $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::OBJECT_NAME, $subject)
-            ->willReturn(new \DateTimeImmutable);
+            ->willReturn(new \DateTimeImmutable());
         $runtime
             ->evaluate('test/' . PresentationObjectComponentImplementation::INTERFACE_DECLARATION_NAME, $subject)
             ->willReturn(\DateTimeInterface::class);

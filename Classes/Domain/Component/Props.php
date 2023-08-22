@@ -1,15 +1,19 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\IsComponent;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeFactory;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\PropTypeIsInvalid;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\UnionPropType;
 
 /**
  * @Flow\Proxy(false)
@@ -25,8 +29,16 @@ final class Props implements \IteratorAggregate
     /**
      * @param array<string,PropTypeInterface> $props
      */
-    private function __construct(array $props)
+    public function __construct(array $props)
     {
+        foreach ($props as $propName => $propType) {
+            if (!is_string($propName)) {
+                throw new \InvalidArgumentException('Prop names must be strings', 1656015548);
+            }
+            if (!$propType instanceof PropTypeInterface) {
+                throw new \InvalidArgumentException('Props collections must only contain PropType objects', 1656015581);
+            }
+        }
         $this->props = $props;
     }
 
@@ -63,13 +75,33 @@ final class Props implements \IteratorAggregate
         if (!IsComponent::isSatisfiedByClassName($className)) {
             throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($className);
         }
-        $props = [];
         $reflection = new \ReflectionClass($className);
-        foreach ($reflection->getProperties() as $reflectionProperty) {
+        $props = self::extractPropsFromReflectionClass($reflection);
+
+        return new self($props);
+    }
+
+    /**
+     * @return array<string,PropTypeInterface>
+     */
+    /** @phpstan-ignore-next-line */
+    private static function extractPropsFromReflectionClass(\ReflectionClass $reflectionClass): array
+    {
+        $parentReflectionClass = $reflectionClass->getParentClass();
+        if (
+            $parentReflectionClass instanceof \ReflectionClass
+            && IsComponent::isSatisfiedByReflectionClass($parentReflectionClass)
+        ) {
+            $props = self::extractPropsFromReflectionClass($parentReflectionClass);
+        } else {
+            $props = [];
+        }
+
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $props[$reflectionProperty->getName()] = PropTypeFactory::fromReflectionProperty($reflectionProperty);
         }
 
-        return new self($props);
+        return $props;
     }
 
     public function renderUseStatements(): string
@@ -78,9 +110,15 @@ final class Props implements \IteratorAggregate
 
         $statedTypes = [];
         foreach ($this as $propType) {
-            if (!isset($statedTypes[$propType->getSimpleName()])) {
-                $statedTypes[$propType->getSimpleName()] = true;
-                $statements .= $propType->getUseStatement();
+            $propTypesToBeRendered = $propType instanceof UnionPropType
+                ? $propType->propTypes
+                : [$propType];
+
+            foreach ($propTypesToBeRendered as $propTypeToBeRendered) {
+                if (!isset($statedTypes[$propTypeToBeRendered->getSimpleName()])) {
+                    $statedTypes[$propTypeToBeRendered->getSimpleName()] = true;
+                    $statements .= $propTypeToBeRendered->getUseStatement();
+                }
             }
         }
 
@@ -110,8 +148,8 @@ final class Props implements \IteratorAggregate
     {
         $terms = [];
         foreach ($this as $propName => $propType) {
-            $terms[] = '        <dt>' . $propName . ':</dt>
-        <dd>' . $propType->getDefinitionData($propName) . '</dd>';
+            $terms[] = '            <dt>' . $propName . ':</dt>
+            <dd>' . $propType->getDefinitionData($propName) . '</dd>';
         }
 
         return trim(implode("\n", $terms));

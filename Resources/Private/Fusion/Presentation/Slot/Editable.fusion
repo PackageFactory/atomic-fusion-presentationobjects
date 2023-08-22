@@ -1,5 +1,5 @@
 prototype(PackageFactory.AtomicFusion.PresentationObjects:Editable) < prototype(PackageFactory.AtomicFusion.PresentationObjects:PresentationObjectComponent) {
-    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\EditableInterface'
+    @presentationObjectInterface = 'PackageFactory\\AtomicFusion\\PresentationObjects\\Presentation\\Slot\\Editable'
 
     renderer = Neos.Neos:Editable {
         node = ${presentationObject.node}

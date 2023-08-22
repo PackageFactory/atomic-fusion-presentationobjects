@@ -1,10 +1,14 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Component\PropType;
+
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\SlotPropType;
 use Vendor\Site\Presentation\Component\MyReflectionComponent\MyReflectionComponent;
 use Neos\Flow\Tests\UnitTestCase;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
@@ -123,13 +127,13 @@ final class PropTypeFactoryTest extends UnitTestCase
             ],
             [
                 $componentName,
-                'MyStringPseudoEnum',
-                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringPseudoEnum', false)
+                'MyStringEnum',
+                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', false)
             ],
             [
                 $componentName,
-                '?MyStringPseudoEnum',
-                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringPseudoEnum', true)
+                '?MyStringEnum',
+                new EnumPropType('Vendor\\Site\\Presentation\\Component\\MyNewComponent\\MyStringEnum', true)
             ],
             [
                 $componentName,
@@ -295,16 +299,28 @@ final class PropTypeFactoryTest extends UnitTestCase
                         new ImageSourcePropType(true)
                     ];
                     break;
+                case 'slotProp':
+                    $reflectionPropertyCases[] = [
+                        $reflectionProperty,
+                        new SlotPropType(false)
+                    ];
+                    break;
+                case 'nullableSlotProp':
+                    $reflectionPropertyCases[] = [
+                        $reflectionProperty,
+                        new SlotPropType(true)
+                    ];
+                    break;
                 case 'enumProp':
                     $reflectionPropertyCases[] = [
                         $reflectionProperty,
-                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum', false)
+                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum', false)
                     ];
                     break;
                 case 'nullableEnumProp':
                     $reflectionPropertyCases[] = [
                         $reflectionProperty,
-                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringPseudoEnum', true)
+                        new EnumPropType('Vendor\Site\Presentation\Component\MyNewComponent\MyStringEnum', true)
                     ];
                     break;
                 case 'componentProp':

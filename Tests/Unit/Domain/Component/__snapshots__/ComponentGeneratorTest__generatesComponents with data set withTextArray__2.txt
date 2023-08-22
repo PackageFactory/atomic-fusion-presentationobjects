@@ -1,14 +1,15 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\WithTextArray;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
-use PackageFactory\AtomicFusion\PresentationObjects\Fusion\ComponentPresentationObjectInterface;
-use Vendor\Site\Presentation\Component\Text\Texts;
+declare(strict_types=1);
 
-interface WithTextArrayInterface extends ComponentPresentationObjectInterface
+namespace Vendor\Site\Presentation\Component\WithTextArray;
+
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObjectFactory;
+
+final class WithTextArrayFactory extends AbstractComponentPresentationObjectFactory
 {
-    public function getTexts(): Texts;
 }

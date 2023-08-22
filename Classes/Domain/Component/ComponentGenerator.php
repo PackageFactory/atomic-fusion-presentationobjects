@@ -1,27 +1,29 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
+
 use Neos\Flow\Annotations as Flow;
+use PackageFactory\AtomicFusion\PresentationObjects\Domain\FactoryRendererInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FileWriterInterface;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Dumper as YamlWriter;
 
 /**
  * The component generator domain service
- *
- * @Flow\Proxy(false)
  */
+#[Flow\Proxy(false)]
 final class ComponentGenerator
 {
-    private FileWriterInterface $fileWriter;
-
-    public function __construct(FileWriterInterface $fileWriter)
-    {
-        $this->fileWriter = $fileWriter;
+    public function __construct(
+        private readonly FileWriterInterface $fileWriter,
+        private readonly FactoryRendererInterface $factoryRenderer
+    ) {
     }
 
     /**
@@ -41,11 +43,13 @@ final class ComponentGenerator
         bool $listable = false
     ): void {
         $props = Props::fromInputArray($componentName, $serializedProps);
-        $component = new Component($componentName, $props, $listable);
+        $component = new Component($componentName, $props);
 
-        $this->fileWriter->writeFile($componentName->getInterfacePath($packagePath, $colocate), $component->getInterfaceContent());
         $this->fileWriter->writeFile($componentName->getClassPath($packagePath, $colocate), $component->getClassContent());
-        $this->fileWriter->writeFile($componentName->getFactoryPath($packagePath, $colocate), $component->getFactoryContent());
+        $this->fileWriter->writeFile(
+            $componentName->getFactoryPath($packagePath, $colocate),
+            $this->factoryRenderer->renderFactoryContent($component)
+        );
         $this->fileWriter->writeFile($componentName->getFusionComponentPath($packagePath), $component->getFusionContent());
 
         if ($listable) {

@@ -1,35 +1,34 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\MyComponent;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\MyComponent;
+
 use Neos\Flow\Annotations as Flow;
 
 /**
- * A list of myComponents
- * @Flow\Proxy(false)
+ * A list of myComponents for test purposes
+ * @implements \IteratorAggregate<int,MyComponent>
  */
+#[Flow\Proxy(false)]
 final class MyComponents implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,MyComponentInterface>|MyComponentInterface[]
+     * @var array<int,MyComponent>|MyComponent[]
      */
     private array $myComponents;
 
-    public function __construct($array)
+    public function __construct(MyComponent ...$myComponents)
     {
-        foreach ($array as $element) {
-            if (!$element instanceof MyComponentInterface) {
-                throw new \InvalidArgumentException(self::class . ' can only consist of ' . MyComponentInterface::class);
-            }
-        }
-        $this->myComponents = $array;
+        $this->myComponents = $myComponents;
     }
 
     /**
-     * @return \ArrayIterator<int,MyComponentInterface>|MyComponentInterface[]
+     * @return \ArrayIterator<int,MyComponent>|MyComponent[]
      */
     public function getIterator(): \ArrayIterator
     {

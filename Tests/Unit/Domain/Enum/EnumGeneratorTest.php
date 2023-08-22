@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
+
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Domain\Enum;
 
 use Neos\Flow\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
@@ -38,7 +41,6 @@ final class EnumGeneratorTest extends UnitTestCase
         ]);
 
         $this->enumGenerator = new EnumGenerator(
-            new \DateTimeImmutable('@1602423895'),
             new SimpleFileWriter()
         );
     }
@@ -57,7 +59,6 @@ final class EnumGeneratorTest extends UnitTestCase
                 'vfs://DistributionPackages/Vendor.Site/',
                 [
                     'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineType.php',
-                    'vfs://DistributionPackages/Vendor.Site/Classes/Presentation/Component/Headline/HeadlineTypeIsInvalid.php'
                 ],
                 false
             ],
@@ -69,7 +70,6 @@ final class EnumGeneratorTest extends UnitTestCase
                 'vfs://DistributionPackages/Vendor.Default/',
                 [
                     'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLight.php',
-                    'vfs://DistributionPackages/Vendor.Default/Classes/Presentation/Component/Crossing/TrafficLightIsInvalid.php'
                 ],
                 false
             ],
@@ -81,7 +81,6 @@ final class EnumGeneratorTest extends UnitTestCase
                 'vfs://DistributionPackages/Vendor.Site/',
                 [
                     'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineType.php',
-                    'vfs://DistributionPackages/Vendor.Site/Resources/Private/Fusion/Presentation/Component/Headline/HeadlineTypeIsInvalid.php'
                 ],
                 true
             ],

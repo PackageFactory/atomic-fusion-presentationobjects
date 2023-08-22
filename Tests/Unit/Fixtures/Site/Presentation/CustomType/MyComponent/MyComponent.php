@@ -1,37 +1,26 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\CustomType\MyComponent;
+<?php
 
 /*
  * This file is part of the Vendor.Site package
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\CustomType\MyComponent;
+
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 use Neos\Flow\Annotations as Flow;
-use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponentInterface;
+use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponent;
 
 /**
  * Dummy component for test purposes
- * @Flow\Proxy(false)
  */
-final class MyComponent extends AbstractComponentPresentationObject implements MyComponentInterface
+#[Flow\Proxy(false)]
+final class MyComponent extends AbstractComponentPresentationObject
 {
-    private string $text;
-
-    private AnotherComponentInterface $other;
-
-    public function __construct(string $text, AnotherComponentInterface $other)
-    {
-        $this->text = $text;
-        $this->other = $other;
-    }
-
-    public function getText(): string
-    {
-        return $this->text;
-    }
-
-    public function getOther(): AnotherComponentInterface
-    {
-        return $this->other;
+    public function __construct(
+        public readonly string $text,
+        public readonly AnotherComponent $other
+    ) {
     }
 }

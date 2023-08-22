@@ -1,38 +1,23 @@
-<?php declare(strict_types=1);
-namespace Vendor\Site\Presentation\Component\NewLink;
+<?php
 
 /*
  * This file is part of the Vendor.Site package.
  */
 
+declare(strict_types=1);
+
+namespace Vendor\Site\Presentation\Component\NewLink;
+
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 use Psr\Http\Message\UriInterface;
 
-/**
- * @Flow\Proxy(false)
- */
-final class NewLink extends AbstractComponentPresentationObject implements NewLinkInterface
+#[Flow\Proxy(false)]
+final class NewLink extends AbstractComponentPresentationObject
 {
-    private UriInterface $href;
-
-    private ?string $title;
-
     public function __construct(
-        UriInterface $href,
-        ?string $title
+        public readonly UriInterface $href,
+        public readonly ?string $title
     ) {
-        $this->href = $href;
-        $this->title = $title;
-    }
-
-    public function getHref(): UriInterface
-    {
-        return $this->href;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
     }
 }

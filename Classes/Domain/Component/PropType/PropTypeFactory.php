@@ -1,16 +1,20 @@
-<?php declare(strict_types=1);
-namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+<?php
 
 /*
  * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package
  */
 
+declare(strict_types=1);
+
+namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType;
+
 use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\Psr7\Uri;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\StringLike;
 use Psr\Http\Message\UriInterface;
-use Sitegeist\Kaleidoscope\EelHelpers\ImageSourceHelperInterface;
+use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 
 /**
  * @Flow\Proxy(false)
@@ -41,14 +45,20 @@ final class PropTypeFactory
             case 'ImageSource':
                 return new ImageSourcePropType($nullable);
             case 'slot':
+            case 'Slot':
                 return new SlotPropType($nullable);
+            case 'stringLike':
+            case 'stringlike':
+            case 'StringLike':
+            case 'Stringlike':
+                return new StringLikePropType($nullable);
             default:
                 if ($isComponentArray = IsComponentArray::isSatisfiedByInputString($input)) {
                     $input = \mb_substr($input, 6, \mb_strlen($input) - 7);
                 }
                 $componentName = $parentComponentName->mergeInput($input);
 
-                if (IsComponent::isSatisfiedByInterfaceName($componentName->getFullyQualifiedInterfaceName())) {
+                if (IsComponent::isSatisfiedByClassName($componentName->getFullyQualifiedClassName())) {
                     return $isComponentArray
                         ? new ComponentArrayPropType($componentName)
                         : new ComponentPropType($componentName, $nullable);
@@ -67,44 +77,63 @@ final class PropTypeFactory
     public static function fromReflectionProperty(\ReflectionProperty $property): PropTypeInterface
     {
         if ($type = $property->getType()) {
-            $nullable = $type->allowsNull();
-            $type = (string) $type;
-            switch ($type) {
-                case 'string':
-                    return new StringPropType($nullable);
-                case 'int':
-                    return new IntPropType($nullable);
-                case 'float':
-                    return new FloatPropType($nullable);
-                case 'bool':
-                    return new BoolPropType($nullable);
-                case UriInterface::class:
-                case Uri::class:
-                    return new UriPropType($nullable);
-                case ImageSourceHelperInterface::class:
-                    return new ImageSourcePropType($nullable);
-                case SlotInterface::class:
-                    return new SlotPropType($nullable);
-                default:
-                    if (IsEnum::isSatisfiedByClassName($type)) {
-                        /** @phpstan-var class-string<mixed> $type */
-                        return new EnumPropType($type, $nullable);
-                    }
-                    if (IsComponent::isSatisfiedByInterfaceName($type)) {
-                        /** @phpstan-var class-string<mixed> $type */
-                        $componentName = ComponentName::fromClassName($type);
-                        return new ComponentPropType($componentName, $nullable);
-                    }
-                    if (IsComponentArray::isSatisfiedByClassName($type)) {
-                        /** @phpstan-var class-string<mixed> $type */
-                        $componentName = ComponentName::fromClassName($type);
-                        return new ComponentArrayPropType($componentName);
-                    }
-            }
+            if ($type instanceof \ReflectionNamedType) {
+                $nullable = $type->allowsNull();
+                $typeString = ltrim((string)$type, '?');
 
-            throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($type);
+                return self::resolvePropTypeByTypeString($typeString, $nullable);
+            } elseif ($type instanceof \ReflectionUnionType) {
+                $nullable = $type->allowsNull();
+                $propTypes = [];
+                foreach ($type->getTypes() as $type) {
+                    if ($type->getName() !== 'null') {
+                        $propTypes[] = self::resolvePropTypeByTypeString($type->getName(), false);
+                    }
+                }
+                return new UnionPropType($nullable, ...$propTypes);
+            }
         }
 
         throw PropTypeIsInvalid::becausePropertyIsNotTyped($property);
+    }
+
+    private static function resolvePropTypeByTypeString(string $typeString, bool $nullable): PropTypeInterface
+    {
+        switch ($typeString) {
+            case 'string':
+                return new StringPropType($nullable);
+            case 'int':
+                return new IntPropType($nullable);
+            case 'float':
+                return new FloatPropType($nullable);
+            case 'bool':
+                return new BoolPropType($nullable);
+            case UriInterface::class:
+            case Uri::class:
+                return new UriPropType($nullable);
+            case ImageSourceInterface::class:
+                return new ImageSourcePropType($nullable);
+            case SlotInterface::class:
+                return new SlotPropType($nullable);
+            case StringLike::class:
+                return new StringLikePropType($nullable);
+            default:
+                if (IsEnum::isSatisfiedByClassName($typeString)) {
+                    /** @phpstan-var class-string<mixed> $typeString */
+                    return new EnumPropType($typeString, $nullable);
+                }
+                if (IsComponent::isSatisfiedByClassName($typeString)) {
+                    /** @phpstan-var class-string<mixed> $typeString */
+                    $componentName = ComponentName::fromClassName($typeString);
+                    return new ComponentPropType($componentName, $nullable);
+                }
+                if (IsComponentArray::isSatisfiedByClassName($typeString)) {
+                    /** @phpstan-var class-string<mixed> $typeString */
+                    $componentName = ComponentName::fromClassName($typeString);
+                    return new ComponentArrayPropType($componentName);
+                }
+        }
+
+        throw PropTypeIsInvalid::becauseItIsNoKnownComponentValueOrPrimitive($typeString);
     }
 }

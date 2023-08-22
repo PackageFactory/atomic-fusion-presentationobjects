@@ -15,8 +15,6 @@ use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
-use Neos\Neos\Service\ContentElementEditableService;
-use Neos\Neos\Service\ContentElementWrappingService;
 
 /**
  * The generic abstract component presentation object factory implementation
@@ -25,17 +23,6 @@ abstract class AbstractComponentPresentationObjectFactory implements
     ComponentPresentationObjectFactoryInterface,
     ProtectedContextAwareInterface
 {
-    /**
-     * @Flow\Inject
-     * @var ContentElementWrappingService
-     */
-    protected $contentElementWrappingService;
-
-    /**
-     * @Flow\Inject
-     * @var ContentElementEditableService
-     */
-    protected $contentElementEditableService;
 
     #[Flow\Inject]
     protected UriServiceInterface $uriService;
@@ -51,41 +38,6 @@ abstract class AbstractComponentPresentationObjectFactory implements
      * @var NodeTypeConstraintFactory
      */
     protected $nodeTypeConstraintFactory;
-
-    /**
-     * @param TraversableNodeInterface $node
-     * @param PresentationObjectComponentImplementation $fusionObject
-     * @return callable
-     * @deprecated since 3.0 Use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Content for content integration pusposes instead
-     */
-    final protected function createWrapper(TraversableNodeInterface $node, PresentationObjectComponentImplementation $fusionObject): callable
-    {
-        $wrappingService = $this->contentElementWrappingService;
-
-        return function (string $content) use ($node, $fusionObject, $wrappingService) {
-            /** @var NodeInterface $node */
-            return $wrappingService->wrapContentObject($node, $content, $fusionObject->getPath());
-        };
-    }
-
-    /**
-     * @param TraversableNodeInterface $node
-     * @param string $propertyName
-     * @param boolean $block
-     * @return string
-     * @deprecated since 3.0 Use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Editable for editable property integration pusposes instead
-     */
-    final protected function getEditableProperty(TraversableNodeInterface $node, string $propertyName, bool $block = false): string
-    {
-        /** @var NodeInterface $node */
-        return $this->contentElementEditableService->wrapContentProperty(
-            $node,
-            $propertyName,
-            ($block ? '<div>' : '')
-                . ($node->getProperty($propertyName) ?: '')
-                . ($block ? '</div>' : '')
-        );
-    }
 
     /**
      * @param TraversableNodeInterface $parentNode

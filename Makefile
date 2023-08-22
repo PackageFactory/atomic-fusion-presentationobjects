@@ -28,7 +28,7 @@ cleanup::
 ###############################################################################
 lint::
 	@bin/phpcs \
-		--standard=PSR2 \
+		--standard=PSR12 \
 		--extensions=php \
 		--exclude=Generic.Files.LineLength \
 		Classes/ Tests/

@@ -11,13 +11,13 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class Enum
+final readonly class Enum
 {
     public function __construct(
-        public readonly EnumName $name,
-        public readonly EnumType $type,
+        public EnumName $name,
+        public EnumType $type,
         /** @var array<string>|array<int> */
-        public readonly array $cases
+        public array $cases
     ) {
         if (empty($cases)) {
             throw new \InvalidArgumentException('Enums must have at least one case, none given.', 1626541482);

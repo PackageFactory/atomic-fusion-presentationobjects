@@ -12,9 +12,8 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * The exception to be thrown if props cannot be deserialized
- *
- * @Flow\Proxy(false)
  */
+#[Flow\Proxy(false)]
 final class PropsCannotBeDeserialized extends \InvalidArgumentException
 {
     public static function becauseTheyAreNoColonList(string $attemptedValue): self

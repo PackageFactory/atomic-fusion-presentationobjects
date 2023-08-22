@@ -12,16 +12,12 @@ use Neos\Flow\Cli\ConsoleOutput;
 use Neos\Utility\Files;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\FileWriterInterface;
 
-final class DefensiveConfirmationFileWriter implements FileWriterInterface
+final readonly class DefensiveConfirmationFileWriter implements FileWriterInterface
 {
-    private ConsoleOutput $output;
-
-    private bool $assumeYes;
-
-    public function __construct(ConsoleOutput $output, bool $assumeYes)
-    {
-        $this->output = $output;
-        $this->assumeYes = $assumeYes;
+    public function __construct(
+        private ConsoleOutput $output,
+        private bool $assumeYes
+    ) {
     }
 
     public function writeFile(string $filePath, string $fileContents): void

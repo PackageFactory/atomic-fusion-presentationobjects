@@ -22,7 +22,6 @@ final class PresentationObjectAwareContext extends Context
 
     /**
      * @param string|int|Context $path
-     * @return mixed
      */
     public function get(mixed $path): mixed
     {

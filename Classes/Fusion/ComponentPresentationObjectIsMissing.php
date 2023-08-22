@@ -8,9 +8,12 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
+use Neos\Flow\Annotations as Flow;
+
 /**
  * An exception to be thrown if a component's presentation object is missing
  */
+#[Flow\Proxy(false)]
 class ComponentPresentationObjectIsMissing extends \DomainException
 {
     public static function butMustNotBe(): self

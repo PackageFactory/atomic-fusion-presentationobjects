@@ -18,10 +18,7 @@ trait StringComponentVariant
         return $this === self::from($other);
     }
 
-    /**
-     * @param string $methodName
-     */
-    public function allowsCallOfMethod($methodName): bool
+    public function allowsCallOfMethod(string $methodName): true
     {
         return true;
     }

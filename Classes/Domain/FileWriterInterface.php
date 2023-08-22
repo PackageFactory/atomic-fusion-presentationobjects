@@ -10,10 +10,5 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain;
 
 interface FileWriterInterface
 {
-    /**
-     * @param string $filePath
-     * @param string $fileContents
-     * @return void
-     */
     public function writeFile(string $filePath, string $fileContents): void;
 }

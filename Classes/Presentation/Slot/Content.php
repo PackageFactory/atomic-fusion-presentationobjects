@@ -8,21 +8,21 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Annotations as Flow;
-use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 
 #[Flow\Proxy(false)]
-final class Content implements SlotInterface
+final readonly class Content implements SlotInterface
 {
     private function __construct(
-        public readonly TraversableNodeInterface $contentNode,
-        public readonly string $contentPrototypeName
+        public Node $contentNode,
+        public string $contentPrototypeName
     ) {
     }
 
-    public static function fromNode(TraversableNodeInterface $node, ?string $contentPrototypeName = null): self
+    public static function fromNode(Node $node, ?string $contentPrototypeName = null): self
     {
-        return new self($node, $contentPrototypeName ?? $node->getNodeType()->getName());
+        return new self($node, $contentPrototypeName ?? $node->nodeTypeName->value);
     }
 
     public function getPrototypeName(): string

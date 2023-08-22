@@ -10,14 +10,11 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class UncachedSegment implements SlotInterface
+final readonly class UncachedSegment implements SlotInterface
 {
-    private string $prototypeName;
-
     public function __construct(
-        string $prototypeName
+        private string $prototypeName
     ) {
-        $this->prototypeName = $prototypeName;
     }
 
     public function getPrototypeName(): string

@@ -11,11 +11,11 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class Component
+final readonly class Component
 {
     public function __construct(
-        public readonly ComponentName $name,
-        public readonly Props $props
+        public ComponentName $name,
+        public Props $props
     ) {
     }
 

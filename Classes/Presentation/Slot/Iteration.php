@@ -11,13 +11,13 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class Iteration
+final readonly class Iteration
 {
     private function __construct(
-        public readonly int $index,
-        public readonly ?int $count,
-        public readonly bool $isFirst,
-        public readonly bool $isLast
+        public int $index,
+        public ?int $count,
+        public bool $isFirst,
+        public bool $isLast
     ) {
     }
 

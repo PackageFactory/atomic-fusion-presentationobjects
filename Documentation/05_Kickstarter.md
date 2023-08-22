@@ -51,20 +51,14 @@ declare(strict_types=1);
 
 namespace Vendor\Site\Presentation\Component\Headline;
 
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\StringComponentVariant;
+
 enum HeadlineLook:string
 {
+    use StringComponentVariant
+
     case LOOK_REGULAR = 'regular';
     case LOOK_HERO = 'hero';
-
-    public function getIsRegular(): bool
-    {
-        return $this->value === self::LOOK_REGULAR;
-    }
-
-    public function getIsHero(): bool
-    {
-        return $this->value === self::LOOK_HERO;
-    }
 }
 ```
 
@@ -146,12 +140,12 @@ use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 
  #[Flow\Proxy(false)]
-final class Headline extends AbstractComponentPresentationObject
+final readonly class Headline extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly HeadlineType $type,
-        public readonly HeadlineLook $look,
-        public readonly string $content
+        public HeadlineType $type,
+        public HeadlineLook $look,
+        public string $content
     ) {
     }
 }

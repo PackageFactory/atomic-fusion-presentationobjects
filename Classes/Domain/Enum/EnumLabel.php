@@ -12,7 +12,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 
 #[Flow\Proxy(false)]
-final class EnumLabel
+final readonly class EnumLabel
 {
     public function __construct(
         private string $labelIdPrefix,

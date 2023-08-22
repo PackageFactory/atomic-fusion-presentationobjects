@@ -11,11 +11,11 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class EnumPropType implements PropTypeInterface
+final readonly class EnumPropType implements PropTypeInterface
 {
     public function __construct(
         /** @var class-string<\BackedEnum> */
-        public readonly string $className,
+        public string $className,
         private bool $nullable
     ) {
     }

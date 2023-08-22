@@ -12,17 +12,12 @@ use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PluralName;
 
-/**
- * @Flow\Proxy(false)
- */
-final class ComponentArrayPropType implements PropTypeInterface
+#[Flow\Proxy(false)]
+final readonly class ComponentArrayPropType implements PropTypeInterface
 {
-    private ComponentName $componentName;
-
     public function __construct(
-        ComponentName $componentName
+        private ComponentName $componentName
     ) {
-        $this->componentName = $componentName;
     }
 
     public function isNullable(): bool

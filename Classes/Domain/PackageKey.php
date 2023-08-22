@@ -11,16 +11,12 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Package\FlowPackageInterface;
 
-/**
- * @Flow\Proxy(false)
- */
-final class PackageKey
+#[Flow\Proxy(false)]
+final readonly class PackageKey
 {
-    private string $value;
-
-    public function __construct(string $value)
-    {
-        $this->value = $value;
+    public function __construct(
+        private string $value
+    ) {
     }
 
     public static function fromPackage(FlowPackageInterface $package): self

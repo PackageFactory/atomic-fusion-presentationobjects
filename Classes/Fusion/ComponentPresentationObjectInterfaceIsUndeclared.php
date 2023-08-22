@@ -8,10 +8,13 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
+use Neos\Flow\Annotations as Flow;
+
 /**
  * An exception to be thrown if a presentation object component has no interface declared
  */
-class ComponentPresentationObjectInterfaceIsUndeclared extends \DomainException
+#[Flow\Proxy(false)]
+final class ComponentPresentationObjectInterfaceIsUndeclared extends \DomainException
 {
     public static function butWasSupposedTo(): self
     {

@@ -12,9 +12,5 @@ use Neos\Flow\Package\FlowPackageInterface;
 
 interface PackageResolverInterface
 {
-    /**
-     * @param null|string $packageKey
-     * @return FlowPackageInterface
-     */
     public function resolvePackage(?string $packageKey = null): FlowPackageInterface;
 }

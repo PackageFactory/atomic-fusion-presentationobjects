@@ -10,11 +10,11 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class CacheSegment implements SlotInterface
+final readonly class CacheSegment implements SlotInterface
 {
     public function __construct(
-        public readonly SlotInterface $content,
-        public readonly string $prototypeName
+        public SlotInterface $content,
+        public string $prototypeName
     ) {
     }
 

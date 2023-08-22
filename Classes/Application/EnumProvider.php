@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Application;
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\ContentRepository\Domain\Model\NodeType;
-use Neos\ContentRepository\NodeTypePostprocessor\NodeTypePostprocessorInterface;
+use Neos\ContentRepository\Core\NodeType\NodeType;
+use Neos\ContentRepository\Core\NodeType\NodeTypePostprocessorInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
@@ -20,11 +20,8 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum\EnumLabel;
 
 final class EnumProvider extends AbstractDataSource implements ProtectedContextAwareInterface, NodeTypePostprocessorInterface
 {
-    /**
-     * @Flow\Inject(lazy=false)
-     * @var Translator
-     */
-    protected $translator;
+    #[Flow\Inject]
+    protected Translator $translator;
 
     /**
      * @var string
@@ -32,11 +29,10 @@ final class EnumProvider extends AbstractDataSource implements ProtectedContextA
     protected static $identifier = 'packagefactory-atomicfusion-presentationobjects-enumcases';
 
     /**
-     * @param NodeInterface|null $node
      * @param array<string|int,string> $arguments
      * @return array<string|int,array<string,string>>
      */
-    public function getData(NodeInterface $node = null, array $arguments = []): array
+    public function getData(Node $node = null, array $arguments = []): array
     {
         if (!array_key_exists('enumName', $arguments) || !is_string($arguments['enumName'])) {
             throw new \InvalidArgumentException('Argument "enumName" must be provided.', 1625297174);
@@ -55,11 +51,10 @@ final class EnumProvider extends AbstractDataSource implements ProtectedContextA
     }
 
     /**
-     * @param NodeType $nodeType
      * @param array<mixed> $configuration
      * @param array<mixed> $options
      */
-    public function process(NodeType $nodeType, array &$configuration, array $options)
+    public function process(NodeType $nodeType, array &$configuration, array $options): void
     {
         if (!array_key_exists('enumName', $options) || !is_string($options['enumName'])) {
             throw new \InvalidArgumentException('Option "enumName" must be provided.', 1625298032);

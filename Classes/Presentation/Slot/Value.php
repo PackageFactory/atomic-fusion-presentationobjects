@@ -11,10 +11,10 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class Value implements SlotInterface, StringLike, \Stringable
+final readonly class Value implements SlotInterface, StringLike, \Stringable
 {
     private function __construct(
-        public readonly string $value
+        public string $value
     ) {
     }
 

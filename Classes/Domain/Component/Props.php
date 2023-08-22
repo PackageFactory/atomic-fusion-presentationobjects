@@ -16,9 +16,9 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\Pr
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropType\UnionPropType;
 
 /**
- * @Flow\Proxy(false)
  * @implements \IteratorAggregate<string,PropTypeInterface>
  */
+#[Flow\Proxy(false)]
 final class Props implements \IteratorAggregate
 {
     /**

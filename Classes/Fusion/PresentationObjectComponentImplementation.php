@@ -29,10 +29,8 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
     /**
      * Evaluate the fusion-keys and transfer the result into the context as ``props``
      * afterwards evaluate the ``renderer`` with this context
-     *
-     * @return mixed
      */
-    public function evaluate()
+    public function evaluate(): mixed
     {
         $context = $this->runtime->getCurrentContext();
         $renderContext = $this->prepare($context);
@@ -63,7 +61,7 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
      * @phpstan-return array<string,mixed>
      * @return array
      */
-    protected function getProps()
+    protected function getProps(): array
     {
         /** @phpstan-var string[] $sortedChildFusionKeys */
         $sortedChildFusionKeys = $this->preparePropertyKeys($this->properties, $this->ignoreProperties);
@@ -84,9 +82,8 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
      *
      * @phpstan-param array<string,mixed> $context
      * @param array $context
-     * @return mixed
      */
-    protected function render(array $context)
+    protected function render(array $context): mixed
     {
         $this->runtime->pushContextArray($context);
         $result = $this->runtime->render($this->path . '/renderer');
@@ -95,17 +92,11 @@ class PresentationObjectComponentImplementation extends DataStructureImplementat
         return $result;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @return ComponentPresentationObjectInterface
-     */
     protected function getPresentationObject(): ComponentPresentationObjectInterface
     {
         $presentationObject = $this->fusionValue(self::OBJECT_NAME);

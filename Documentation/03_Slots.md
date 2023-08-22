@@ -34,8 +34,8 @@ prototype(Vendor.Site:Button) < prototype(PresentationObjectComponent) {
     @presentationObjectInterface = 'Vendor\\Site\\Presentation\\Block\\Button\\Button'
 
     renderer = afx`
-        <button type={props.model.type}>
-            <PackageFactory.AtomicFusion.PresentationObjects:Slot model={presentationObject.label}/>
+        <button type={presentationObject.type.value}>
+            <PackageFactory.AtomicFusion.PresentationObjects:Slot model={presentationObject.label} />
         </button>
     `
 }
@@ -69,7 +69,7 @@ This package provides a set of built-in slot implementation that are designed to
 
 If you have the need to apply ContentElementWrapping to a nested PresentationObject in your PresentationObject factory code, `Content` will help you out.
 
-`Content` has a static factory method `fromNode` that takes a `TraversableNodeInterface` and a `contentPrototypeName` and redirects rendering inside Fusion to the latter:
+`Content` has a static factory method `fromNode` that takes a `Node` and a `contentPrototypeName` and redirects rendering inside Fusion to the latter:
 
 ```php
 Content::fromNode($node, $contentPrototypeName)
@@ -93,13 +93,13 @@ final class DeckFactory extends AbstractComponentPresentationObjectFactory
 {
     /* ... */
 
-    public function forDeckNode(TraversableNodeInterface $node): Deck
+    public function forDeckNode(Node $node): Deck
     {
         // Optional: Use assertions to ensure the incoming node type
-        assert($node->getNodeType()->isOfType('Vendor.Site:Content.Deck'));
+        assert($node->nodeType->isOfType('Vendor.Site:Content.Deck'));
 
         return new Deck(
-            Collection::fromNodes($this->findCardNodes(), function (TraversableNodeInterface $cardNode, int $key, Iteration $iteration): SlotInterface {
+            Collection::fromNodes($this->findCardNodes(), function (Node $cardNode, int $key, Iteration $iteration): SlotInterface {
                 // ...
             })
         );
@@ -119,7 +119,7 @@ final class DeckFactory extends AbstractComponentPresentationObjectFactory
 {
     /* ... */
 
-    public function forDeckNode(NodeInterface $node): Deck
+    public function forDeckNode(Node $node): Deck
     {
         // Optional: Use assertions to ensure the incoming node type
         assert($node->getNodeType()->isOfType('Vendor.Site:Content.Deck'));
@@ -185,7 +185,7 @@ final class ButtonFactory extends AbstractComponentPresentationObjectFactory
 
 In plain AtomicFusion we would use `Neos.Neos:Editable` to integrate a property that is supposed to be editable via CK Editor in the Neos UI. The analogous mechanism for PresentationObjects is the `Editable` slot implementation.
 
-`Editable` takes a `TraversableNodeInterface`, a `propertyName` and the flag `isBlock`. Internally, it actually redirects rendering to the `Neos.Neos:Editable` fusion prototype.
+`Editable` takes a `Node`, a `propertyName` and the flag `isBlock`. Internally, it actually redirects rendering to the `Neos.Neos:Editable` fusion prototype.
 
 In Factories, it can be initialized via static factory method:
 
@@ -197,7 +197,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Editable;
 
 final class TextFactory extends AbstractComponentPresentationObjectFactory
 {
-    public function forTextNode(TraversableNodeInterface $node): Text
+    public function forTextNode(Node $node): Text
     {
         // Optional: Use assertions to ensure the incoming node type
         assert($node->getNodeType()->isOfType('Vendor.Site:Content.Text'));

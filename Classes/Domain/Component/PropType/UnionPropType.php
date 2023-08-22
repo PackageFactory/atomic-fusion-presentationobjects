@@ -11,18 +11,17 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class UnionPropType implements PropTypeInterface
+final readonly class UnionPropType implements PropTypeInterface
 {
     /**
-     * @var array<int,PropTypeInterface>
+     * @var array<PropTypeInterface>
      */
-    public readonly array $propTypes;
+    public array $propTypes;
 
     public function __construct(
-        private readonly bool $nullable,
+        private bool $nullable,
         PropTypeInterface ...$propTypes
     ) {
-        /** @var array<int,PropTypeInterface> $propTypes */
         $this->propTypes = $propTypes;
     }
 

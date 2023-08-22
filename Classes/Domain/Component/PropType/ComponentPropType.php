@@ -12,21 +12,13 @@ use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\ComponentName;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\Props;
 
-/**
- * @Flow\Proxy(false)
- */
-final class ComponentPropType implements PropTypeInterface
+#[Flow\Proxy(false)]
+final readonly class ComponentPropType implements PropTypeInterface
 {
-    private ComponentName $componentName;
-
-    private bool $nullable;
-
     public function __construct(
-        ComponentName $componentName,
-        bool $nullable
+        private ComponentName $componentName,
+        private bool $nullable
     ) {
-        $this->componentName = $componentName;
-        $this->nullable = $nullable;
     }
 
     public function isNullable(): bool

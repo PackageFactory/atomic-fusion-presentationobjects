@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace PackageFactory\AtomicFusion\PresentationObjects\Tests\Unit\Infrastructure;
 
 use GuzzleHttp\Psr7\Uri;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
-use Neos\ContentRepository\Domain\Service\Context as ContentContext;
+use Neos\ContentRepository\Core\Projection\ContentGraph\ContentSubgraphInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
+use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Core\RequestHandlerInterface;
 use Neos\Flow\Mvc\Controller\ControllerContext;
@@ -62,6 +62,11 @@ final class UriServiceTest extends UnitTestCase
     private $uriBuilder;
 
     /**
+     * @var ObjectProphecy<ContentRepositoryRegistry>
+     */
+    private $contentRepositoryRegistry;
+
+    /**
      * @var UriService
      */
     private $uriService;
@@ -85,14 +90,12 @@ final class UriServiceTest extends UnitTestCase
 
         $this->uriBuilder = $this->prophet->prophesize(UriBuilder::class);
 
-        $this->uriService = new UriService();
-
-        $this->inject($this->uriService, 'resourceManager', $this->resourceManager->reveal());
-        $this->inject($this->uriService, 'linkingService', $this->linkingService->reveal());
-        $this->inject($this->uriService, 'assetRepository', $this->assetRepository->reveal());
-        $this->inject($this->uriService, 'bootstrap', $this->bootstrap->reveal());
-
-        $this->inject($this->uriService->getControllerContext(), 'uriBuilder', $this->uriBuilder->reveal());
+        $this->uriService = new UriService(
+            $this->contentRepositoryRegistry->reveal(),
+            $this->resourceManager->reveal(),
+            $this->assetRepository->reveal(),
+            $this->bootstrap->reveal()
+        );
     }
 
     /**
@@ -111,10 +114,9 @@ final class UriServiceTest extends UnitTestCase
     public function providesUrisForNodes(): void
     {
         $documentNode = $this->prophet
-            ->prophesize(TraversableNodeInterface::class)
-            ->willImplement(NodeInterface::class);
+            ->prophesize(Node::class);
 
-        $controllerContext = $this->uriService->getControllerContext();
+        $controllerContext = $this->uriService->controllerContext;
 
         $this->linkingService
             ->createNodeUri($controllerContext, $documentNode, null, null, false)
@@ -187,10 +189,10 @@ final class UriServiceTest extends UnitTestCase
      */
     public function providesAControllerContext(): void
     {
-        $controllerContext = $this->uriService->getControllerContext();
+        $controllerContext = $this->uriService->controllerContext;
 
         $this->assertTrue($controllerContext instanceof ControllerContext);
-        $this->assertSame($controllerContext, $this->uriService->getControllerContext());
+        $this->assertSame($controllerContext, $this->uriService->controllerContext);
     }
 
     /**
@@ -200,16 +202,15 @@ final class UriServiceTest extends UnitTestCase
     public function resolvesLinkUrisWithNodeProtocol(): void
     {
         $documentNode = $this->prophet
-            ->prophesize(TraversableNodeInterface::class)
-            ->willImplement(NodeInterface::class);
+            ->prophesize(Node::class);
 
-        $controllerContext = $this->uriService->getControllerContext();
+        $controllerContext = $this->uriService->controllerContext;
 
         $this->linkingService
             ->createNodeUri($controllerContext, $documentNode, null, null, false)
             ->willReturn('/blog/2020/10/10/coronavirus-sucks.html');
 
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
         $subgraph->getNodeByIdentifier('7f2939f6-db07-476c-afac-7cac59466242')->willReturn($documentNode);
 
         $this->assertEquals(
@@ -224,7 +225,7 @@ final class UriServiceTest extends UnitTestCase
      */
     public function resolvesLinkUrisWithNodeProtocolToHashIfNodeCannotBeFound(): void
     {
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
 
         $this->assertEquals(
             new Uri('#'),
@@ -250,7 +251,7 @@ final class UriServiceTest extends UnitTestCase
             ->findByIdentifier('49638323-a25d-43a3-a0b3-66693239439a')
             ->willReturn($asset);
 
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
 
         $this->assertEquals(
             new Uri('/_Resources/Persistent/path/to/49638323-a25d-43a3-a0b3-66693239439a'),
@@ -264,7 +265,7 @@ final class UriServiceTest extends UnitTestCase
      */
     public function resolvesLinkUrisWithAssetProtocolToHashIfAssetCannotBeFound(): void
     {
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
 
         $this->assertEquals(
             new Uri('#'),
@@ -278,7 +279,7 @@ final class UriServiceTest extends UnitTestCase
      */
     public function resolvesLinkUrisWithHttpProtocol(): void
     {
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
 
         $this->assertEquals(
             new Uri('http://some.domain/some/path'),
@@ -292,7 +293,7 @@ final class UriServiceTest extends UnitTestCase
      */
     public function resolvesLinkUrisWithHttpsProtocol(): void
     {
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
 
         $this->assertEquals(
             new Uri('https://some.domain/some/path'),
@@ -306,7 +307,7 @@ final class UriServiceTest extends UnitTestCase
      */
     public function resolvesLinkUrisToHashWhenProtocolIsUnknown(): void
     {
-        $subgraph = $this->prophet->prophesize(ContentContext::class);
+        $subgraph = $this->prophet->prophesize(ContentSubgraphInterface::class);
 
         $this->assertEquals(new Uri('#'), $this->uriService->resolveLinkUri('ftp://some.domain/some/path', $subgraph->reveal()));
         $this->assertEquals(new Uri('#'), $this->uriService->resolveLinkUri('#top', $subgraph->reveal()));

@@ -16,9 +16,7 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\StringLike
 use Psr\Http\Message\UriInterface;
 use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 
-/**
- * @Flow\Proxy(false)
- */
+#[Flow\Proxy(false)]
 final class PropTypeFactory
 {
     /**

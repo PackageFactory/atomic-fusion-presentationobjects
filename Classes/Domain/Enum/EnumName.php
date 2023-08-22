@@ -14,11 +14,11 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
 #[Flow\Proxy(false)]
-final class EnumName
+final readonly class EnumName
 {
     public function __construct(
-        public readonly ComponentName $componentName,
-        public readonly string $name
+        public ComponentName $componentName,
+        public string $name
     ) {
     }
 

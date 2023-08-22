@@ -8,17 +8,17 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot;
 
-use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
-use Neos\ContentRepository\Domain\Projection\Content\TraversableNodes;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Nodes;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final class Collection implements SlotInterface
+final readonly class Collection implements SlotInterface
 {
     /**
      * @var array<int,SlotInterface>
      */
-    public readonly array $items;
+    public array $items;
 
     private function __construct(SlotInterface ...$items)
     {
@@ -71,12 +71,9 @@ final class Collection implements SlotInterface
         return new self(...$items);
     }
 
-    /**
-     * @param TraversableNodes<int,TraversableNodeInterface> $nodes
-     */
-    public static function fromNodes(TraversableNodes $nodes, ?callable $itemRenderer = null): self
+    public static function fromNodes(Nodes $nodes, ?callable $itemRenderer = null): self
     {
-        $itemRenderer = $itemRenderer ?? function (TraversableNodeInterface $node): Content {
+        $itemRenderer = $itemRenderer ?? function (Node $node): Content {
             return Content::fromNode($node);
         };
 

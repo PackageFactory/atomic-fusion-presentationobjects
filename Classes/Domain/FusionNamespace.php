@@ -10,22 +10,13 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain;
 
 use Neos\Flow\Annotations as Flow;
 
-/**
- * @Flow\Proxy(false)
- */
-final class FusionNamespace
+#[Flow\Proxy(false)]
+final readonly class FusionNamespace
 {
-    /**
-     * @var array|string[]
-     */
-    private array $segments = [];
-
-    /**
-     * @param array|string[] $segments
-     */
-    private function __construct(array $segments)
-    {
-        $this->segments = $segments;
+    private function __construct(
+        /** @var array<string> */
+        private array $segments = []
+    ) {
     }
 
     public static function default(): self

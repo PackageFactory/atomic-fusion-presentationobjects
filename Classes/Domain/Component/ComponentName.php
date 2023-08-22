@@ -14,12 +14,12 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\FusionNamespace;
 use PackageFactory\AtomicFusion\PresentationObjects\Domain\PackageKey;
 
 #[Flow\Proxy(false)]
-final class ComponentName
+final readonly class ComponentName
 {
     public function __construct(
-        public readonly PackageKey $packageKey,
-        public readonly FusionNamespace $fusionNamespace,
-        public readonly string $name
+        public PackageKey $packageKey,
+        public FusionNamespace $fusionNamespace,
+        public string $name
     ) {
     }
 

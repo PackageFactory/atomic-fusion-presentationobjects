@@ -12,8 +12,8 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * The specification for component array classes
- * @Flow\Proxy(false)
  */
+#[Flow\Proxy(false)]
 final class IsComponentArray
 {
     public static function isSatisfiedByInputString(string $input): bool

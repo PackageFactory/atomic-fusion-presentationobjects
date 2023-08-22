@@ -27,16 +27,16 @@ declare(strict_types=1);
 
 namespace Vendor\Site\Presentation\Image;
 
-use Neos\ContentRepository\Domain\Projection\Content\NodeInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Scope("singleton")]
 final class ImageFactory extends AbstractComponentPresentationObjectFactory
 {
-    public function forImageNode(NodeInterface $node): Image
+    public function forImageNode(Node $node): Image
     {
         // Optional: Use assertions to ensure the incoming node type
-        assert($node->getNodeType()->isOfType('Vendor.Site:Content.Image'));
+        assert($node->nodeType->isOfType('Vendor.Site:Content.Image'));
 
         return new Image(
             $node->getProperty('image__src')

@@ -11,17 +11,13 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
 use Neos\Flow\Annotations as Flow;
 use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 
-/**
- * @Flow\Proxy(false)
- */
-final class ImageSourcePropType implements PropTypeInterface
+#[Flow\Proxy(false)]
+final readonly class ImageSourcePropType implements PropTypeInterface
 {
-    private bool $nullable;
 
     public function __construct(
-        bool $nullable
+        private bool $nullable
     ) {
-        $this->nullable = $nullable;
     }
 
     public function isNullable(): bool

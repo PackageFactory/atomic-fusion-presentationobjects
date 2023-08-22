@@ -14,14 +14,11 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterf
 /**
  * The generic abstract component presentation object implementation
  */
-abstract class AbstractComponentPresentationObject implements ComponentPresentationObjectInterface, SlotInterface
+abstract readonly class AbstractComponentPresentationObject implements ComponentPresentationObjectInterface, SlotInterface
 {
-    /**
-     * @return string
-     */
     public function getPrototypeName(): string
     {
-        $componentName = ComponentName::fromClassName(static::class);
-        return $componentName->getFullyQualifiedFusionName();
+        return ComponentName::fromClassName(static::class)
+            ->getFullyQualifiedFusionName();
     }
 }

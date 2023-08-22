@@ -11,17 +11,12 @@ namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Component\PropT
 use Neos\Flow\Annotations as Flow;
 use Psr\Http\Message\UriInterface;
 
-/**
- * @Flow\Proxy(false)
- */
+#[Flow\Proxy(false)]
 final class UriPropType implements PropTypeInterface
 {
-    private bool $nullable;
-
     public function __construct(
-        bool $nullable
+        private readonly bool $nullable
     ) {
-        $this->nullable = $nullable;
     }
 
     public function isNullable(): bool

@@ -18,21 +18,16 @@ use Symfony\Component\Yaml\Dumper as YamlWriter;
  * The component generator domain service
  */
 #[Flow\Proxy(false)]
-final class ComponentGenerator
+final readonly class ComponentGenerator
 {
     public function __construct(
-        private readonly FileWriterInterface $fileWriter,
-        private readonly FactoryRendererInterface $factoryRenderer
+        private FileWriterInterface $fileWriter,
+        private FactoryRendererInterface $factoryRenderer
     ) {
     }
 
     /**
-     * @param ComponentName $componentName
      * @param array|string[] $serializedProps
-     * @param string $packagePath
-     * @param bool $colocate
-     * @param bool $listable
-     * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
     public function generateComponent(
@@ -58,11 +53,6 @@ final class ComponentGenerator
         $this->registerFactory($packagePath, $componentName);
     }
 
-    /**
-     * @param string $packagePath
-     * @param ComponentName $componentName
-     * @return void
-     */
     private function registerFactory(string $packagePath, ComponentName $componentName): void
     {
         $configurationPath = $packagePath . 'Configuration/';

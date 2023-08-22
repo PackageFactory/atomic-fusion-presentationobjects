@@ -14,25 +14,16 @@ use Neos\Flow\Package\PackageManager;
 
 /**
  * The package resolver domain service
- *
- * @Flow\Scope("singleton")
  */
+#[Flow\Scope('singleton')]
 final class PackageResolver implements PackageResolverInterface
 {
-    /**
-     * @var PackageManager
-     */
-    protected PackageManager $packageManager;
-
-    /**
-     * @Flow\InjectConfiguration(path="componentGeneration.defaultPackageKey")
-     * @var string
-     */
+    #[Flow\InjectConfiguration(path: 'componentGeneration.defaultPackageKey')]
     protected string $defaultPackageKey = '';
 
-    public function __construct(PackageManager $packageManager)
-    {
-        $this->packageManager = $packageManager;
+    public function __construct(
+        private readonly PackageManager $packageManager
+    ) {
     }
 
     public function resolvePackage(?string $packageKey = null): FlowPackageInterface

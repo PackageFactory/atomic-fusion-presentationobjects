@@ -12,9 +12,8 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * An exception to be thrown if a component's presentation object does not implement the required interface
- *
- * @Flow\Proxy(false)
  */
+#[Flow\Proxy(false)]
 class ComponentPresentationObjectDoesNotImplementRequiredInterface extends \DomainException
 {
     public static function butWasSupposedTo(string $requiredInterface): self

@@ -36,12 +36,12 @@ use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPres
  * It's highly recommended to declare PresentationObjects as final to
  * keep them canonical.
  */
-final class Image extends AbstractComponentPresentationObject
+final readonly class Image extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly string $src,
-        public readonly string $alt,
-        public readonly ?string $title
+        public string $src,
+        public string $alt,
+        public ?string $title
     ) {
     }
 
@@ -51,9 +51,6 @@ final class Image extends AbstractComponentPresentationObject
      * you need to implement a copy-on-write mechanism like this one.
      *
      * Such with*-methods are optional however.
-     *
-     * @param string $alt
-     * @return self
      */
     public function withAlt(string $alt): self
     {
@@ -121,26 +118,15 @@ declare(strict_types=1);
 
 namespace Acme\Site\Presentation\Block\Headline;
 
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\StringComponentVariant;
+
 enum HeadlineType:string
 {
+    use StringComponentVariant
+
     case TYPE_H1 = 'h1';
     case TYPE_H2 = 'h2';
     case TYPE_H3 = 'h3';
-
-    public function getIsH1(): bool
-    {
-        return $this === self::TYPE_H1;
-    }
-
-    public function getIsH2(): bool
-    {
-        return $this === self::TYPE_H2;
-    }
-
-    public function getIsH3(): bool
-    {
-        return $this === self::TYPE_H3;
-    }
 }
 ```
 
@@ -153,7 +139,9 @@ declare(strict_types=1);
 
 namespace Acme\Site\Presentation\Block\Headline;
 
-final class Headline
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+
+final readonly class Headline extends AbstractComponentPresentationObject
 {
     public function __construct(
         public readonly HeadlineType $headlineType,
@@ -162,6 +150,14 @@ final class Headline
     }
 }
 ```
+
+Using the built-in `StringComponentVariant` or `IntComponentVariant` traits, we can safely compare values in afx as follows:
+```
+<h1 @if.presentationObject.headlineType.equals('h1')>{presentationObject.content}</h1>
+<h2 @if.presentationObject.headlineType.equals('h2')>{presentationObject.content}</h2>
+<h3 @if.presentationObject.headlineType.equals('h3')>{presentationObject.content}</h3>
+```
+Any typos in the equals parameter will resolve in an exception.
 
 > **Hint:** Enums can also be used in Neos' inspector select box editor. Please refer to [Integration Recipes](./04_IntegrationRecipes.md) to learn how it is done.
 

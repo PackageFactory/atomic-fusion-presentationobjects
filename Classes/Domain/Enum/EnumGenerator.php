@@ -16,10 +16,10 @@ use PackageFactory\AtomicFusion\PresentationObjects\Domain\FileWriterInterface;
  * The enum generator domain service
  */
 #[Flow\Proxy(false)]
-final class EnumGenerator
+final readonly class EnumGenerator
 {
     public function __construct(
-        private readonly FileWriterInterface $fileWriter
+        private FileWriterInterface $fileWriter
     ) {
     }
 

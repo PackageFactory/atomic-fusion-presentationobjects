@@ -8,56 +8,30 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
-use GuzzleHttp\Psr7\Uri;
-use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
-use Neos\ContentRepository\Domain\Service\Context as ContentContext;
+use Neos\ContentRepository\Core\Projection\ContentGraph\ContentSubgraphInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Mvc\Controller\ControllerContext;
 use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Media\Domain\Model\AssetInterface;
+use Psr\Http\Message\UriInterface;
 
 interface UriServiceInterface
 {
-    /**
-     * @param TraversableNodeInterface $documentNode
-     * @param boolean $absolute
-     * @param string|null $format
-     * @return Uri
-     */
     public function getNodeUri(
-        TraversableNodeInterface $documentNode,
+        Node $documentNode,
         bool $absolute = false,
         ?string $format = null
-    ): Uri;
+    ): UriInterface;
 
-    /**
-     * @param string $packageKey
-     * @param string $resourcePath
-     * @return Uri
-     */
-    public function getResourceUri(string $packageKey, string $resourcePath): Uri;
+    public function getResourceUri(string $packageKey, string $resourcePath): UriInterface;
 
-    public function getPersistentResourceUri(PersistentResource $resource): ?Uri;
+    public function getPersistentResourceUri(PersistentResource $resource): ?UriInterface;
 
-    /**
-     * @param AssetInterface $asset
-     * @return Uri
-     */
-    public function getAssetUri(AssetInterface $asset): Uri;
+    public function getAssetUri(AssetInterface $asset): UriInterface;
 
-    /**
-     * @return Uri
-     */
-    public function getDummyImageBaseUri(): Uri;
+    public function getDummyImageBaseUri(): UriInterface;
 
-    /**
-     * @return ControllerContext
-     */
     public function getControllerContext(): ControllerContext;
 
-    /**
-     * @param string $rawLinkUri
-     * @param ContentContext $subgraph
-     * @return Uri
-     */
-    public function resolveLinkUri(string $rawLinkUri, ContentContext $subgraph): Uri;
+    public function resolveLinkUri(string $rawLinkUri, ContentSubgraphInterface $subgraph): UriInterface;
 }

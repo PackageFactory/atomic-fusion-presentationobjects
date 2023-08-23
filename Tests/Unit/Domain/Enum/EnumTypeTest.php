@@ -19,10 +19,8 @@ class EnumTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider enumTypeProvider
-     * @param EnumType $subject
      * @param array<mixed> $valueArray
      * @param array<mixed> $expectedValueArray
-     * @return void
      */
     public function testProcessValueArray(EnumType $subject, array $valueArray, array $expectedValueArray): void
     {
@@ -32,7 +30,7 @@ class EnumTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function enumTypeProvider(): array
+    public static function enumTypeProvider(): array
     {
         return [
             [

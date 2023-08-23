@@ -16,11 +16,11 @@ use Psr\Http\Message\UriInterface;
  * Link component for test purposes
  */
 #[Flow\Proxy(false)]
-final class Link extends AbstractComponentPresentationObject
+final readonly class Link extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly UriInterface $uri,
-        public readonly ?string $title
+        public UriInterface $uri,
+        public ?string $title
     ) {
     }
 }

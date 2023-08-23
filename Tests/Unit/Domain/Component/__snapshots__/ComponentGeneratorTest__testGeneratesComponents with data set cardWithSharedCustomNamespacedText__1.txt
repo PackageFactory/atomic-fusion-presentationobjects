@@ -15,12 +15,12 @@ use Vendor\Shared\Presentation\Custom\Type\Text\Text;
 use Vendor\Site\Presentation\Component\Link\Link;
 
 #[Flow\Proxy(false)]
-final class Card extends AbstractComponentPresentationObject
+final readonly class Card extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly ?ImageSourceInterface $image,
-        public readonly ?Text $text,
-        public readonly ?Link $link
+        public ?ImageSourceInterface $image,
+        public ?Text $text,
+        public ?Link $link
     ) {
     }
 }

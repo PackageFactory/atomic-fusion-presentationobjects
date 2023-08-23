@@ -31,7 +31,6 @@ final class EnumGeneratorTest extends UnitTestCase
 
     /**
      * @before
-     * @return void
      */
     public function setUpComponentGeneratorTest(): void
     {
@@ -48,7 +47,7 @@ final class EnumGeneratorTest extends UnitTestCase
     /**
      * @return array<string,array{ComponentName,string,string,string[],string,string[],bool}>
      */
-    public function exampleProvider(): array
+    public static function exampleProvider(): array
     {
         return [
             'headlinetype' => [
@@ -88,19 +87,12 @@ final class EnumGeneratorTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @group isolated
      * @dataProvider exampleProvider
-     * @param ComponentName $componentName
-     * @param string $name
-     * @param string $type
      * @param string[] $values
-     * @param string $packagePath
      * @param string[] $expectedFileNames
-     * @param bool $colocate
-     * @return void
      */
-    public function generatesEnums(ComponentName $componentName, string $name, string $type, array $values, string $packagePath, array $expectedFileNames, bool $colocate): void
+    public function testGeneratesEnums(ComponentName $componentName, string $name, string $type, array $values, string $packagePath, array $expectedFileNames, bool $colocate): void
     {
         $this->enumGenerator->generateEnum($componentName, $name, $type, $values, $packagePath, $colocate);
 

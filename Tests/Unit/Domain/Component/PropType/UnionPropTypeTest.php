@@ -32,7 +32,7 @@ final class UnionPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function typeProvider(): array
+    public static function typeProvider(): array
     {
         return [
             [
@@ -65,7 +65,7 @@ final class UnionPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function definitionDataProvider(): array
+    public static function definitionDataProvider(): array
     {
         return [
             [

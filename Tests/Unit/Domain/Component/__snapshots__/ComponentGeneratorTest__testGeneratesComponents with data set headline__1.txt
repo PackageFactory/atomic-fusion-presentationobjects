@@ -6,16 +6,18 @@
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Component\NewText;
+namespace Vendor\Site\Presentation\Component\Headline;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 
 #[Flow\Proxy(false)]
-final class NewText extends AbstractComponentPresentationObject
+final readonly class Headline extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly string $content
+        public HeadlineType $type,
+        public HeadlineLook $look,
+        public string $content
     ) {
     }
 }

@@ -118,9 +118,10 @@ declare(strict_types=1);
 
 namespace Acme\Site\Presentation\Block\Headline;
 
+use Neos\Eel\ProtectedContextAwareInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\StringComponentVariant;
 
-enum HeadlineType:string
+enum HeadlineType:string implements ProtectedContextAwareInterface
 {
     use StringComponentVariant
 

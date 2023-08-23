@@ -59,7 +59,7 @@ final class ComponentGeneratorTest extends UnitTestCase
     /**
      * @return array<string,array{ComponentName,string[],string,bool,bool,string[]}>
      */
-    public function exampleProvider(): array
+    public static function exampleProvider(): array
     {
         return [
             'text' => [
@@ -249,17 +249,12 @@ final class ComponentGeneratorTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @dataProvider exampleProvider
-     * @param ComponentName $componentName
      * @param string[] $serializedProps
-     * @param string $packagePath
-     * @param bool $listable
      * @param string[] $expectedFileNames
-     * @return void
      * @throws \Neos\Utility\Exception\FilesException
      */
-    public function generatesComponents(ComponentName $componentName, array $serializedProps, string $packagePath, bool $colocate, bool $listable, array $expectedFileNames): void
+    public function testGeneratesComponents(ComponentName $componentName, array $serializedProps, string $packagePath, bool $colocate, bool $listable, array $expectedFileNames): void
     {
         $this->componentGenerator->generateComponent($componentName, $serializedProps, $packagePath, $colocate, $listable);
 

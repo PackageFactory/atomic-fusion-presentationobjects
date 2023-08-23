@@ -21,29 +21,29 @@ use Psr\Http\Message\UriInterface;
  * Dummy component for test purposes
  */
 #[Flow\Proxy(false)]
-final class MyReflectionComponent extends AbstractComponentPresentationObject
+final readonly class MyReflectionComponent extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly string $stringProp,
-        public readonly ?string $nullableStringProp,
-        public readonly int $intProp,
-        public readonly ?int $nullableIntProp,
-        public readonly float $floatProp,
-        public readonly ?float $nullableFloatProp,
-        public readonly bool $boolProp,
-        public readonly ?bool $nullableBoolProp,
-        public readonly UriInterface $uriProp,
-        public readonly ?UriInterface $nullableUriProp,
-        public readonly ImageSourceInterface $imageSourceProp,
-        public readonly ?ImageSourceInterface $nullableImageSourceProp,
-        public readonly SlotInterface $slotProp,
-        public readonly ?SlotInterface $nullableSlotProp,
-        public readonly MyStringEnum $enumProp,
-        public readonly ?MyStringEnum $nullableEnumProp,
-        public readonly AnotherComponent $componentProp,
-        public readonly ?AnotherComponent $nullableComponentProp,
-        public readonly AnotherComponents $componentArrayProp,
-        public readonly \DateTimeImmutable $dateProp
+        public string $stringProp,
+        public ?string $nullableStringProp,
+        public int $intProp,
+        public ?int $nullableIntProp,
+        public float $floatProp,
+        public ?float $nullableFloatProp,
+        public bool $boolProp,
+        public ?bool $nullableBoolProp,
+        public UriInterface $uriProp,
+        public ?UriInterface $nullableUriProp,
+        public ImageSourceInterface $imageSourceProp,
+        public ?ImageSourceInterface $nullableImageSourceProp,
+        public SlotInterface $slotProp,
+        public ?SlotInterface $nullableSlotProp,
+        public MyStringEnum $enumProp,
+        public ?MyStringEnum $nullableEnumProp,
+        public AnotherComponent $componentProp,
+        public ?AnotherComponent $nullableComponentProp,
+        public AnotherComponents $componentArrayProp,
+        public \DateTimeImmutable $dateProp
     ) {
     }
 }

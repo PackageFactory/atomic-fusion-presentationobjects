@@ -6,19 +6,21 @@
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Component\Image;
+namespace Vendor\Site\Presentation\Component\Card;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
+use Vendor\Site\Presentation\Component\Text\Text;
+use Vendor\Site\Presentation\Component\Link\Link;
 
 #[Flow\Proxy(false)]
-final class Image extends AbstractComponentPresentationObject
+final readonly class Card extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly ImageSourceInterface $src,
-        public readonly string $alt,
-        public readonly ?string $title
+        public ?ImageSourceInterface $image,
+        public ?Text $text,
+        public ?Link $link
     ) {
     }
 }

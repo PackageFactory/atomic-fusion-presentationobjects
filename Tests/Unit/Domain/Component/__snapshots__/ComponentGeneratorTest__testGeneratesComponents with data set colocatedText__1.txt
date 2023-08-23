@@ -6,17 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Component\WithTextArray;
+namespace Vendor\Site\Presentation\Component\ColocatedText;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
-use Vendor\Site\Presentation\Component\Text\Texts;
 
 #[Flow\Proxy(false)]
-final class WithTextArray extends AbstractComponentPresentationObject
+final readonly class ColocatedText extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly Texts $texts
+        public string $content
     ) {
     }
 }

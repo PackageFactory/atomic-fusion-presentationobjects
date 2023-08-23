@@ -15,10 +15,10 @@ use Neos\Flow\Annotations as Flow;
  * @implements \IteratorAggregate<int,MyComponent>
  */
 #[Flow\Proxy(false)]
-final class MyComponents implements \IteratorAggregate, \Countable
+final readonly class MyComponents implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,MyComponent>|MyComponent[]
+     * @var array<MyComponent>
      */
     private array $myComponents;
 
@@ -28,9 +28,9 @@ final class MyComponents implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \ArrayIterator<int,MyComponent>|MyComponent[]
+     * @return \Iterator<MyComponent>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->myComponents);
     }

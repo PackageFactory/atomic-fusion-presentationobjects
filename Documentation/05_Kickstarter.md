@@ -51,9 +51,10 @@ declare(strict_types=1);
 
 namespace Vendor\Site\Presentation\Component\Headline;
 
+use Neos\Eel\ProtectedContextAwareInterface;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\StringComponentVariant;
 
-enum HeadlineLook:string
+enum HeadlineLook:string implements ProtectedContextAwareInterface
 {
     use StringComponentVariant
 

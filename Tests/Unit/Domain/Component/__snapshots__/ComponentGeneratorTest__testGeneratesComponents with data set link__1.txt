@@ -6,16 +6,18 @@
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\FancyComponent\NewText;
+namespace Vendor\Site\Presentation\Component\NewLink;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use Psr\Http\Message\UriInterface;
 
 #[Flow\Proxy(false)]
-final class NewText extends AbstractComponentPresentationObject
+final readonly class NewLink extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly ?string $text
+        public UriInterface $href,
+        public ?string $title
     ) {
     }
 }

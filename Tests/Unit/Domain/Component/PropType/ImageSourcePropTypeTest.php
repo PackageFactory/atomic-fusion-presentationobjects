@@ -19,9 +19,6 @@ final class ImageSourcePropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
-     * @param ImageSourcePropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetSimpleName(ImageSourcePropType $subject, string $expectedName): void
     {
@@ -31,7 +28,7 @@ final class ImageSourcePropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function simpleNameProvider(): array
+    public static function simpleNameProvider(): array
     {
         return [
             [
@@ -47,11 +44,8 @@ final class ImageSourcePropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
-     * @param ImageSourcePropType $subject
-     * @param string $expectedName
-     * @return void
      */
-    public function testGetUseStatement(ImageSourcePropType $subject, string $expectedName): void
+    public static function testGetUseStatement(ImageSourcePropType $subject, string $expectedName): void
     {
         Assert::assertSame($expectedName, $subject->getUseStatement());
     }
@@ -59,7 +53,7 @@ final class ImageSourcePropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function useStatementProvider(): array
+    public static function useStatementProvider(): array
     {
         return [
             [
@@ -77,11 +71,8 @@ final class ImageSourcePropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider typeProvider
-     * @param ImageSourcePropType $subject
-     * @param string $expectedType
-     * @return void
      */
-    public function testGetType(ImageSourcePropType $subject, string $expectedType): void
+    public static function testGetType(ImageSourcePropType $subject, string $expectedType): void
     {
         Assert::assertSame($expectedType, $subject->getType());
     }
@@ -89,7 +80,7 @@ final class ImageSourcePropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function typeProvider(): array
+    public static function typeProvider(): array
     {
         return [
             [
@@ -105,9 +96,6 @@ final class ImageSourcePropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
-     * @param ImageSourcePropType $subject
-     * @param string $expectedStyleGuideValue
-     * @return void
      */
     public function testGetStyleGuideValue(ImageSourcePropType $subject, string $expectedStyleGuideValue): void
     {
@@ -117,7 +105,7 @@ final class ImageSourcePropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function styleGuideValueProvider(): array
+    public static function styleGuideValueProvider(): array
     {
         return [
             [
@@ -140,10 +128,6 @@ final class ImageSourcePropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider definitionDataProvider
-     * @param ImageSourcePropType $subject
-     * @param string $propName
-     * @param string $expectedDefinitionData
-     * @return void
      */
     public function testGetDefinitionData(ImageSourcePropType $subject, string $propName, string $expectedDefinitionData): void
     {
@@ -153,7 +137,7 @@ final class ImageSourcePropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function definitionDataProvider(): array
+    public static function definitionDataProvider(): array
     {
         return [
             [

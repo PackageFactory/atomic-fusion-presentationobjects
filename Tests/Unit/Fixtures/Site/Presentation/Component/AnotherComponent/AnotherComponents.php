@@ -12,13 +12,13 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * A list of anotherComponents for testing purposes
- * @implements \IteratorAggregate<int,AnotherComponent>
+ * @implements \IteratorAggregate<AnotherComponent>
  */
 #[Flow\Proxy(false)]
-final class AnotherComponents implements \IteratorAggregate, \Countable
+final readonly class AnotherComponents implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,AnotherComponent>|AnotherComponent[]
+     * @var array<AnotherComponent>
      */
     private array $anotherComponents;
 
@@ -28,9 +28,9 @@ final class AnotherComponents implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \ArrayIterator<int,AnotherComponent>|AnotherComponent[]
+     * @return \Iterator<AnotherComponent>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->anotherComponents);
     }

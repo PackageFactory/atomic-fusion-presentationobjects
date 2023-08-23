@@ -28,7 +28,7 @@ final class SlotPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function simpleNameProvider(): array
+    public static function simpleNameProvider(): array
     {
         return [
             [
@@ -53,7 +53,7 @@ final class SlotPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function useStatementProvider(): array
+    public static function useStatementProvider(): array
     {
         return [
             [
@@ -80,7 +80,7 @@ final class SlotPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function typeProvider(): array
+    public static function typeProvider(): array
     {
         return [
             [
@@ -105,7 +105,7 @@ final class SlotPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function styleGuideValueProvider(): array
+    public static function styleGuideValueProvider(): array
     {
         return [
             [
@@ -131,7 +131,7 @@ final class SlotPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function definitionDataProvider(): array
+    public static function definitionDataProvider(): array
     {
         return [
             [

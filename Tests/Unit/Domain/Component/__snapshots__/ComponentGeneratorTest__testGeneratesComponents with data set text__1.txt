@@ -6,16 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Component\ColocatedText;
+namespace Vendor\Site\Presentation\Component\NewText;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 
 #[Flow\Proxy(false)]
-final class ColocatedText extends AbstractComponentPresentationObject
+final readonly class NewText extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly string $content
+        public string $content
     ) {
     }
 }

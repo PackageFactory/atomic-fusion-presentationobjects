@@ -18,8 +18,6 @@ use PHPUnit\Framework\Assert;
 class EnumLabelTest extends UnitTestCase
 {
     /**
-     * @param string $enumName
-     * @param EnumLabel $expectedLabel
      * @dataProvider enumProvider
      */
     public function testFromEnumName(string $enumName, EnumLabel $expectedLabel): void
@@ -33,7 +31,7 @@ class EnumLabelTest extends UnitTestCase
     /**
      * @return array<int, array<int, class-string<mixed>|EnumLabel>>
      */
-    public function enumProvider(): array
+    public static function enumProvider(): array
     {
         return [
             [

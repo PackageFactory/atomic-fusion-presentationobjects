@@ -18,7 +18,10 @@ trait IntComponentVariant
         return $this === self::from($other);
     }
 
-    public function allowsCallOfMethod(string $methodName): true
+    /**
+     * @param string $methodName
+     */
+    public function allowsCallOfMethod($methodName): true
     {
         return true;
     }

@@ -13,22 +13,14 @@ use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\Value;
 
 final class ValueTest extends UnitTestCase
 {
-    /**
-     * @test
-     * @return void
-     */
-    public function holdsStringValues(): void
+    public function testHoldsStringValues(): void
     {
         $value = Value::fromString('Some Value');
         $this->assertEquals('Some Value', (string) $value);
         $this->assertInstanceOf(Value::class, $value);
     }
 
-    /**
-     * @test
-     * @return void
-     */
-    public function isRenderedAsValueFusionPrototype(): void
+    public function testIsRenderedAsValueFusionPrototype(): void
     {
         $value = Value::fromString('Some Value');
         $this->assertEquals('PackageFactory.AtomicFusion.PresentationObjects:Value', $value->getPrototypeName());
@@ -37,7 +29,7 @@ final class ValueTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function inputValueProvider(): array
+    public static function inputValueProvider(): array
     {
         if ($resource = fopen('/dev/null', 'r')) {
             fclose($resource);
@@ -70,17 +62,13 @@ final class ValueTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @dataProvider inputValueProvider
-     * @param mixed $inputValue
-     * @param string $expectedString
-     * @return void
      */
-    public function canbeCreatedFromAnyInputValue($inputValue, $expectedString): void
+    public function testCanBeCreatedFromAnyInputValue(mixed $inputValue, string $expectedString): void
     {
         $value = Value::fromAny($inputValue);
 
-        $this->assertInstanceOf(Value::class, $value);
-        $this->assertEquals($expectedString, (string) $value);
+        self::assertInstanceOf(Value::class, $value);
+        self::assertEquals($expectedString, (string)$value);
     }
 }

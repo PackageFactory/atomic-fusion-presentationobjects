@@ -22,9 +22,6 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
-     * @param ComponentArrayPropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetSimpleName(ComponentArrayPropType $subject, string $expectedName): void
     {
@@ -34,7 +31,7 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function simpleNameProvider(): array
+    public static function simpleNameProvider(): array
     {
         return [
             [
@@ -54,9 +51,6 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
-     * @param ComponentArrayPropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetUseStatement(ComponentArrayPropType $subject, string $expectedName): void
     {
@@ -66,7 +60,7 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function useStatementProvider(): array
+    public static function useStatementProvider(): array
     {
         return [
             [
@@ -101,7 +95,7 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function typeProvider(): array
+    public static function typeProvider(): array
     {
         return [
             [
@@ -121,9 +115,6 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
-     * @param ComponentArrayPropType $subject
-     * @param string $expectedStyleGuideValue
-     * @return void
      */
     public function testGetStyleGuideValue(ComponentArrayPropType $subject, string $expectedStyleGuideValue): void
     {
@@ -133,7 +124,7 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function styleGuideValueProvider(): array
+    public static function styleGuideValueProvider(): array
     {
         return [
             [
@@ -192,10 +183,6 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider definitionDataProvider
-     * @param ComponentArrayPropType $subject
-     * @param string $propName
-     * @param string $expectedDefinitionData
-     * @return void
      */
     public function testGetDefinitionData(ComponentArrayPropType $subject, string $propName, string $expectedDefinitionData): void
     {
@@ -205,7 +192,7 @@ final class ComponentArrayPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function definitionDataProvider(): array
+    public static function definitionDataProvider(): array
     {
         return [
             [

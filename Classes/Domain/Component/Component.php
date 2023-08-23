@@ -33,7 +33,7 @@ use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 ' . $this->props->renderUseStatements() . '
 #[Flow\Proxy(false)]
-final class ' . $this->name->getSimpleClassName() . ' extends AbstractComponentPresentationObject
+final readonly class ' . $this->name->getSimpleClassName() . ' extends AbstractComponentPresentationObject
 {
     ' . $this->renderConstructor() .  '
 }
@@ -53,28 +53,25 @@ namespace ' . $this->name->getPhpNamespace() . ';
 use Neos\Flow\Annotations as Flow;
 
 /**
- * @implements \IteratorAggregate<int,' . $this->name->getSimpleClassName() . '>
+ * @implements \IteratorAggregate<' . $this->name->getSimpleClassName() . '>
  */
 #[Flow\Proxy(false)]
-final class ' . $this->name->getSimpleComponentArrayName() . ' implements \IteratorAggregate, \Countable
+final readonly class ' . $this->name->getSimpleComponentArrayName() . ' implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,' . $this->name->getSimpleClassName() . '>
+     * @var array<' . $this->name->getSimpleClassName() . '>
      */
     private array $' . $this->name->getSimpleComponentArrayPropertyName() . ';
 
-    /**
-     * @param array<int,' . $this->name->getSimpleInterfaceName() . '> $array
-     */
     public function __construct(' . $this->name->getSimpleClassName() . ' ...$' . $this->name->getSimpleComponentArrayPropertyName() . ')
     {
         $this->' . $this->name->getSimpleComponentArrayPropertyName() . ' = $' . $this->name->getSimpleComponentArrayPropertyName() . ';
     }
 
     /**
-     * @return \ArrayIterator<int,' . $this->name->getSimpleClassName() . '>|' . $this->name->getSimpleClassName() . '[]
+     * @return \Iterator<' . $this->name->getSimpleClassName() . '>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->' . $this->name->getSimpleComponentArrayPropertyName() . ');
     }
@@ -117,7 +114,7 @@ final class ' . $this->name->getSimpleComponentArrayName() . ' implements \Itera
     {
         $arguments = [];
         foreach ($this->props as $propName => $propType) {
-            $arguments[] = 'public readonly ' . $propType->getType() . ' $' . $propName . ',';
+            $arguments[] = 'public ' . $propType->getType() . ' $' . $propName . ',';
         }
         return 'public function __construct(
         ' . trim(trim(implode("\n        ", $arguments)), ',') .  '

@@ -14,7 +14,6 @@ use Sitegeist\Kaleidoscope\Domain\ImageSourceInterface;
 #[Flow\Proxy(false)]
 final readonly class ImageSourcePropType implements PropTypeInterface
 {
-
     public function __construct(
         private bool $nullable
     ) {

@@ -86,28 +86,28 @@ use Vendor\Site\Presentation\Component\MyComponent\MyComponents;
 use PackageFactory\AtomicFusion\PresentationObjects\Presentation\Slot\SlotInterface;
 
 #[Flow\Proxy(false)]
-final class MyNewComponent extends AbstractComponentPresentationObject
+final readonly class MyNewComponent extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly bool $bool,
-        public readonly ?bool $nullableBool,
-        public readonly float $float,
-        public readonly ?float $nullableFloat,
-        public readonly int $int,
-        public readonly ?int $nullableInt,
-        public readonly string $string,
-        public readonly ?string $nullableString,
-        public readonly UriInterface $uri,
-        public readonly ?UriInterface $nullableUri,
-        public readonly ImageSourceInterface $image,
-        public readonly ?ImageSourceInterface $nullableImage,
-        public readonly MyComponent $subComponent,
-        public readonly ?MyComponent $nullableSubComponent,
-        public readonly MyComponents $componentArray,
-        public readonly MyStringEnum $enum,
-        public readonly ?MyStringEnum $nullableEnum,
-        public readonly SlotInterface $slot,
-        public readonly ?SlotInterface $nullableSlot
+        public bool $bool,
+        public ?bool $nullableBool,
+        public float $float,
+        public ?float $nullableFloat,
+        public int $int,
+        public ?int $nullableInt,
+        public string $string,
+        public ?string $nullableString,
+        public UriInterface $uri,
+        public ?UriInterface $nullableUri,
+        public ImageSourceInterface $image,
+        public ?ImageSourceInterface $nullableImage,
+        public MyComponent $subComponent,
+        public ?MyComponent $nullableSubComponent,
+        public MyComponents $componentArray,
+        public MyStringEnum $enum,
+        public ?MyStringEnum $nullableEnum,
+        public SlotInterface $slot,
+        public ?SlotInterface $nullableSlot
     ) {
     }
 }
@@ -258,13 +258,13 @@ namespace Vendor\Site\Presentation\Component\MyNewComponent;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * @implements \IteratorAggregate<int,MyNewComponent>
+ * @implements \IteratorAggregate<MyNewComponent>
  */
 #[Flow\Proxy(false)]
-final class MyNewComponents implements \IteratorAggregate, \Countable
+final readonly class MyNewComponents implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,MyNewComponent>
+     * @var array<MyNewComponent>
      */
     private array $myNewComponents;
 
@@ -274,9 +274,9 @@ final class MyNewComponents implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \ArrayIterator<int,MyNewComponent>|MyNewComponent[]
+     * @return \Iterator<MyNewComponent>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->myNewComponents);
     }

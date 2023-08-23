@@ -16,11 +16,11 @@ use Vendor\Site\Presentation\Component\AnotherComponent\AnotherComponent;
  * Dummy component for test purposes
  */
 #[Flow\Proxy(false)]
-final class MyComponent extends AbstractComponentPresentationObject
+final readonly class MyComponent extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly string $text,
-        public readonly AnotherComponent $other
+        public string $text,
+        public AnotherComponent $other
     ) {
     }
 }

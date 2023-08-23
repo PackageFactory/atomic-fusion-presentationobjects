@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the Vendor.Site package.
+ * This file is part of the Vendor.Default package.
  */
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Even\FancierComponent\NewText;
+namespace Vendor\Default\Presentation\Component\NewText;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
 
 #[Flow\Proxy(false)]
-final class NewText extends AbstractComponentPresentationObject
+final readonly class NewText extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly ?string $text
+        public string $content
     ) {
     }
 }

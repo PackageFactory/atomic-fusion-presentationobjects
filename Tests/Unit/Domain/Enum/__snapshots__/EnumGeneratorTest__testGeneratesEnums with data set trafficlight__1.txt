@@ -1,0 +1,21 @@
+<?php
+
+/*
+ * This file is part of the Vendor.Default package.
+ */
+
+declare(strict_types=1);
+
+namespace Vendor\Default\Presentation\Component\Crossing;
+
+use Neos\Eel\ProtectedContextAwareInterface;
+use PackageFactory\AtomicFusion\PresentationObjects\Fusion\IntComponentVariant;
+
+enum TrafficLight: int implements ProtectedContextAwareInterface
+{
+    use IntComponentVariant;
+
+    case LIGHT_RED = 1;
+    case LIGHT_YELLOW = 2;
+    case LIGHT_GREEN = 3;
+}

@@ -12,13 +12,13 @@ use Neos\Flow\Annotations as Flow;
 
 /**
  * A list of texts for testing purposes
- * @implements \IteratorAggregate<int,Text>
+ * @implements \IteratorAggregate<Text>
  */
 #[Flow\Proxy(false)]
-final class Texts implements \IteratorAggregate, \Countable
+final readonly class Texts implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,Text>|Text[]
+     * @var array<Text>
      */
     private array $texts;
 
@@ -28,9 +28,9 @@ final class Texts implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \ArrayIterator<int,Text>|Text[]
+     * @return \Iterator<Text>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->texts);
     }

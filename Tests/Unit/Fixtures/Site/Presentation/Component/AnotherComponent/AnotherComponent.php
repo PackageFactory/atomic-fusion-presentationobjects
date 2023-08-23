@@ -15,10 +15,10 @@ use Neos\Flow\Annotations as Flow;
  * Another dummy component for test purposes
  */
 #[Flow\Proxy(false)]
-final class AnotherComponent extends AbstractComponentPresentationObject
+final readonly class AnotherComponent extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly int $number
+        public int $number
     ) {
     }
 }

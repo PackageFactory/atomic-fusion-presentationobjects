@@ -6,18 +6,17 @@
 
 declare(strict_types=1);
 
-namespace Vendor\Site\Presentation\Component\Headline;
+namespace Vendor\Site\Presentation\Component\WithTextArray;
 
 use Neos\Flow\Annotations as Flow;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\AbstractComponentPresentationObject;
+use Vendor\Site\Presentation\Component\Text\Texts;
 
 #[Flow\Proxy(false)]
-final class Headline extends AbstractComponentPresentationObject
+final readonly class WithTextArray extends AbstractComponentPresentationObject
 {
     public function __construct(
-        public readonly HeadlineType $type,
-        public readonly HeadlineLook $look,
-        public readonly string $content
+        public Texts $texts
     ) {
     }
 }

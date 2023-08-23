@@ -20,9 +20,6 @@ final class EnumPropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
-     * @param EnumPropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetSimpleName(EnumPropType $subject, string $expectedName): void
     {
@@ -32,7 +29,7 @@ final class EnumPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function simpleNameProvider(): array
+    public static function simpleNameProvider(): array
     {
         return [
             [
@@ -48,9 +45,6 @@ final class EnumPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
-     * @param EnumPropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetUseStatement(EnumPropType $subject, string $expectedName): void
     {
@@ -60,7 +54,7 @@ final class EnumPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function useStatementProvider(): array
+    public static function useStatementProvider(): array
     {
         return [
             [
@@ -76,9 +70,6 @@ final class EnumPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider typeProvider
-     * @param EnumPropType $subject
-     * @param string $expectedType
-     * @return void
      */
     public function testGetType(EnumPropType $subject, string $expectedType): void
     {
@@ -88,7 +79,7 @@ final class EnumPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function typeProvider(): array
+    public static function typeProvider(): array
     {
         return [
             [
@@ -104,9 +95,6 @@ final class EnumPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
-     * @param EnumPropType $subject
-     * @param string $expectedStyleGuideValue
-     * @return void
      */
     public function testGetStyleGuideValue(EnumPropType $subject, string $expectedStyleGuideValue): void
     {
@@ -116,7 +104,7 @@ final class EnumPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function styleGuideValueProvider(): array
+    public static function styleGuideValueProvider(): array
     {
         return [
             [

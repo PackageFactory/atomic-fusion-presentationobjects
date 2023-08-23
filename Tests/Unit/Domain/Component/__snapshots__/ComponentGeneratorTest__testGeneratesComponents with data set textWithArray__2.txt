@@ -11,13 +11,13 @@ namespace Vendor\Site\Presentation\Component\NewText;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * @implements \IteratorAggregate<int,NewText>
+ * @implements \IteratorAggregate<NewText>
  */
 #[Flow\Proxy(false)]
-final class NewTexts implements \IteratorAggregate, \Countable
+final readonly class NewTexts implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int,NewText>
+     * @var array<NewText>
      */
     private array $newTexts;
 
@@ -27,9 +27,9 @@ final class NewTexts implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \ArrayIterator<int,NewText>|NewText[]
+     * @return \Iterator<NewText>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->newTexts);
     }

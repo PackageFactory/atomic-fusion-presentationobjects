@@ -21,9 +21,6 @@ final class ComponentNameTest extends UnitTestCase
 {
     /**
      * @dataProvider inputProvider
-     * @param string $input
-     * @param PackageKey $defaultPackageKey
-     * @param ComponentName $expectedName
      */
     public function testFromInput(string $input, PackageKey $defaultPackageKey, ComponentName $expectedName): void
     {
@@ -33,7 +30,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<array{string,PackageKey,ComponentName}>
      */
-    public function inputProvider(): array
+    public static function inputProvider(): array
     {
         $defaultPackageKey = new PackageKey('Vendor.Default');
 
@@ -63,9 +60,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider classNameProvider
-     * @param string $className
-     * @param ComponentName $expectedName
-     * @return void
      */
     public function testFromClassName(string $className, ComponentName $expectedName): void
     {
@@ -75,7 +69,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function classNameProvider(): array
+    public static function classNameProvider(): array
     {
         $packageKey = new PackageKey('Vendor.Site');
         return [
@@ -104,7 +98,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider fusionPathProvider
-     * @return void
      */
     public function testFromFusionPath(string $className, ComponentName $expectedName): void
     {
@@ -114,7 +107,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function fusionPathProvider(): array
+    public static function fusionPathProvider(): array
     {
         return [
             [
@@ -154,9 +147,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider fusionNameProvider
-     * @param ComponentName $subject
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetFullyQualifiedFusionName(ComponentName $subject, string $expectedValue)
     {
@@ -166,7 +156,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function fusionNameProvider(): array
+    public static function fusionNameProvider(): array
     {
         return [
             [
@@ -186,9 +176,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider phpNamespaceProvider
-     * @param ComponentName $subject
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetPhpNamespace(ComponentName $subject, string $expectedValue)
     {
@@ -198,7 +185,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function phpNamespaceProvider(): array
+    public static function phpNamespaceProvider(): array
     {
         return [
             [
@@ -218,9 +205,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider factoryNameProvider
-     * @param ComponentName $subject
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetFullyQualifiedFactoryName(ComponentName $subject, string $expectedValue)
     {
@@ -230,7 +214,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function factoryNameProvider(): array
+    public static function factoryNameProvider(): array
     {
         return [
             [
@@ -250,9 +234,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider interfaceNameProvider
-     * @param ComponentName $subject
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetFullyQualifiedInterfaceName(ComponentName $subject, string $expectedValue)
     {
@@ -262,7 +243,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function interfaceNameProvider(): array
+    public static function interfaceNameProvider(): array
     {
         return [
             [
@@ -282,9 +263,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider helperNameProvider
-     * @param ComponentName $subject
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetHelperName(ComponentName $subject, string $expectedValue)
     {
@@ -294,7 +272,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function helperNameProvider(): array
+    public static function helperNameProvider(): array
     {
         return [
             [
@@ -314,11 +292,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider phpFilePathProvider
-     * @param ComponentName $subject
-     * @param string $packagePath
-     * @param bool $colocate
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetPhpFilePath(ComponentName $subject, string $packagePath, bool $colocate, string $expectedValue)
     {
@@ -328,7 +301,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function phpFilePathProvider(): array
+    public static function phpFilePathProvider(): array
     {
         return [
             [
@@ -354,10 +327,6 @@ final class ComponentNameTest extends UnitTestCase
 
     /**
      * @dataProvider fusionFilePathProvider
-     * @param ComponentName $subject
-     * @param string $packagePath
-     * @param string $expectedValue
-     * @return void
      */
     public function testGetFusionFilePath(ComponentName $subject, string $packagePath, string $expectedValue)
     {
@@ -367,7 +336,7 @@ final class ComponentNameTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function fusionFilePathProvider(): array
+    public static function fusionFilePathProvider(): array
     {
         return [
             [

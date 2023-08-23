@@ -26,7 +26,7 @@ final class AbstractComponentPresentationObjectTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function presentationObjectsAndPrototypeNamesProvider(): array
+    public static function presentationObjectsAndPrototypeNamesProvider(): array
     {
         return [
             AnotherComponent::class => [
@@ -54,13 +54,9 @@ final class AbstractComponentPresentationObjectTest extends UnitTestCase
 
     /**
      * @dataProvider presentationObjectsAndPrototypeNamesProvider
-     * @test
      * @small
-     * @param AbstractComponentPresentationObject $implementation
-     * @param string $expectedPrototypeName
-     * @return void
      */
-    public function implementsSlotInterfaceAndSmartlyGuessesFusionPrototypeNameFromInheritingClassNames(
+    public function testImplementsSlotInterfaceAndSmartlyGuessesFusionPrototypeNameFromInheritingClassNames(
         AbstractComponentPresentationObject $implementation,
         string $expectedPrototypeName
     ): void {

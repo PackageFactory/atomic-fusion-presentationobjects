@@ -19,9 +19,6 @@ final class UriPropTypeTest extends UnitTestCase
 {
     /**
      * @dataProvider simpleNameProvider
-     * @param UriPropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetSimpleName(UriPropType $subject, string $expectedName): void
     {
@@ -31,7 +28,7 @@ final class UriPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function simpleNameProvider(): array
+    public static function simpleNameProvider(): array
     {
         return [
             [
@@ -47,9 +44,6 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider useStatementProvider
-     * @param UriPropType $subject
-     * @param string $expectedName
-     * @return void
      */
     public function testGetUseStatement(UriPropType $subject, string $expectedName): void
     {
@@ -59,7 +53,7 @@ final class UriPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function useStatementProvider(): array
+    public static function useStatementProvider(): array
     {
         return [
             [
@@ -77,9 +71,6 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider typeProvider
-     * @param UriPropType $subject
-     * @param string $expectedType
-     * @return void
      */
     public function testGetType(UriPropType $subject, string $expectedType): void
     {
@@ -89,7 +80,7 @@ final class UriPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function typeProvider(): array
+    public static function typeProvider(): array
     {
         return [
             [
@@ -105,9 +96,6 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider styleGuideValueProvider
-     * @param UriPropType $subject
-     * @param string $expectedStyleGuideValue
-     * @return void
      */
     public function testGetStyleGuideValue(UriPropType $subject, string $expectedStyleGuideValue): void
     {
@@ -117,7 +105,7 @@ final class UriPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function styleGuideValueProvider(): array
+    public static function styleGuideValueProvider(): array
     {
         return [
             [
@@ -134,10 +122,6 @@ final class UriPropTypeTest extends UnitTestCase
 
     /**
      * @dataProvider definitionDataProvider
-     * @param UriPropType $subject
-     * @param string $propName
-     * @param string $expectedDefinitionData
-     * @return void
      */
     public function testGetDefinitionData(UriPropType $subject, string $propName, string $expectedDefinitionData): void
     {
@@ -147,7 +131,7 @@ final class UriPropTypeTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function definitionDataProvider(): array
+    public static function definitionDataProvider(): array
     {
         return [
             [

@@ -13,7 +13,6 @@ use Neos\Flow\Annotations as Flow;
 #[Flow\Proxy(false)]
 final readonly class StringLikePropType implements PropTypeInterface
 {
-
     public function __construct(
         private bool $nullable
     ) {

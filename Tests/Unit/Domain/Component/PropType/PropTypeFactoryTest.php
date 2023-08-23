@@ -35,10 +35,6 @@ final class PropTypeFactoryTest extends UnitTestCase
 {
     /**
      * @dataProvider validInputStringProvider
-     * @param ComponentName $componentName
-     * @param string $inputString
-     * @param PropTypeInterface $expectedPropType
-     * @return void
      */
     public function testFromInputString(ComponentName $componentName, string $inputString, PropTypeInterface $expectedPropType): void
     {
@@ -47,9 +43,6 @@ final class PropTypeFactoryTest extends UnitTestCase
 
     /**
      * @dataProvider invalidInputStringProvider
-     * @param ComponentName $componentName
-     * @param string $inputString
-     * @return void
      */
     public function testFromInputStringCatchesInvalidInputs(ComponentName $componentName, string $inputString): void
     {
@@ -60,7 +53,7 @@ final class PropTypeFactoryTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function validInputStringProvider(): array
+    public static function validInputStringProvider(): array
     {
         $packageKey = new PackageKey('Vendor.Site');
         $componentName = new ComponentName($packageKey, FusionNamespace::default(), 'MyNewComponent');
@@ -171,7 +164,7 @@ final class PropTypeFactoryTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function invalidInputStringProvider(): array
+    public static function invalidInputStringProvider(): array
     {
         $componentName = new ComponentName(new PackageKey('Vendor.Site'), FusionNamespace::default(), 'MyNewComponent');
         return [
@@ -209,9 +202,6 @@ final class PropTypeFactoryTest extends UnitTestCase
 
     /**
      * @dataProvider validReflectionPropertyProvider
-     * @param \ReflectionProperty $reflectionProperty
-     * @param PropTypeInterface $expectedPropType
-     * @return void
      */
     public function testFromReflectionProperty(\ReflectionProperty $reflectionProperty, PropTypeInterface $expectedPropType): void
     {
@@ -221,7 +211,7 @@ final class PropTypeFactoryTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function validReflectionPropertyProvider(): array
+    public static function validReflectionPropertyProvider(): array
     {
         $reflectionPropertyCases = [];
         $reflectionClass = new \ReflectionClass(MyReflectionComponent::class);
@@ -349,8 +339,6 @@ final class PropTypeFactoryTest extends UnitTestCase
 
     /**
      * @dataProvider invalidReflectionPropertyProvider
-     * @param \ReflectionProperty $reflectionProperty
-     * @return void
      */
     public function testFromReflectionPropertyCatchesInvalidReflectionProperties(\ReflectionProperty $reflectionProperty): void
     {
@@ -361,7 +349,7 @@ final class PropTypeFactoryTest extends UnitTestCase
     /**
      * @return array<mixed>
      */
-    public function invalidReflectionPropertyProvider(): array
+    public static function invalidReflectionPropertyProvider(): array
     {
         $reflectionClass = new \ReflectionClass(MyReflectionComponent::class);
         return [

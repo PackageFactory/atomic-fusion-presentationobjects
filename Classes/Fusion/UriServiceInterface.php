@@ -23,6 +23,8 @@ interface UriServiceInterface
         ?string $format = null
     ): UriInterface;
 
+    public function useControllerContext(ControllerContext $controllerContext): void;
+
     public function getResourceUri(string $packageKey, string $resourcePath): UriInterface;
 
     public function getPersistentResourceUri(PersistentResource $resource): ?UriInterface;

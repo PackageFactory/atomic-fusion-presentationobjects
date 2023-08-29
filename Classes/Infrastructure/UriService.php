@@ -33,31 +33,21 @@ use Psr\Http\Message\UriInterface;
  * The URI service
  */
 #[Flow\Scope('singleton')]
-final readonly class UriService implements UriServiceInterface
+final class UriService implements UriServiceInterface
 {
-    public ControllerContext $controllerContext;
+    private ?ControllerContext $controllerContext = null;
 
     public function __construct(
-        private ContentRepositoryRegistry $contentRepositoryRegistry,
-        private ResourceManager $resourceManager,
-        private AssetRepository $assetRepository,
-        Bootstrap $bootstrap
+        private readonly ContentRepositoryRegistry $contentRepositoryRegistry,
+        private readonly ResourceManager $resourceManager,
+        private readonly AssetRepository $assetRepository,
+        private readonly Bootstrap $bootstrap
     ) {
-        $requestHandler = $bootstrap->getActiveRequestHandler();
-        if ($requestHandler instanceof Http\RequestHandler) {
-            $request = $requestHandler->getHttpRequest();
-        } else {
-            $request = ServerRequest::fromGlobals();
-        }
-        $actionRequest = Mvc\ActionRequest::fromHttpRequest($request);
-        $uriBuilder = new Mvc\Routing\UriBuilder();
-        $uriBuilder->setRequest($actionRequest);
-        $this->controllerContext = new Mvc\Controller\ControllerContext(
-            $actionRequest,
-            new Mvc\ActionResponse(),
-            new Mvc\Controller\Arguments(),
-            $uriBuilder
-        );
+    }
+
+    public function useControllerContext(ControllerContext $controllerContext): void
+    {
+        $this->controllerContext = $controllerContext;
     }
 
     public function getNodeUri(Node $documentNode, bool $absolute = false, ?string $format = null): UriInterface
@@ -67,13 +57,15 @@ final readonly class UriService implements UriServiceInterface
         );
         $nodeAddressFactory = NodeAddressFactory::create($contentRepository);
         $nodeAddress = $nodeAddressFactory->createFromNode($documentNode);
+
         $uriBuilder = new UriBuilder();
-        $uriBuilder->setRequest($this->controllerContext->getRequest());
+        $uriBuilder->setRequest($this->getControllerContext()->getRequest());
         $uriBuilder
             ->setCreateAbsoluteUri($absolute)
             ->setFormat($format ?: 'html');
 
-        return NodeUriBuilder::fromUriBuilder($uriBuilder)->uriFor($nodeAddress);
+        return NodeUriBuilder::fromUriBuilder($uriBuilder)
+            ->uriFor($nodeAddress);
     }
 
     public function getResourceUri(string $packageKey, string $resourcePath): UriInterface
@@ -99,7 +91,7 @@ final readonly class UriService implements UriServiceInterface
 
     public function getDummyImageBaseUri(): UriInterface
     {
-        $uriBuilder = $this->controllerContext->getUriBuilder();
+        $uriBuilder = $this->getControllerContext()->getUriBuilder();
 
         return new Uri($uriBuilder->uriFor(
             'image',
@@ -111,6 +103,23 @@ final readonly class UriService implements UriServiceInterface
 
     public function getControllerContext(): ControllerContext
     {
+        if (!$this->controllerContext) {
+            $requestHandler = $this->bootstrap->getActiveRequestHandler();
+            if ($requestHandler instanceof Http\RequestHandler) {
+                $request = $requestHandler->getHttpRequest();
+            } else {
+                $request = ServerRequest::fromGlobals();
+            }
+            $actionRequest = Mvc\ActionRequest::fromHttpRequest($request);
+            $uriBuilder = new Mvc\Routing\UriBuilder();
+            $uriBuilder->setRequest($actionRequest);
+            $this->controllerContext = new Mvc\Controller\ControllerContext(
+                $actionRequest,
+                new Mvc\ActionResponse(),
+                new Mvc\Controller\Arguments(),
+                $uriBuilder
+            );
+        }
         return $this->controllerContext;
     }
 

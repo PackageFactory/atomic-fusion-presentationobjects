@@ -146,10 +146,10 @@ final class UriServiceTest extends UnitTestCase
     public function testProvidesAControllerContext(): void
     {
         $this->markTestSkipped('Cannot mock the content repository registry yet');
-        $controllerContext = $this->uriService->controllerContext;
+        $controllerContext = $this->uriService->getControllerContext();
 
         $this->assertTrue($controllerContext instanceof ControllerContext);
-        $this->assertSame($controllerContext, $this->uriService->controllerContext);
+        $this->assertSame($controllerContext, $this->uriService->getControllerContext());
     }
 
     public function testResolvesLinkUrisWithNodeProtocolToHashIfNodeCannotBeFound(): void

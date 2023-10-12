@@ -45,11 +45,6 @@ final class UriService implements UriServiceInterface
     ) {
     }
 
-    public function useControllerContext(ControllerContext $controllerContext): void
-    {
-        $this->controllerContext = $controllerContext;
-    }
-
     public function getNodeUri(Node $documentNode, bool $absolute = false, ?string $format = null): UriInterface
     {
         $contentRepository = $this->contentRepositoryRegistry->get(

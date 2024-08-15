@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Fusion;
 
+use Neos\ContentRepository\Core\NodeType\NodeType;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\Translator;
+use Neos\Neos\Domain\NodeLabel\NodeLabelGeneratorInterface;
 
 /**
  * The generic abstract component presentation object factory implementation
@@ -29,6 +31,20 @@ abstract class AbstractComponentPresentationObjectFactory implements
 
     #[Flow\Inject]
     protected Translator $translator;
+
+    #[Flow\Inject]
+    protected NodeLabelGeneratorInterface $nodeLabelGenerator;
+
+    final protected function getNodeType(Node $node): ?NodeType
+    {
+        return $this->contentRepositoryRegistry->get($node->contentRepositoryId)
+            ->getNodeTypeManager()->getNodeType($node->nodeTypeName);
+    }
+
+    final protected function getNodeLabel(Node $node): string
+    {
+        return $this->nodeLabelGenerator->getLabel($node);
+    }
 
     /**
      * @template T

@@ -12,20 +12,18 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
 use Neos\ContentRepository\Core\Projection\ContentGraph\ContentSubgraphInterface;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
+use Neos\ContentRepository\Core\SharedModel\Node\NodeAddress;
 use Neos\ContentRepository\Core\SharedModel\Node\NodeAggregateId;
-use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ControllerContext;
-use Neos\Flow\Mvc\Routing\UriBuilder;
 use Neos\Flow\ResourceManagement\PersistentResource;
 use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Flow\Http;
 use Neos\Media\Domain\Model\AssetInterface;
 use Neos\Media\Domain\Repository\AssetRepository;
-use Neos\Neos\FrontendRouting\NodeAddressFactory;
-use Neos\Neos\FrontendRouting\NodeUriBuilder;
 use Neos\Flow\Mvc;
 use Neos\Flow\Core\Bootstrap;
+use Neos\Neos\FrontendRouting\NodeUriBuilderFactory;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\UriServiceInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -38,29 +36,17 @@ final class UriService implements UriServiceInterface
     private ?ControllerContext $controllerContext = null;
 
     public function __construct(
-        private readonly ContentRepositoryRegistry $contentRepositoryRegistry,
         private readonly ResourceManager $resourceManager,
         private readonly AssetRepository $assetRepository,
-        private readonly Bootstrap $bootstrap
+        private readonly Bootstrap $bootstrap,
+        private readonly NodeUriBuilderFactory $nodeUriBuilderFactory,
     ) {
     }
 
     public function getNodeUri(Node $documentNode, bool $absolute = false, ?string $format = null): UriInterface
     {
-        $contentRepository = $this->contentRepositoryRegistry->get(
-            $documentNode->subgraphIdentity->contentRepositoryId
-        );
-        $nodeAddressFactory = NodeAddressFactory::create($contentRepository);
-        $nodeAddress = $nodeAddressFactory->createFromNode($documentNode);
-
-        $uriBuilder = new UriBuilder();
-        $uriBuilder->setRequest($this->getControllerContext()->getRequest());
-        $uriBuilder
-            ->setCreateAbsoluteUri($absolute)
-            ->setFormat($format ?: 'html');
-
-        return NodeUriBuilder::fromUriBuilder($uriBuilder)
-            ->uriFor($nodeAddress);
+        return $this->nodeUriBuilderFactory->forActionRequest($this->getControllerContext()->getRequest())
+            ->uriFor(NodeAddress::fromNode($documentNode));
     }
 
     public function getResourceUri(string $packageKey, string $resourcePath): UriInterface

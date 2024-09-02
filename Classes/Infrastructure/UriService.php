@@ -24,6 +24,7 @@ use Neos\Media\Domain\Repository\AssetRepository;
 use Neos\Flow\Mvc;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Neos\FrontendRouting\NodeUriBuilderFactory;
+use Neos\Neos\FrontendRouting\Options;
 use PackageFactory\AtomicFusion\PresentationObjects\Fusion\UriServiceInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -46,7 +47,7 @@ final class UriService implements UriServiceInterface
     public function getNodeUri(Node $documentNode, bool $absolute = false, ?string $format = null): UriInterface
     {
         return $this->nodeUriBuilderFactory->forActionRequest($this->getControllerContext()->getRequest())
-            ->uriFor(NodeAddress::fromNode($documentNode));
+            ->uriFor(NodeAddress::fromNode($documentNode), $absolute ? Options::createForceAbsolute() : null);
     }
 
     public function getResourceUri(string $packageKey, string $resourcePath): UriInterface

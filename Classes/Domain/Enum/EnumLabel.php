@@ -1,9 +1,5 @@
 <?php
 
-/*
- * This file is part of the PackageFactory.AtomicFusion.PresentationObjects package.
- */
-
 declare(strict_types=1);
 
 namespace PackageFactory\AtomicFusion\PresentationObjects\Domain\Enum;
@@ -26,7 +22,7 @@ final readonly class EnumLabel
         list($packageNamespace, $componentName) = explode('\Presentation\\', $enumName);
         $pivot = \mb_strrpos($componentName, '\\') ?: null;
         $componentNamespace = \mb_substr($componentName, 0, $pivot);
-        $enumShort = lcfirst(\mb_substr($componentName, $pivot + 1));
+        $enumShort = lcfirst(\mb_substr($componentName, (is_int($pivot) ? $pivot + 1 : 0)));
 
         return new self(
             $enumShort . '.',

@@ -36,7 +36,7 @@ final class EnumProvider extends AbstractDataSource implements ProtectedContextA
      * @param array<string|int,string> $arguments
      * @return array<string|int,array<string,string>>
      */
-    public function getData(NodeInterface $node = null, array $arguments = []): array
+    public function getData(?NodeInterface $node = null, array $arguments = []): array
     {
         if (!array_key_exists('enumName', $arguments) || !is_string($arguments['enumName'])) {
             throw new \InvalidArgumentException('Argument "enumName" must be provided.', 1625297174);
